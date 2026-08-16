@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2ª Avaliação Sistemática — 7º ano · Modo prática</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1f2733;
+    --ink-soft:#55606e;
+    --paper:#f6f7fb;
+    --card:#ffffff;
+    --line:#e7eaf1;
+    --ok:#1a8a5a;
+    --ok-bg:#e6f6ee;
+    --no:#c4413a;
+    --no-bg:#fdecea;
+    --focus:#3457d5;
+    /* cor por matéria — a cor é informação: identifica a disciplina */
+    --Portugues:#E4572E;
+    --Matematica:#1f9e8f;
+    --Ingles:#3457d5;
+    --Ciencias:#3fa34d;
+    --Geografia:#e8871e;
+    --Historia:#8a5cd1;
+    --Filosofia:#4f6d8c;
+    --Arte:#d6337e;
+    --accent:var(--Portugues);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:"Public Sans",system-ui,sans-serif;font-size:17px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px 96px}
+
+  /* ---------- Cabeçalho ---------- */
+  header{padding:34px 0 18px}
+  .eyebrow{
+    font-family:"Space Mono",monospace;font-size:12.5px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--ink-soft);margin:0 0 10px
+  }
+  h1{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:clamp(28px,6.4vw,42px);line-height:1.04;margin:0 0 12px;
+    letter-spacing:-.015em;
+  }
+  h1 .yr{color:var(--accent)}
+  .lede{margin:0;max-width:56ch;color:var(--ink-soft);font-size:16px}
+
+  /* ---------- Placar ---------- */
+  .scorebar{
+    position:sticky;top:0;z-index:20;background:rgba(246,247,251,.9);
+    backdrop-filter:blur(8px);border-bottom:1px solid var(--line);
+    margin:20px -18px 0;padding:10px 18px;
+  }
+  .score-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  .stat{font-family:"Space Mono",monospace;font-size:13px;color:var(--ink-soft)}
+  .stat b{color:var(--ink);font-size:15px}
+  .bar{flex:1 1 120px;height:8px;border-radius:99px;background:var(--line);overflow:hidden;min-width:120px}
+  .bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .4s ease}
+  .reset{
+    font:inherit;font-size:13px;border:1px solid var(--line);background:var(--card);
+    color:var(--ink-soft);border-radius:99px;padding:6px 14px;cursor:pointer
+  }
+  .reset:hover{color:var(--ink);border-color:var(--ink-soft)}
+
+  /* ---------- Navegação por matéria ---------- */
+  nav{display:flex;gap:8px;overflow-x:auto;padding:16px 0 6px;margin:0 -18px;padding-left:18px;padding-right:18px;-webkit-overflow-scrolling:touch}
+  nav::-webkit-scrollbar{height:0}
+  .chip{
+    flex:0 0 auto;font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+    border:1.5px solid var(--line);background:var(--card);color:var(--ink-soft);
+    padding:8px 14px;border-radius:99px;white-space:nowrap;display:flex;gap:7px;align-items:center;
+    transition:.15s
+  }
+  .chip .dot{width:9px;height:9px;border-radius:99px;background:var(--c)}
+  .chip .cnt{font-family:"Space Mono",monospace;font-size:11.5px;opacity:.75}
+  .chip[aria-selected="true"]{border-color:var(--c);color:var(--ink);background:color-mix(in srgb,var(--c) 8%,white)}
+  .chip:focus-visible,.opt:focus-visible,.reset:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+
+  /* ---------- Questões ---------- */
+  .subject-head{
+    display:flex;align-items:baseline;gap:10px;margin:26px 0 4px
+  }
+  .subject-head h2{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:22px;margin:0;color:var(--accent)
+  }
+  .subject-head .range{font-family:"Space Mono",monospace;font-size:12.5px;color:var(--ink-soft)}
+
+  .q{
+    background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:20px 20px 18px;margin:16px 0;border-left:5px solid var(--accent)
+  }
+  .qhead{display:flex;align-items:center;gap:10px;margin:0 0 10px;flex-wrap:wrap}
+  .qnum{
+    font-family:"Space Mono",monospace;font-weight:700;font-size:13px;
+    color:var(--accent);letter-spacing:.02em
+  }
+  .hab{
+    font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.03em;
+    color:var(--ink-soft);background:#eef0f5;border:1px solid var(--line);
+    padding:2px 8px;border-radius:99px
+  }
+  .context{
+    background:color-mix(in srgb,var(--accent) 5%,white);
+    border:1px solid color-mix(in srgb,var(--accent) 22%,white);
+    border-radius:11px;padding:13px 15px;margin:0 0 14px;font-size:15.5px;color:#2c3542
+  }
+  .context .src{display:block;margin-top:8px;font-size:12.5px;color:var(--ink-soft);font-style:italic}
+  .context p{margin:0 0 8px}.context p:last-child{margin-bottom:0}
+  .imgnote{
+    border:1.5px dashed color-mix(in srgb,var(--accent) 40%,#c9ced8);border-radius:11px;
+    padding:12px 14px;margin:0 0 14px;font-size:13.5px;color:var(--ink-soft);
+    background:repeating-linear-gradient(135deg,transparent,transparent 9px,color-mix(in srgb,var(--accent) 6%,white) 9px,color-mix(in srgb,var(--accent) 6%,white) 18px)
+  }
+  .imgnote b{color:var(--ink);font-weight:600}
+  figure.diagram{margin:0 0 14px;text-align:center}
+  figure.diagram svg{max-width:100%;height:auto}
+  figure.diagram figcaption{font-size:12.5px;color:var(--ink-soft);margin-top:6px}
+  figure.photo{margin:0 0 14px;text-align:center}
+  figure.photo img{display:none;max-width:100%;height:auto;border-radius:11px;border:1px solid var(--line)}
+  figure.photo.loaded img{display:block}
+  figure.photo.loaded .imgnote{display:none}
+  .stem{font-size:17px;margin:0 0 14px;font-weight:500}
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{
+    display:flex;gap:12px;align-items:flex-start;text-align:left;width:100%;
+    font:inherit;font-size:16px;cursor:pointer;background:var(--card);
+    border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;transition:.13s;color:var(--ink)
+  }
+  .opt:hover:not(:disabled){border-color:var(--accent);background:color-mix(in srgb,var(--accent) 5%,white)}
+  .opt .let{
+    flex:0 0 auto;font-family:"Space Mono",monospace;font-weight:700;font-size:14px;
+    width:24px;height:24px;border-radius:7px;display:grid;place-items:center;
+    background:color-mix(in srgb,var(--accent) 12%,white);color:var(--accent)
+  }
+  .opt:disabled{cursor:default}
+  .opt.correct{border-color:var(--ok);background:var(--ok-bg)}
+  .opt.correct .let{background:var(--ok);color:#fff}
+  .opt.chosen-wrong{border-color:var(--no);background:var(--no-bg)}
+  .opt.chosen-wrong .let{background:var(--no);color:#fff}
+  .opt.dim{opacity:.55}
+  .feedback{
+    margin-top:13px;padding:12px 14px;border-radius:11px;font-size:15px;
+    display:none;animation:rise .28s ease
+  }
+  .feedback.show{display:block}
+  .feedback.win{background:var(--ok-bg);color:#116b45}
+  .feedback.lose{background:var(--no-bg);color:#93312c}
+  .feedback .tag{font-weight:700;display:block;margin-bottom:3px}
+  @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---------- Resultado ---------- */
+  .result{
+    display:none;background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:26px;margin:26px 0;text-align:center
+  }
+  .result.show{display:block;animation:rise .3s ease}
+  .result h3{font-family:"Bricolage Grotesque",sans-serif;font-size:24px;margin:0 0 6px}
+  .result .big{font-family:"Space Mono",monospace;font-size:44px;font-weight:700;color:var(--accent);margin:6px 0}
+  .result p{color:var(--ink-soft);margin:4px 0 0}
+
+  footer{margin-top:30px;font-size:13px;color:var(--ink-soft);text-align:center;line-height:1.5}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  }
+  @media (max-width:520px){
+    body{font-size:16px}.q{padding:17px 15px 15px}.opt{font-size:15px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Ensino Fundamental · Edição 2024</p>
+    <h1>2ª Avaliação Sistemática <span class="yr">· 7º ano</span></h1>
+    <p class="lede">Modo prática: responda no seu ritmo. A correção aparece na hora, com uma explicação de cada questão. Não vale nota — é para aprender e revisar.</p>
+  </header>
+
+  <div class="scorebar">
+    <div class="score-row">
+      <span class="stat">Respondidas <b id="answered">0</b>/<span id="total">50</span></span>
+      <span class="stat">Acertos <b id="hits">0</b></span>
+      <div class="bar"><span id="progress"></span></div>
+      <button class="reset" id="reset">Recomeçar</button>
+    </div>
+  </div>
+
+  <nav id="nav" aria-label="Escolher matéria"></nav>
+
+  <main id="main"></main>
+
+  <div class="result" id="result" aria-live="polite">
+    <h3 id="result-title">Matéria concluída!</h3>
+    <div class="big" id="result-score">0/0</div>
+    <p id="result-msg"></p>
+  </div>
+
+  <footer>
+    Versão de prática para uso interno da escola · Corrige na hora, funciona offline no navegador.
+  </footer>
+</div>
+
+<script>
+/* =========================================================================
+   GABARITO E CONTEÚDO DA PROVA
+   -------------------------------------------------------------------------
+   "correct" = índice da alternativa certa (0=a, 1=b, 2=c, 3=d).
+   Respostas CONFERIDAS com o gabarito oficial do SAS (todas corretas).
+   Para alterar uma resposta, troque o número em "correct" da questão.
+   ========================================================================= */
+
+/* Habilidade avaliada em cada questão (código BNCC ou marcação do Currículo SAS),
+   conforme o gabarito oficial. Exibida como etiqueta discreta em cada questão. */
+const HAB = {
+  1:"EF67LP28", 2:"EF07LP08", 3:"EF67LP07", 4:"Currículo SAS", 5:"EF07LP02",
+  6:"EF07LP09", 7:"EF67LP17", 8:"EF07LP07", 9:"EF67LP02", 10:"EF07LP10",
+  11:"EF07MA10",12:"EF07MA10",13:"EF07MA08",14:"EF07MA12",15:"EF07MA12",
+  16:"EF07MA11",17:"EF07MA13",18:"EF07MA15",19:"EF07MA13",20:"EF07MA18",
+  21:"EF07LI18",22:"EF07LI07",23:"EF07LI15",24:"EF07LI09",25:"EF07LI15",
+  26:"Currículo SAS",27:"Currículo SAS",28:"Currículo SAS",29:"Currículo SAS",30:"EF07CI07",
+  31:"EF07GE09",32:"EF07GE09",33:"EF07GE05",34:"EF07GE11",35:"EF07GE08",
+  36:"EF07HI02",37:"EF07HI03",38:"EF07HI14",39:"EF07HI09",40:"EF07HI03",
+  41:"Currículo SAS",42:"Currículo SAS",43:"Currículo SAS",44:"Currículo SAS",45:"Currículo SAS",
+  46:"EF69AR11",47:"EF69AR34",48:"EF69AR04",49:"EF69AR19",50:"EF69AR02"
+};
+
+/* Nenhuma questão depende mais de imagens externas. As questões que usavam
+   figuras protegidas foram reescritas em texto, medindo as mesmas habilidades.
+   Os diagramas simples (reta numérica, latinhas, octógono, cadeia alimentar,
+   gráfico do PIB) continuam desenhados diretamente na página. */
+const IMG = {};
+
+const SUBJECTS = [
+  {key:"Portugues", label:"Português", range:"1–10"},
+  {key:"Matematica",label:"Matemática",range:"11–20"},
+  {key:"Ingles",    label:"Inglês",    range:"21–25"},
+  {key:"Ciencias",  label:"Ciências",  range:"26–30"},
+  {key:"Geografia", label:"Geografia", range:"31–35"},
+  {key:"Historia",  label:"História",  range:"36–40"},
+  {key:"Filosofia", label:"Filosofia", range:"41–45"},
+  {key:"Arte",      label:"Arte",      range:"46–50"},
+];
+
+const QUESTIONS = [
+/* ---------------- PORTUGUÊS ---------------- */
+{n:1,s:"Portugues",
+ context:`<p>Já estava acordada revirando-se na cama por cerca de uma hora, quando de repente algo a fez se sentar e voltar a cabeça em direção à porta. Ela ouviu, atenta.</p><p>— Agora não é o vento — sussurrou um tanto alto. — Isso não é o vento. É diferente. É aquele choro que já ouvi antes.</p><p>A porta de seu quarto estava entreaberta e o som vinha pelo corredor... Mary sentia que precisava descobrir o que era... Talvez o fato de ela estar com um humor péssimo tenha lhe dado coragem. Pôs o pé para fora e saiu da cama.</p><span class="src">BURNETT, Frances Hodgson. O jardim secreto. Companhia das Letras, 2013.</span>`,
+ stem:"Uma característica do gênero romance infantojuvenil que pode ser observada nesse trecho é a",
+ opts:["existência de elementos fantásticos e distantes da realidade.","presença de diferentes pontos de vista sobre a cena apresentada.","apresentação de uma moral para conscientizar o público jovem.","utilização de uma linguagem adequada ao público jovem."],
+ correct:3,
+ exp:"O trecho usa linguagem simples e acessível, própria do público jovem. Não há elementos fantásticos, nem vários pontos de vista, nem uma moral explícita."},
+
+{n:2,s:"Portugues",
+ context:`<p>"Talvez o fato de ela estar com um humor <b>péssimo</b> tenha lhe dado coragem."</p>`,
+ stem:'O adjetivo destacado no trecho exerce a função de',
+ opts:['adjunto adnominal, pois caracteriza o substantivo "humor".','adjunto adverbial, pois acrescenta sentido ao verbo "tenha".','complemento verbal, pois complementa o sentido do verbo "estar".','complemento nominal, pois delimita o sentido do substantivo "fato".'],
+ correct:0,
+ exp:'"Péssimo" caracteriza diretamente o substantivo "humor", funcionando como adjunto adnominal.'},
+
+{n:3,s:"Portugues",
+ context:`<p>Leia o texto de uma campanha:</p><p><b>"Economize água. Feche a torneira enquanto escova os dentes — cada gota faz diferença para o planeta."</b></p>`,
+ stem:"Um cartaz de conscientização como esse tem como principal objetivo",
+ opts:["narrar uma história sobre o uso da água.","vender produtos de limpeza para as famílias.","sensibilizar as pessoas a mudar um comportamento.","explicar cientificamente o ciclo da água."],
+ correct:2,
+ exp:"O cartaz de conscientização busca sensibilizar o público e incentivar uma mudança de atitude — aqui, economizar água."},
+
+{n:4,s:"Portugues",
+ context:`<p><b>Cidade natal homenageia Ziraldo com Casa de Cultura e estátua do "Menino Maluquinho"</b></p><p>Caratinga, terra natal de Ziraldo, tem dois locais para homenagear o desenhista e escritor que faleceu aos 91 anos. [...]</p><span class="src">ODA, Michelly. G1, 6 abr. 2024.</span>`,
+ stem:"O aposto é um termo que explica outro termo da oração. A expressão que apresenta essa função no texto é",
+ opts:['"terra natal de Ziraldo".','"Já na entrada da cidade".','"há uma estátua do \'Menino Maluquinho\'".','"recebeu o nome de Casa Ziraldo de Cultura".'],
+ correct:0,
+ exp:'"Terra natal de Ziraldo" explica quem é Caratinga — é um aposto explicativo.'},
+
+{n:5,s:"Portugues",
+ context:`<p><b>Agora é crime: cyberbullying alarma o Brasil, 2º país no mundo em casos</b></p><p>O Brasil está entre os líderes mundiais no uso da internet... a prática do bullying, antes limitada a ambientes físicos, se estendeu ao plano virtual... é o segundo país no mundo com maior incidência de episódios de cyberbullying.</p><span class="src">HUPSEL FILHO, Valmar. Veja, 19 jan. 2024. (adaptado)</span>`,
+ stem:"Esse fragmento faz parte de uma reportagem, gênero que se caracteriza principalmente por",
+ opts:["narrar histórias fictícias sobre fatos sociais.","informar sobre um tema de forma detalhada.","apresentar questionários com depoimentos.","orientar o leitor sobre como fazer uma denúncia."],
+ correct:1,
+ exp:"A reportagem aprofunda um tema real com dados e explicações — informa de forma detalhada."},
+
+{n:6,s:"Portugues",
+ context:`<p>"São 181,8 milhões de pessoas (84% da população) conectadas <b>diariamente</b> à rede mundial de computadores, em uma média de oito horas por dia."</p>`,
+ stem:"No trecho, o adjunto adverbial em destaque expressa circunstância de",
+ opts:['lugar, delimitando o termo "rede".','tempo, modificando o sentido de "conectadas".','afirmação, alterando o significado de "população".','certeza, caracterizando a expressão "milhões de pessoas".'],
+ correct:1,
+ exp:'"Diariamente" indica com que frequência as pessoas ficam conectadas — circunstância de tempo.'},
+
+{n:7,s:"Portugues",
+ context:`<p><b>Carta aberta à sociedade brasileira</b></p><p>[...] A sustentabilidade não é uma pauta para o futuro: devemos alcançá-la agora! É urgente realizar a transição para um modelo de desenvolvimento sustentável... Os compromissos assumidos perante a Agenda apenas serão alcançados coletivamente se cada um de nós estiver comprometido...</p><span class="src">Comissão Nacional para os ODS. Secretaria Geral, 12 abr. 2024. (adaptado)</span>`,
+ stem:"Caracterizado como uma carta aberta, o texto apresenta um",
+ opts:["pedido para que o leitor divulgue sua opinião sobre o assunto.","comparativo entre diferentes pontos de vista sobre a Agenda 2030.","posicionamento contrário à execução dos compromissos sustentáveis.","alerta para a urgência da adesão social ao desenvolvimento sustentável."],
+ correct:3,
+ exp:'Palavras como "urgente" e "devemos alcançá-la agora" mostram um alerta pela adesão de todos.'},
+
+{n:8,s:"Portugues",
+ context:`<p>"A sustentabilidade não é uma pauta para o futuro [...]"</p>`,
+ stem:"Na oração, o núcleo do sujeito é representado por um",
+ opts:["verbo, que assume valor de nome.","artigo, que foi substantivado.","substantivo, que nomeia um conceito.","adjetivo, que está determinado por artigo."],
+ correct:2,
+ exp:'O núcleo do sujeito é "sustentabilidade", um substantivo que nomeia um conceito.'},
+
+{n:9,s:"Portugues",
+ context:`<p><b>Animais do passado</b></p><p>Olá, pessoal da revista CHC! Nós lemos o texto "Pônei pré-histórico?!?"... Gostamos muito desse texto... Vocês poderiam escrever mais sobre os animais pré-históricos?...</p><p>Alunos do 4º ano C. Escola Municipal Anna Abreu. Itatiba/SP.</p><span class="src">Ciência Hoje das Crianças: Fala aqui!, 1º mar. 2024. (adaptado)</span>`,
+ stem:"Esse texto se caracteriza como uma carta do leitor, pois",
+ opts:["apresenta uma narrativa ficcional sobre animais.","utiliza dados estatísticos para a defesa de uma ideia.","divulga uma descoberta científica de modo detalhado.","compartilha uma opinião sobre uma matéria publicada."],
+ correct:3,
+ exp:"Os leitores comentam e opinam sobre um texto que a revista publicou — típico da carta do leitor."},
+
+{n:10,s:"Portugues",
+ context:`<p>Observe a frase:</p><p><b>"Os alunos saíram às pressas quando o sinal tocou."</b></p>`,
+ stem:'O emprego da crase em "às pressas" se justifica porque essa expressão',
+ opts:["indica uma hora específica do dia.","une dois verbos na mesma oração.","apresenta a contração de artigo com pronome.","é uma locução adverbial formada por palavra feminina."],
+ correct:3,
+ exp:'"Às pressas" é uma locução adverbial de modo formada por palavra feminina — caso em que a crase é obrigatória.'},
+
+/* ---------------- MATEMÁTICA ---------------- */
+{n:11,s:"Matematica",
+ context:`<p>Pedro Henrique venceu o lançamento do dardo com a marca de, aproximadamente, <b>83,9 m</b>. Entre 83 e 84 foram inseridos os pontos A, B, C e D.</p>`,
+ diagram:`<svg viewBox="0 0 620 90" role="img" aria-label="Reta numérica de 83 a 84 com pontos A, B, C e D">
+   <line x1="20" y1="45" x2="600" y2="45" stroke="#55606e" stroke-width="2"/>
+   <polygon points="600,45 590,40 590,50" fill="#55606e"/><polygon points="20,45 30,40 30,50" fill="#55606e"/>
+   ${[0,1,2,3,4,5,6,7,8,9,10].map(i=>{const x=60+i*50;return `<line x1="${x}" y1="38" x2="${x}" y2="52" stroke="#55606e" stroke-width="2"/>`}).join("")}
+   <text x="60" y="72" text-anchor="middle" font-family="Space Mono" font-size="13">83</text>
+   <text x="110" y="30" text-anchor="middle" font-family="Space Mono" font-size="13" fill="#1f9e8f">A</text>
+   <text x="160" y="30" text-anchor="middle" font-family="Space Mono" font-size="13" fill="#1f9e8f">B</text>
+   <text x="310" y="72" text-anchor="middle" font-family="Space Mono" font-size="13">83,5</text>
+   <text x="460" y="30" text-anchor="middle" font-family="Space Mono" font-size="13" fill="#1f9e8f">C</text>
+   <text x="510" y="30" text-anchor="middle" font-family="Space Mono" font-size="13" fill="#1f9e8f">D</text>
+   <text x="560" y="72" text-anchor="middle" font-family="Space Mono" font-size="13">84</text>
+ </svg>`,
+ stem:"Na reta numérica, qual ponto corresponde à marca atingida pelo atleta?",
+ opts:["A","B","C","D"],
+ correct:3,
+ exp:"Cada intervalo vale 0,1. Contando de 83: A=83,1; B=83,2; C=83,8; D=83,9. Logo, 83,9 é o ponto D."},
+
+{n:12,s:"Matematica",
+ context:`<p>Duas em cada cinco espécies de plantas estão sob risco de extinção. A relação é 2/5.</p>`,
+ stem:"Qual é a representação, na forma decimal, dessa relação?",
+ opts:["0,6","0,4","0,06","0,04"],
+ correct:1,
+ exp:"2 ÷ 5 = 0,4."},
+
+{n:13,s:"Matematica",
+ context:`<p>Ao terminar o tempo mínimo: Ana completou 8/10, Beto 3/4, Carla 5/6 e Daniel 7/10 do percurso.</p>`,
+ stem:"Quem fez o menor percurso?",
+ opts:["Ana","Beto","Carla","Daniel"],
+ correct:3,
+ exp:"Em decimais: Ana 0,8; Beto 0,75; Carla ≈0,83; Daniel 0,7. O menor é Daniel."},
+
+{n:14,s:"Matematica",
+ context:`<p>A = (14/5 − 6/25) : [ (1/5)² + 3/5 ]</p>`,
+ stem:"Qual é o valor numérico de A?",
+ opts:["4","8","16","64"],
+ correct:0,
+ exp:"(70/25 − 6/25) = 64/25. E [1/25 + 15/25] = 16/25. Então 64/25 ÷ 16/25 = 64/16 = 4."},
+
+{n:15,s:"Matematica",
+ context:`<p>Restaurante self-service: 100 g por R$ 11,00. Renata pegou 200 g de comida, um suco de R$ 6,50 e um chocolate de R$ 2,40. Ela pagou apenas metade do total consumido.</p>`,
+ stem:"Quanto a cliente pagou por essa conta?",
+ opts:["R$ 15,45","R$ 19,90","R$ 22,00","R$ 28,50"],
+ correct:0,
+ exp:"Comida: 200 g = R$ 22,00. Total = 22 + 6,50 + 2,40 = R$ 30,90. Metade = R$ 15,45."},
+
+{n:16,s:"Matematica",
+ context:`<p>Um tanque estava com 6/15 de sua capacidade. Foi esvaziado com baldes de 1/30 do tanque cada.</p>`,
+ stem:"Quantos baldes foram necessários para armazenar a água do tanque?",
+ opts:["12","10","9","8"],
+ correct:0,
+ exp:"6/15 = 12/30. Dividindo por 1/30: 12/30 ÷ 1/30 = 12 baldes."},
+
+{n:17,s:"Matematica",
+ context:`<p>Expressão: ( −2a + 3b² − 4 ) ÷ ( a + 2b + 30 ), para a = −25 e b = 1.</p>`,
+ stem:"Qual é o valor numérico dessa expressão?",
+ opts:["−7","−3","1","7"],
+ correct:3,
+ exp:"Numerador: −2(−25)+3(1)−4 = 50+3−4 = 49. Denominador: −25+2+30 = 7. Logo 49 ÷ 7 = 7."},
+
+{n:18,s:"Matematica",
+ diagram:`<svg viewBox="0 0 560 150" role="img" aria-label="Sequência de figuras com latinhas em organização retangular">
+   ${[1,2,3,4].map((f,idx)=>{const bx=20+idx*135;let g="";for(let r=0;r<f;r++){for(let c=0;c<3;c++){const x=bx+c*22;const y=120-r*26;g+=`<rect x="${x}" y="${y}" width="16" height="22" rx="3" fill="#1f9e8f" opacity="0.85"/>`}}return g+`<text x="${bx+27}" y="145" text-anchor="middle" font-family="Space Mono" font-size="11">${f}ª fig.</text>`}).join("")}
+   <text x="545" y="70" font-size="20">…</text>
+ </svg>`,
+ stem:"Cada figura tem uma organização retangular de latinhas (3 por linha). Quantas latinhas haverá na 5ª figura?",
+ opts:["15","18","21","24"],
+ correct:0,
+ exp:"Cada figura tem 3 latinhas por linha e o número de linhas cresce de 1 em 1: 3, 6, 9, 12… A 5ª tem 5×3 = 15."},
+
+{n:19,s:"Matematica",
+ context:`<p>A soma das idades de Amanda e Beatriz é 57. Beatriz tem três anos a mais que o dobro da idade de Amanda. Considere x a idade de Amanda.</p>`,
+ stem:"Qual é a equação que representa a situação?",
+ opts:["x + x = 54","x + (2x − 3) = 57","x + (2x + 3) = 57","x + x + x = 57"],
+ correct:2,
+ exp:'Amanda = x; Beatriz = 2x + 3 ("três a mais que o dobro"). Soma: x + (2x + 3) = 57.'},
+
+{n:20,s:"Matematica",
+ diagram:`<svg viewBox="0 0 200 200" role="img" aria-label="Octógono regular com lados marcados por y">
+   <polygon points="60,20 140,20 180,60 180,140 140,180 60,180 20,140 20,60" fill="none" stroke="#1f9e8f" stroke-width="4"/>
+   ${["100,14","165,45","190,100","165,165","100,190","35,165","10,100","35,45"].map(p=>{const[x,y]=p.split(",");return `<text x="${x}" y="${y}" text-anchor="middle" font-family="Space Mono" font-size="13" fill="#55606e">y</text>`}).join("")}
+ </svg>`,
+ stem:"Um marceneiro fez uma moldura octogonal de lados iguais com 128 cm de ripa. Qual é a medida de cada lado, em centímetros?",
+ opts:["16","18","21","32"],
+ correct:0,
+ exp:"O octógono tem 8 lados iguais: 128 ÷ 8 = 16 cm."},
+
+/* ---------------- INGLÊS ---------------- */
+{n:21,s:"Ingles",
+ context:`<p>[...] Billie Eilish was barely a teenager when her song "Ocean Eyes" became a viral hit. She teamed with her brother, Finneas O'Connell... establishing the artist as a global sensation and seven-time Grammy winner before the age of 20. [...] Raised in a two-bedroom house in Highland Park, where she and her brother were homeschooled, Eilish was encouraged to pursue her interests in dance, gymnastics, horseback riding and especially music.</p><span class="src">biography.com, 25 abr. 2024. · <b>raised</b>: criada · <b>homeschooled</b>: educados em casa</span>`,
+ stem:"According to the text, singer Billie Eilish",
+ opts:["will be a famous artist in the future.","is a daughter of photographer parents.","is being raised without contact with art.","was a teenager when her music was a hit."],
+ correct:3,
+ exp:'The text says she "was barely a teenager when her song became a viral hit" — option d.'},
+
+{n:22,s:"Ingles",
+ context:`<p>Despite class differences, 95% of Americans over the age of 15 engaged in some kind of leisure activity... But the vast majority of Americans' leisure time is spent — you guessed it — in front of the television. Watching TV is the most popular leisure activity, accounting for an average of 2.8 hours a day.</p><span class="src">SNODGRASS, Erin. Business Insider, 4 abr. 2024.</span>`,
+ stem:"According to the text, which leisure activity is most popular among Americans?",
+ opts:["Socializing outdoors.","Watching television.","Exercising.","Reading."],
+ correct:1,
+ exp:'The text states watching TV "is the most popular leisure activity."'},
+
+{n:23,s:"Ingles",
+ context:`<p>Read the sentence:</p><p><b>"Yesterday, Marina cleaned her room and watched a movie with her sister."</b></p>`,
+ stem:'In the sentence, the verbs "cleaned" and "watched" are examples of',
+ opts:["verbs in the present continuous.","regular verbs in the simple past.","irregular verbs in the simple past.","verbs in the simple future."],
+ correct:1,
+ exp:'Regular verbs form the simple past by adding -ed: clean → cleaned, watch → watched.'},
+
+{n:24,s:"Ingles",
+ context:`<p><b>Caring is necessary but it is also a choice</b></p><p>I think caring about our society is a choice you make for yourself... Caring could be shown in different ways. People can volunteer to go to poor countries... Others dive in the ocean and collect plastic... Or even just stay for a day with your grandma...</p><span class="src">MIRRIAM. The Kids Write, 17 jun. 2020. · <b>caring</b>: cuidar</span>`,
+ stem:"According to this blog post, caring",
+ opts:["harms countries that are in danger.","refers to finishing mandatory tasks.","can be shown in a variety of ways.","means helping yourself."],
+ correct:2,
+ exp:'The author says caring "could be shown in different ways" and gives several examples.'},
+
+{n:25,s:"Ingles",
+ context:`<p>Read the sentence:</p><p><b>"Last weekend, Tom went to the beach and bought an ice cream."</b></p>`,
+ stem:"The sentence contains examples of irregular verbs in the simple past. They are",
+ opts:['"went" and "bought".','"weekend" and "beach".','"went" and "beach".','"to" and "an".'],
+ correct:0,
+ exp:'"Went" (go) and "bought" (buy) are irregular verbs — they do not follow the -ed rule in the simple past.'},
+
+/* ---------------- CIÊNCIAS ---------------- */
+{n:26,s:"Ciencias",
+ context:`<p>Os fungos, como o bolor que aparece em pães e frutas, alimentam-se de matéria orgânica já existente e têm células com núcleo organizado.</p>`,
+ stem:"Com base nessas características, os fungos são organismos",
+ opts:["autotróficos e procariontes.","autotróficos e eucariontes.","heterotróficos e procariontes.","heterotróficos e eucariontes."],
+ correct:3,
+ exp:"Fungos têm núcleo organizado (eucariontes) e obtêm energia de matéria orgânica pronta (heterotróficos)."},
+
+{n:27,s:"Ciencias",
+ context:`<p>As samambaias são plantas vasculares e não possuem sementes, flores ou frutos. Têm grande valor comercial como plantas ornamentais.</p><span class="src">prefeitura.sp.gov.br (adaptado)</span>`,
+ stem:"As plantas citadas pertencem a qual grupo do reino Plantae?",
+ opts:["Briófitas","Pteridófitas","Angiospermas","Gimnospermas"],
+ correct:1,
+ exp:"Samambaias são vasculares e sem sementes: características das pteridófitas."},
+
+{n:28,s:"Ciencias",
+ diagram:`<svg viewBox="0 0 620 70" role="img" aria-label="Cadeia alimentar: grama, gafanhoto, sapo, serpente, falcão">
+   ${["Grama","Gafanhoto","Sapo","Serpente","Falcão"].map((t,i)=>{const x=20+i*125;return `<rect x="${x}" y="20" width="96" height="34" rx="8" fill="#3fa34d" opacity="0.12" stroke="#3fa34d"/><text x="${x+48}" y="42" text-anchor="middle" font-size="13" font-family="Public Sans" fill="#1f2733">${t}</text>${i<4?`<text x="${x+112}" y="42" text-anchor="middle" font-size="18" fill="#3fa34d">→</text>`:""}`}).join("")}
+ </svg>`,
+ stem:"Dentre os seres vivos apresentados, aquele que produz o próprio alimento é",
+ opts:["a serpente.","o falcão.","a grama.","o sapo."],
+ correct:2,
+ exp:"A grama é produtora: realiza fotossíntese e produz o próprio alimento. Os demais são consumidores."},
+
+{n:29,s:"Ciencias",
+ context:`<p>Considere a cadeia alimentar: capim → gafanhoto → sapo → cobra. A cada nível, parte da energia é usada nas atividades do organismo e liberada na forma de calor.</p>`,
+ stem:"Sobre a energia disponível ao longo dessa cadeia, é correto afirmar que ela",
+ opts:["aumenta a cada nível, do capim até a cobra.","diminui a cada nível, do capim até a cobra.","permanece igual em todos os níveis.","existe apenas no último nível (a cobra)."],
+ correct:1,
+ exp:"A energia disponível diminui a cada nível trófico, pois parte é perdida como calor nas atividades dos organismos."},
+
+{n:30,s:"Ciencias",
+ context:`<p>Os povos indígenas deram nome a um dos principais biomas do Nordeste, a mata branca, que ocupa pouco mais de 10% do território nacional. Forma-se em regiões de clima seco, com chuvas escassas... espécies adaptadas para sobreviver à falta de água.</p><span class="src">embrapa.br (adaptado)</span>`,
+ stem:"Assinale a alternativa que indica corretamente o bioma descrito.",
+ opts:["Pampa","Cerrado","Caatinga","Pantanal"],
+ correct:2,
+ exp:'"Mata branca", clima seco e espécies adaptadas à falta de água descrevem a Caatinga, bioma típico do Nordeste.'},
+
+/* ---------------- GEOGRAFIA ---------------- */
+{n:31,s:"Geografia",
+ context:`<p>Uma das propostas de regionalização do Brasil divide o país em três grandes complexos — Amazônia, Nordeste e Centro-Sul — considerando as semelhanças de produção, urbanização e desenvolvimento econômico de cada área, e não os limites entre os estados.</p>`,
+ stem:"Nessa proposta, o critério usado para dividir o território brasileiro é",
+ opts:["o clima predominante em cada área.","a realidade socioeconômica do espaço.","as fronteiras políticas entre os estados.","a vegetação natural de cada região."],
+ correct:1,
+ exp:"A divisão em complexos regionais baseia-se em critérios socioeconômicos (produção, urbanização, economia), e não em limites políticos ou fatores naturais."},
+
+{n:32,s:"Geografia",
+ context:`<p>Na regionalização "Os quatro Brasis", proposta por Milton Santos, a chamada Região Concentrada reúne o Sudeste e o Sul do país.</p>`,
+ stem:"Essa região é caracterizada principalmente pelo alto grau de",
+ opts:["preservação ambiental e atividade extrativista.","produção agrícola familiar e baixa densidade populacional.","industrialização, urbanização e modernização.","isolamento econômico e pouca infraestrutura."],
+ correct:2,
+ exp:"A Região Concentrada (Sudeste e Sul) reúne as áreas mais industrializadas, urbanizadas e com infraestrutura mais moderna do país."},
+
+{n:33,s:"Geografia",
+ context:`<p>O gado foi introduzido no Brasil no início da colonização... O crescimento dos rebanhos era incompatível com a expansão dos canaviais. Os animais devoravam as mudas e a própria cana... A criação de gado no litoral tornava-se quase impossível.</p><span class="src">multirio.rj.gov.br (adaptado)</span>`,
+ stem:"Na economia açucareira, a situação apresentada teve como principal consequência o(a)",
+ opts:["fortalecimento do extrativismo.","diminuição do mercado externo.","avanço para o interior nordestino.","progresso para a industrialização."],
+ correct:2,
+ exp:"Como o gado não podia ficar perto dos canaviais do litoral, a pecuária foi empurrada para o interior (sertão) nordestino."},
+
+{n:34,s:"Geografia",
+ context:`<p>A produção de cacau no Brasil começou a se estruturar no sul da Bahia, onde o cacaueiro se adaptou bem às condições naturais...</p><span class="src">fsp.usp.br (adaptado)</span>`,
+ stem:"Que característica natural da Zona da Mata nordestina favoreceu o cultivo de cacau?",
+ opts:["A predominância de vegetação seca.","A falta de regularidade das chuvas.","A influência do relevo montanhoso.","A presença de um clima úmido."],
+ correct:3,
+ exp:"O cacau exige umidade e chuvas regulares. A Zona da Mata tem clima úmido, ideal para essa cultura."},
+
+{n:35,s:"Geografia",
+ diagram:`<svg viewBox="0 0 560 210" role="img" aria-label="Participação das regiões no PIB do Brasil em 2018">
+   ${[["Sudeste",53.1],["Sul",17.1],["Nordeste",14.3],["Centro-Oeste",9.9],["Norte",5.5]].map((d,i)=>{const y=15+i*38;const w=d[1]*8.2;return `<text x="10" y="${y+18}" font-size="12" font-family="Public Sans">${d[0]}</text><rect x="120" y="${y}" width="${w}" height="24" rx="4" fill="#e8871e" opacity="0.85"/><text x="${125+w}" y="${y+17}" font-size="12" font-family="Space Mono">${d[1].toString().replace('.',',')}%</text>`}).join("")}
+   <text x="10" y="205" font-size="11" fill="#55606e" font-family="Public Sans">Participação das Grandes Regiões no PIB — 2018 (IBGE)</text>
+ </svg>`,
+ stem:"Qual fator é o principal responsável pela posição da Região Sudeste no gráfico?",
+ opts:["O predomínio da pecuária.","A intensa produção açucareira.","A elevada concentração industrial.","O avanço da atividade petrolífera."],
+ correct:2,
+ exp:"O Sudeste concentra a maior parte da indústria brasileira, o que explica sua participação de 53,1% no PIB."},
+
+/* ---------------- HISTÓRIA ---------------- */
+{n:36,s:"Historia",
+ context:`<p>Ao longo dos séculos XV e XVI, com as viagens portuguesas e espanholas, a experiência náutica possibilitou superar antigas crenças sobre o planeta... a chegada à América por Colombo (1492) e a de Vasco da Gama às Índias (1498)...</p><span class="src">ALEGRIA, M. Fernanda et al. História da Expansão Portuguesa (adaptado)</span>`,
+ stem:"Assinale uma consequência dessas experiências náuticas para as nações europeias no século XVI.",
+ opts:["A unificação das práticas econômicas.","O distanciamento dos povos orientais.","O estabelecimento de novas rotas comerciais.","A centralização de conhecimentos tecnológicos."],
+ correct:2,
+ exp:"As grandes navegações abriram caminhos marítimos inéditos, estabelecendo novas rotas comerciais."},
+
+{n:37,s:"Historia",
+ context:`<p>A repentina proximidade dos povos oyo, egba, egbado, ijesa... em seu exílio em Serra Leoa... levou-os a reconhecer suas similaridades e diferenças... tornando possível uma identidade étnica "iorubá".</p><span class="src">MATORY, J. Lorand. Horizontes Antropológicos (adaptado)</span>`,
+ stem:"O texto destaca a seguinte característica da formação dos grupos iorubás:",
+ opts:["união de territórios subordinados à autoridade do rei de Gana.","integração de práticas religiosas devido à localização geográfica.","aproximação de populações escravizadas por influência europeia.","compartilhamento de semelhanças culturais entre povos distintos."],
+ correct:3,
+ exp:"Povos distintos, ao se aproximarem, reconheceram semelhanças culturais e formaram a identidade iorubá."},
+
+{n:38,s:"Historia",
+ context:`<p>Os primeiros contatos dos portugueses com o reino de Monomotapa datam do início do século XVI... os lusitanos já tinham ciência do grande volume de ouro negociado em Sofala... cuja origem era principalmente o reino do Monomotapa.</p><span class="src">MUSCALU, Ivana P. de O. USP, 2011 (adaptado)</span>`,
+ stem:"Além de facilitar o acesso às Índias, qual era o outro importante objetivo dos portugueses ao se relacionarem com o reino Monomotapa?",
+ opts:["Converter as populações nativas ao cristianismo.","Explorar as rotas e os recursos minerais locais.","Dominar e enfraquecer a religião muçulmana.","Estabelecer habitação nos territórios africanos."],
+ correct:1,
+ exp:"O texto enfatiza o ouro. O interesse português era explorar as rotas e os recursos minerais (ouro) da região."},
+
+{n:39,s:"Historia",
+ context:`<p>A produção de uma arquitetura europeia em território americano exigiu mão de obra. O caso mexicano revela que essa demanda exigia um processo de aculturação, formação de mão de obra e conversão religiosa.</p><span class="src">THIESEN, José R. P. Oculum Ensaios, 2022 (adaptado)</span>`,
+ stem:"Segundo o texto, qual foi a consequência da colonização espanhola para os povos do atual México?",
+ opts:["O estabelecimento do regime de trabalho assalariado.","A reprodução de saberes arquitetônicos originários.","A criação de rivalidades entre grupos indígenas.","O enfraquecimento da cultura dos povos nativos."],
+ correct:3,
+ exp:"A aculturação e a conversão religiosa impostas enfraqueceram a cultura dos povos nativos."},
+
+{n:40,s:"Historia",
+ context:`<p>Se eu dividia meus presentes entre a população sem considerar as diferenças de classe, frequentemente encontrava os objetos nas mãos dos senhores. Mas estes últimos entregavam grande parte dos presentes recebidos para a sua gente.</p><span class="src">SCHMIDT, Max. Os Aruaques (adaptado)</span>`,
+ stem:"Essa prática de distribuição de presentes dos povos aruaques do Alto Xingu era um meio para",
+ opts:["desenvolver o saber teórico religioso.","conquistar a lealdade de tribos vizinhas.","manter a organização social da comunidade.","impedir a ocorrência de disputas econômicas."],
+ correct:2,
+ exp:"A redistribuição dos presentes pelos senhores reforçava hierarquias e mantinha a organização social do grupo."},
+
+/* ---------------- FILOSOFIA ---------------- */
+{n:41,s:"Filosofia",
+ context:`<p>Minha maior bronca é me sentir diferente do resto da turma... o maior sonho da minha vida é... caber no meio, ser igual a todos os meus colegas... Mas, provavelmente, jamais serei igual aos meus colegas. Serei sempre diferente.</p><span class="src">NICOLELIS, Giselda L. Como é duro ser diferente! FTD, 2022.</span>`,
+ stem:"A dificuldade da personagem reflete o seguinte problema presente na sociedade atual:",
+ opts:["o contato entre culturas diferentes.","o amplo estímulo ao autoconhecimento.","a imposição de padrões socialmente aceitos.","a alta valorização da individualidade humana."],
+ correct:2,
+ exp:'O desejo de "ser igual a todos" mostra a pressão de padrões socialmente impostos.'},
+
+{n:42,s:"Filosofia",
+ context:`<p>"Quando falamos em qualidade de vida, o esporte é uma ferramenta importante, mas é mais fundamental ainda para as pessoas com deficiência... temos vários projetos que incentivam a prática de atividade física em idade escolar..."</p><span class="src">Ramon Pereira, Comitê Paralímpico Brasileiro (adaptado)</span>`,
+ stem:"A partir da fala do coordenador, o esporte paralímpico tem papel importante na sociedade por",
+ opts:["desconsiderar as características físicas e intelectuais dos indivíduos.","promover o acolhimento das diferenças e a inclusão social.","diminuir a competitividade entre o público infantil.","eliminar os casos de preconceito na sociedade."],
+ correct:1,
+ exp:"O esporte paralímpico valoriza a participação das pessoas com deficiência, promovendo acolhimento e inclusão."},
+
+{n:43,s:"Filosofia",
+ context:`<p><b>Cultura é o quê?</b></p><p>[...] Cultura é mulher rendeira, oleira, tecendo tricô, crochê... Cultura é tudo que você imagina, realiza, sonha, projeta e ajuda a transformar realidades.</p><span class="src">SANTANA, J. In: CANEDO, D. V ENECULT, 2009.</span>`,
+ stem:"Na reflexão do texto, a cultura é entendida como o(a)",
+ opts:["memorização dos conhecimentos adquiridos na escola.","evolução das técnicas usadas na produção artística.","comprovação das qualidades naturais das pessoas.","conjunto das criações produzidas pelo ser humano."],
+ correct:3,
+ exp:"O texto define cultura como tudo que o ser humano cria, imagina e realiza."},
+
+{n:44,s:"Filosofia",
+ context:`<p>O Brasil é grande. Tem diversas tradições culturais, mas muitas delas vieram de outras partes do mundo... é pelo paladar que o brasileiro se encontra com outras culturas: árabe, mexicana, italiana, coreana...</p><span class="src">g1.globo.com (adaptado)</span>`,
+ stem:"O texto indica que a cultura brasileira é marcada pela",
+ opts:["conservação de tradições nativas.","falta de patrimônios materiais.","existência de discriminações.","diversidade de influências."],
+ correct:3,
+ exp:"As várias origens citadas (árabe, italiana, coreana…) mostram uma cultura marcada pela diversidade de influências."},
+
+{n:45,s:"Filosofia",
+ context:`<p>O preconceito é um fenômeno social que afeta indivíduos e comunidades. Pode ser definido como uma atitude negativa a um grupo... podendo limitar as oportunidades de educação, emprego, moradia e acesso a serviços de saúde.</p><span class="src">rabiscodahistoria.com (adaptado)</span>`,
+ stem:"Com base no texto, uma das consequências do preconceito é o(a)",
+ opts:["aumento das taxas de criminalidade.","desaparecimento das diferenças culturais.","violação de direitos básicos dos indivíduos.","ocorrência de conflitos entre povos inimigos."],
+ correct:2,
+ exp:"Ao limitar acesso a educação, emprego, moradia e saúde, o preconceito viola direitos básicos das pessoas."},
+
+/* ---------------- ARTE ---------------- */
+{n:46,s:"Arte",
+ context:`<p>Na dança, os movimentos podem ser realizados em diferentes níveis, de acordo com a altura do corpo em relação ao chão: alto, médio e baixo.</p>`,
+ stem:"Um dançarino que se apoia no chão e realiza movimentos rentes ao solo está explorando o nível",
+ opts:["alto.","médio.","baixo.","aéreo."],
+ correct:2,
+ exp:"O nível baixo corresponde aos movimentos realizados próximos ao chão."},
+
+{n:47,s:"Arte",
+ context:`<p>A capoeira é uma manifestação cultural multidimensional — dança, luta e jogo ao mesmo tempo... Símbolo da cultura afro-brasileira, da miscigenação de etnias e da resistência à opressão.</p><span class="src">institutopreservale.com.br (adaptado)</span>`,
+ stem:"A capoeira simboliza a diversidade de matrizes culturais brasileira porque",
+ opts:["mistura luta e dança em sua prática.","possui movimentos complexos.","apresenta instrumentos antigos.","tem origem na cultura africana."],
+ correct:3,
+ exp:"A capoeira é símbolo da cultura afro-brasileira: sua origem africana representa uma das matrizes que formam a diversidade brasileira."},
+
+{n:48,s:"Arte",
+ context:`<p><b>Pinturas corporais indígenas carregam marcas de identidade cultural</b></p><p>Por meio das pinturas corporais, os indígenas carregam a identidade cultural de sua comunidade... Cada traço possui um significado. O conceito depende de cada etnia...</p><span class="src">Funai, set. 2022.</span>`,
+ stem:"Os grafismos corporais são importantes para os povos indígenas, principalmente, porque",
+ opts:["mostram que a natureza tem dependência dos humanos.","seguem padrões que são comuns entre os grupos.","são expressões da cultura de cada etnia.","recebem influência de outras culturas."],
+ correct:2,
+ exp:"Cada etnia tem seus significados próprios: as pinturas expressam a cultura específica de cada povo."},
+
+{n:49,s:"Arte",
+ context:`<p>Koji Kondo, criador da trilha de Super Mario Bros, sobre seu processo: "...penso na melodia construindo uma progressão de acordes que combine com esses ritmos..."</p><span class="src">Portal Correio, mar. 2024 (adaptado)</span>`,
+ stem:"Koji Kondo menciona a melodia como um componente básico da música. Esse componente é definido como o(a)",
+ opts:["textura musical.","duração da canção.","sequência de notas musicais.","agrupamento irregular de sons."],
+ correct:2,
+ exp:"Melodia é a sequência de notas musicais organizada no tempo."},
+
+{n:50,s:"Arte",
+ context:`<p>Nas esculturas do Egito Antigo, os faraós eram representados de forma idealizada, com postura rígida e imponente, para transmitir poder e autoridade. Já pessoas comuns, como os escribas, apareciam de maneira mais simples e natural.</p>`,
+ stem:"Essa diferença na forma de representar faraós e pessoas comuns mostra que a arte egípcia buscava",
+ opts:["retratar todos os indivíduos de maneira igual.","destacar a grandiosidade e a importância dos faraós.","mostrar os defeitos físicos das autoridades.","valorizar mais os escribas do que os governantes."],
+ correct:1,
+ exp:"A representação idealizada e imponente dos faraós reforçava sua grandiosidade, poder e importância social."},
+];
+
+/* ========================= LÓGICA DA PÁGINA ========================= */
+const state = JSON.parse(localStorageSafe()) || {}; // {n: chosenIndex}
+function localStorageSafe(){return "{}";} // sem armazenamento no navegador — sessão em memória
+let current = "Portugues";
+
+const nav = document.getElementById("nav");
+const main = document.getElementById("main");
+const answeredEl = document.getElementById("answered");
+const hitsEl = document.getElementById("hits");
+const progressEl = document.getElementById("progress");
+document.getElementById("total").textContent = QUESTIONS.length;
+
+function subjColor(k){return getComputedStyle(document.documentElement).getPropertyValue("--"+k).trim();}
+
+function buildNav(){
+  nav.innerHTML="";
+  SUBJECTS.forEach(sub=>{
+    const total = QUESTIONS.filter(q=>q.s===sub.key).length;
+    const done = QUESTIONS.filter(q=>q.s===sub.key && state[q.n]!=null).length;
+    const b=document.createElement("button");
+    b.className="chip";b.setAttribute("role","tab");
+    b.setAttribute("aria-selected", sub.key===current);
+    b.style.setProperty("--c", subjColor(sub.key));
+    b.innerHTML=`<span class="dot"></span>${sub.label} <span class="cnt">${done}/${total}</span>`;
+    b.onclick=()=>{current=sub.key;render();window.scrollTo({top:0});};
+    nav.appendChild(b);
+  });
+}
+
+function render(){
+  document.documentElement.style.setProperty("--accent", subjColor(current));
+  const sub = SUBJECTS.find(s=>s.key===current);
+  main.innerHTML="";
+  const head=document.createElement("div");
+  head.className="subject-head";
+  head.innerHTML=`<h2>${sub.label}</h2><span class="range">Questões ${sub.range}</span>`;
+  main.appendChild(head);
+
+  QUESTIONS.filter(q=>q.s===current).forEach(q=>main.appendChild(card(q)));
+  buildNav();
+  updateScore();
+  showResultIfDone(sub);
+}
+
+function card(q){
+  const el=document.createElement("div");
+  el.className="q";
+  let media="";
+  if(q.diagram) media=`<figure class="diagram">${q.diagram}</figure>`;
+  else if(IMG[q.n]) media=`<figure class="photo"><img src="imagens/${IMG[q.n]}" alt="Imagem da questão ${q.n}" loading="lazy" onload="this.closest('figure').classList.add('loaded')"><div class="imgnote">🖼️ ${q.imgnote||"Inserir imagem da prova original."}</div></figure>`;
+  else if(q.imgnote) media=`<div class="imgnote">🖼️ ${q.imgnote}</div>`;
+  const ctx = q.context?`<div class="context">${q.context}</div>`:"";
+  const hab = HAB[q.n]?`<span class="hab" title="Habilidade avaliada">${HAB[q.n]}</span>`:"";
+  el.innerHTML=`<div class="qhead"><span class="qnum">Questão ${q.n}</span>${hab}</div>${ctx}${media}<p class="stem">${q.stem}</p>`;
+  const opts=document.createElement("div");opts.className="opts";
+  const letters=["a","b","c","d"];
+  q.opts.forEach((text,i)=>{
+    const btn=document.createElement("button");
+    btn.className="opt";btn.innerHTML=`<span class="let">${letters[i]}</span><span>${text}</span>`;
+    btn.onclick=()=>choose(q,i,opts,fb);
+    opts.appendChild(btn);
+  });
+  const fb=document.createElement("div");fb.className="feedback";
+  el.appendChild(opts);el.appendChild(fb);
+
+  if(state[q.n]!=null) lockCard(q,opts,fb,state[q.n]);
+  return el;
+}
+
+const WINS=["Boa! ✔","Isso mesmo!","Acertou!","Certíssimo!","Muito bem! 👏"];
+const LOSES=["Quase lá!","Não foi dessa vez.","Vamos revisar:","Fica a dica:"];
+
+function choose(q,i,opts,fb){
+  if(state[q.n]!=null) return;
+  state[q.n]=i;
+  lockCard(q,opts,fb,i);
+  updateScore();buildNav();
+  const sub=SUBJECTS.find(s=>s.key===current);
+  showResultIfDone(sub);
+}
+
+function lockCard(q,opts,fb,chosen){
+  const btns=[...opts.querySelectorAll(".opt")];
+  btns.forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===q.correct) b.classList.add("correct");
+    else if(idx===chosen) b.classList.add("chosen-wrong");
+    else b.classList.add("dim");
+  });
+  const win=chosen===q.correct;
+  fb.className="feedback show "+(win?"win":"lose");
+  const tag=win?WINS[q.n%WINS.length]:LOSES[q.n%LOSES.length];
+  fb.innerHTML=`<span class="tag">${tag}</span>${q.exp}`;
+}
+
+function updateScore(){
+  const answered=Object.keys(state).length;
+  const hits=QUESTIONS.filter(q=>state[q.n]===q.correct).length;
+  answeredEl.textContent=answered;
+  hitsEl.textContent=hits;
+  progressEl.style.width=(answered/QUESTIONS.length*100)+"%";
+}
+
+function showResultIfDone(sub){
+  const qs=QUESTIONS.filter(q=>q.s===sub.key);
+  const done=qs.every(q=>state[q.n]!=null);
+  const box=document.getElementById("result");
+  if(done){
+    const hits=qs.filter(q=>state[q.n]===q.correct).length;
+    document.getElementById("result-title").textContent=`${sub.label}: matéria concluída!`;
+    document.getElementById("result-score").textContent=`${hits}/${qs.length}`;
+    const pct=hits/qs.length;
+    let msg = pct===1?"Gabaritou esta matéria. Excelente!":pct>=0.6?"Bom trabalho! Reveja as que erraram e siga em frente.":"Vale revisar esta matéria com calma — releia as explicações.";
+    document.getElementById("result-msg").textContent=msg;
+    box.classList.add("show");
+  } else box.classList.remove("show");
+}
+
+document.getElementById("reset").onclick=()=>{
+  if(!confirm("Recomeçar apaga todas as respostas desta sessão. Continuar?"))return;
+  for(const k in state) delete state[k];
+  render();window.scrollTo({top:0});
+};
+
+buildNav();render();
+</script>
+</body>
+</html>
