@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2ª Prova Treino · 2º ano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Public+Sans:ital,wght@0,300..800;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --port:#0d9488; --ing:#dc2626; --mat:#2563eb; --bio:#16a34a;
+    --qui:#db2777; --fis:#0891b2; --his:#7c3aed; --geo:#ea580c; --fil:#ca8a04;
+    --accent:#0d9488;
+    --ink:#0f172a; --muted:#64748b; --line:#e2e8f0; --bg:#f6f7f9; --card:#ffffff;
+    --ok:#16a34a; --okbg:#f0fdf4; --err:#dc2626; --errbg:#fef2f2;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Public Sans",system-ui,sans-serif;
+    background:var(--bg); color:var(--ink); line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:840px;margin:0 auto;padding:20px 16px 80px}
+  header.top{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:22px 22px 18px;margin-bottom:16px;position:relative;overflow:hidden;
+  }
+  header.top::before{content:"";position:absolute;inset:0 auto 0 0;width:7px;background:var(--accent);transition:background .25s}
+  .eyebrow{font-family:"Space Mono",monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 4px}
+  h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.7rem;line-height:1.1;margin:0 0 4px;letter-spacing:-.01em}
+  .sub{color:var(--muted);font-size:.95rem;margin:0}
+  .note{margin-top:12px;font-size:.82rem;color:var(--muted);background:#f8fafc;border:1px dashed var(--line);border-radius:10px;padding:8px 12px}
+
+  /* scoreboard */
+  .scoreboard{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+  .stat{flex:1;min-width:120px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+  .stat .k{font-family:"Space Mono",monospace;font-size:1.5rem;font-weight:700;color:var(--accent)}
+  .stat .l{font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+  .progress-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:16px}
+  .progress-top{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted);margin-bottom:6px;font-family:"Space Mono",monospace}
+  .bar{height:9px;background:#eef2f6;border-radius:99px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .35s ease}
+
+  /* tabs */
+  .tabs{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 10px;margin-bottom:6px;scrollbar-width:thin}
+  .tab{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--muted);
+    padding:8px 14px;border-radius:99px;font-size:.86rem;font-weight:600;cursor:pointer;transition:.18s;display:flex;align-items:center;gap:8px}
+  .tab .dot{width:9px;height:9px;border-radius:99px;background:var(--c)}
+  .tab .cnt{font-family:"Space Mono",monospace;font-size:.72rem;opacity:.7}
+  .tab.active{color:#fff;border-color:transparent;background:var(--c)}
+  .tab.active .dot{background:#fff}
+  .tab.done::after{content:"✓";font-size:.8rem;margin-left:2px}
+
+  /* subject header */
+  .subhead{display:flex;align-items:baseline;gap:10px;margin:14px 2px 6px}
+  .subhead h2{font-family:"Bricolage Grotesque",sans-serif;font-size:1.15rem;margin:0;color:var(--accent)}
+  .subhead .range{font-family:"Space Mono",monospace;font-size:.75rem;color:var(--muted)}
+
+  /* question card */
+  .q{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;margin-bottom:14px}
+  .q .qtop{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:6px}
+  .qnum{font-family:"Space Mono",monospace;font-weight:700;font-size:.8rem;color:#fff;background:var(--accent);border-radius:8px;padding:3px 9px;flex:none}
+  .hab{font-size:.7rem;color:var(--muted);text-align:right;max-width:60%;line-height:1.3}
+  .hab b{font-family:"Space Mono",monospace;font-weight:700;color:var(--accent);letter-spacing:.03em}
+  .stmt{font-size:.98rem;margin:6px 0 4px;white-space:pre-line}
+  .stmt em{font-style:italic}
+  .figura{margin:10px 0;display:flex;justify-content:center}
+  .figura svg{max-width:100%;height:auto}
+  table.mtx{border-collapse:collapse;display:inline-table;vertical-align:middle;font-family:"Space Mono",monospace;font-size:.86rem}
+  table.mtx td{padding:1px 7px;text-align:center;min-width:26px}
+  table.mtx{border-left:2px solid currentColor;border-right:2px solid currentColor;border-radius:3px;padding:2px 3px}
+
+  .opts{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:11px;padding:10px 12px;cursor:pointer;transition:.14s;background:#fff}
+  .opt:hover{border-color:var(--accent);background:#fbfdfe}
+  .opt .letter{font-family:"Space Mono",monospace;font-weight:700;font-size:.82rem;flex:none;width:22px;height:22px;border-radius:6px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;color:var(--muted);margin-top:1px}
+  .opt .txt{font-size:.93rem}
+  .opt.correct{border-color:var(--ok);background:var(--okbg)}
+  .opt.correct .letter{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--err);background:var(--errbg)}
+  .opt.wrong .letter{background:var(--err);color:#fff}
+  .opt.locked{cursor:default;opacity:.96}
+  .opt.locked:hover{border-color:var(--line);background:#fff}
+  .opt.correct.locked:hover{border-color:var(--ok);background:var(--okbg)}
+  .opt.wrong.locked:hover{border-color:var(--err);background:var(--errbg)}
+  .opt.dim{opacity:.55}
+
+  .expl{margin-top:11px;font-size:.88rem;border-radius:11px;padding:11px 13px;display:none}
+  .expl.show{display:block}
+  .expl.good{background:var(--okbg);border:1px solid #bbf7d0}
+  .expl.bad{background:var(--errbg);border:1px solid #fecaca}
+  .expl .tag{font-family:"Space Mono",monospace;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:3px}
+  .expl.good .tag{color:var(--ok)} .expl.bad .tag{color:var(--err)}
+
+  /* subject summary */
+  .summary{background:linear-gradient(180deg,#fff, #fbfcfe);border:1px solid var(--accent);border-radius:16px;padding:18px;margin:6px 0 14px;text-align:center;display:none}
+  .summary.show{display:block}
+  .summary h3{font-family:"Bricolage Grotesque",sans-serif;margin:0 0 6px;color:var(--accent)}
+  .summary .big{font-family:"Space Mono",monospace;font-size:2rem;font-weight:700;color:var(--accent)}
+  .summary p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
+
+  footer.bottom{display:flex;justify-content:center;margin-top:22px}
+  .restart{font-family:"Public Sans";font-weight:700;font-size:.9rem;color:#fff;background:var(--ink);border:none;border-radius:99px;padding:12px 26px;cursor:pointer;transition:.15s}
+  .restart:hover{background:#1e293b}
+  .foot-note{text-align:center;color:var(--muted);font-size:.75rem;margin-top:16px;font-family:"Space Mono",monospace}
+  @media(max-width:520px){ h1{font-size:1.4rem} .hab{max-width:52%} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Prova Treino · Modo prática</p>
+    <h1>2ª Prova Treino</h1>
+    <p class="sub">2º ano · Ensino Médio</p>
+    <div class="note">Responda cada questão e receba a correção na hora, com uma explicação curta. É treino: não gera nota. Escolha a matéria nas abas abaixo.</div>
+  </header>
+
+  <div class="scoreboard">
+    <div class="stat"><div class="k" id="stRespondidas">0</div><div class="l">Respondidas</div></div>
+    <div class="stat"><div class="k" id="stAcertos">0</div><div class="l">Acertos</div></div>
+    <div class="stat"><div class="k" id="stAproveitamento">—</div><div class="l">Aproveitamento</div></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-top"><span id="progLabel">Progresso geral</span><span id="progCount">0 / 96</span></div>
+    <div class="bar"><i id="progBar"></i></div>
+  </div>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <div class="subhead"><h2 id="subTitle"></h2><span class="range" id="subRange"></span></div>
+
+  <div class="summary" id="summary"></div>
+  <div id="questions"></div>
+
+  <footer class="bottom"><button class="restart" id="restart">↻ Recomeçar prova</button></footer>
+  <p class="foot-note">2ª Prova Treino · 2º ano · 96 questões</p>
+</div>
+
+<script>
+/* ---------- helpers ---------- */
+function mtx(rows){
+  var s='<table class="mtx">';
+  for(var i=0;i<rows.length;i++){
+    s+='<tr>';
+    for(var j=0;j<rows[i].length;j++){ s+='<td>'+rows[i][j]+'</td>'; }
+    s+='</tr>';
+  }
+  return s+'</table>';
+}
+var MINUS='\u2212'; // proper minus sign
+
+/* SVG: barras Amazônia (Q30) */
+var svgBarras =
+'<svg viewBox="0 0 300 190" role="img" aria-label="Grafico de barras">'
++'<line x1="40" y1="20" x2="40" y2="160" stroke="#94a3b8" stroke-width="1.5"/>'
++'<line x1="40" y1="160" x2="285" y2="160" stroke="#94a3b8" stroke-width="1.5"/>'
++'<rect x="80" y="116" width="60" height="44" rx="4" fill="#2563eb" opacity="0.85"/>'
++'<rect x="190" y="27" width="60" height="133" rx="4" fill="#2563eb"/>'
++'<text x="110" y="108" text-anchor="middle" font-family="Space Mono, monospace" font-size="12" fill="#0f172a">3,8</text>'
++'<text x="220" y="19" text-anchor="middle" font-family="Space Mono, monospace" font-size="12" fill="#0f172a">11,4</text>'
++'<text x="110" y="176" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="11" fill="#64748b">2000</text>'
++'<text x="220" y="176" text-anchor="middle" font-family="Public Sans, sans-serif" font-size="11" fill="#64748b">2020</text>'
++'<text x="30" y="20" text-anchor="end" font-family="Space Mono, monospace" font-size="9" fill="#94a3b8">12</text>'
++'<text x="30" y="163" text-anchor="end" font-family="Space Mono, monospace" font-size="9" fill="#94a3b8">0</text>'
++'<text x="150" y="188" text-anchor="middle" font-family="Public Sans" font-size="10" fill="#64748b">Area colhida no bioma Amazonia (milhoes de hectares)</text>'
++'</svg>';
+
+/* SVG: pontos no plano (Q48) */
+function px(x){ return 40 + x*13; }
+function py(y){ return 160 - y*15; }
+var pts=[[2,2,'A'],[10,8,'B'],[12,8,'C'],[16,5,'D']];
+var svgPontos='<svg viewBox="0 0 290 185" role="img" aria-label="Pontos no plano cartesiano">'
++'<line x1="40" y1="18" x2="40" y2="162" stroke="#94a3b8" stroke-width="1.4"/>'
++'<line x1="38" y1="160" x2="278" y2="160" stroke="#94a3b8" stroke-width="1.4"/>';
+for(var g=2; g<=16; g+=2){ svgPontos+='<line x1="'+px(g)+'" y1="160" x2="'+px(g)+'" y2="163" stroke="#cbd5e1"/><text x="'+px(g)+'" y="174" text-anchor="middle" font-family="Space Mono" font-size="8" fill="#94a3b8">'+g+'</text>'; }
+for(var h=2; h<=8; h+=2){ svgPontos+='<line x1="37" y1="'+py(h)+'" x2="40" y2="'+py(h)+'" stroke="#cbd5e1"/><text x="33" y="'+(py(h)+3)+'" text-anchor="end" font-family="Space Mono" font-size="8" fill="#94a3b8">'+h+'</text>'; }
+svgPontos+='<polyline points="';
+for(var p=0;p<pts.length;p++){ svgPontos+=px(pts[p][0])+','+py(pts[p][1])+' '; }
+svgPontos+='" fill="none" stroke="#2563eb" stroke-width="2"/>';
+for(var p2=0;p2<pts.length;p2++){
+  svgPontos+='<circle cx="'+px(pts[p2][0])+'" cy="'+py(pts[p2][1])+'" r="4" fill="#2563eb"/>';
+  svgPontos+='<text x="'+(px(pts[p2][0])+2)+'" y="'+(py(pts[p2][1])-7)+'" font-family="Space Mono" font-size="10" font-weight="700" fill="#0f172a">'+pts[p2][2]+'</text>';
+}
+svgPontos+='</svg>';
+
+/* ---------- subjects ---------- */
+var subjects=[
+  {key:'PORT',label:'Português',color:'var(--port)'},
+  {key:'ING', label:'Inglês',color:'var(--ing)'},
+  {key:'MAT', label:'Matemática',color:'var(--mat)'},
+  {key:'BIO', label:'Biologia',color:'var(--bio)'},
+  {key:'QUI', label:'Química',color:'var(--qui)'},
+  {key:'FIS', label:'Física',color:'var(--fis)'},
+  {key:'HIS', label:'História',color:'var(--his)'},
+  {key:'GEO', label:'Geografia',color:'var(--geo)'},
+  {key:'FIL', label:'Filosofia/Sociologia',color:'var(--fil)'}
+];
+
+/* ---------- questions ---------- */
+/* correct = index 0..4 (A..E) */
+var Q=[
+/* ===== PORTUGUÊS — Gramática 1-5 ===== */
+{s:'PORT',n:1,hab:'Estabelecer relações entre verbos e desinências na concordância',
+ stmt:'Leia o período:\n"Cerca de 92,1 milhões de pessoas se declararam pardas no último censo."\nConsiderando o uso da expressão "cerca de", a forma verbal "se declararam" concorda, nesse contexto, com o(a)',
+ o:['expressão "cerca de", sendo preferível o singular.','sujeito posposto "pardas", pois está na voz passiva sintética.','termo preposicionado "do país", pela proximidade.','substantivo "população", pelo uso da porcentagem.','sujeito "92,1 milhões de pessoas", estando adequada no plural.'],
+ c:4,e:'Com "cerca de", a concordância se faz com o núcleo do sujeito — "92,1 milhões de pessoas" —, exigindo o verbo no plural.'},
+
+{s:'PORT',n:2,hab:'Refletir sobre efeitos de sentido de preposições e conjunções',
+ stmt:'Na frase "A cliente pediu, na livraria, um livro sobre buracos de minhoca", a preposição "sobre" estabelece uma relação de sentido de',
+ o:['lugar.','posse.','assunto.','finalidade.','movimento.'],
+ c:2,e:'A preposição "sobre" liga o substantivo "livro" ao assunto de que ele trata: os "buracos de minhoca".'},
+
+{s:'PORT',n:3,hab:'Analisar a função sintática da oração subordinada',
+ stmt:'Considere o período:\n"Como ter certeza de que o homem pousou na Lua?"\nA oração subordinada "de que o homem pousou na Lua" exerce, em relação à principal, a função de',
+ o:['predicativo, pois caracteriza o sujeito.','agente da passiva, pois indica o agente da ação.','objeto indireto, pois complementa o verbo "ter".','sujeito, pois se relaciona ao predicado.','complemento nominal, pois completa o sentido de "certeza".'],
+ c:4,e:'A oração completa o sentido do substantivo "certeza": é uma subordinada substantiva completiva nominal.'},
+
+{s:'PORT',n:4,hab:'Identificar e compreender as orações adjetivas',
+ stmt:'Leia o período:\n"O papel que você descarta corretamente pode ser reciclado."\nA oração destacada "que você descarta corretamente" classifica-se como',
+ o:['oração principal.','subordinada substantiva subjetiva.','subordinada adverbial causal.','subordinada substantiva objetiva direta.','subordinada adjetiva restritiva.'],
+ c:4,e:'A oração restringe o sentido do substantivo "papel", especificando de qual papel se fala (sem vírgulas) — é adjetiva restritiva.'},
+
+{s:'PORT',n:5,hab:'Identificar relações sintáticas dos pronomes relativos',
+ stmt:'Leia:\n"Essa é a contribuição que o país tenta levar ao projeto. Você não conseguirá reunir todas as coisas de que precisa."\nOs pronomes relativos destacados ("que" e "de que") exercem, respectivamente, a função de',
+ o:['objeto direto e objeto indireto.','sujeito e predicativo do sujeito.','complemento nominal e sujeito.','agente da passiva e adjunto adverbial.','adjunto adverbial e complemento nominal.'],
+ c:0,e:'"que" retoma "contribuição", objeto direto de "levar"; "de que" retoma "coisas", objeto indireto de "precisar" (precisar DE algo).'},
+
+/* ===== PORTUGUÊS — Literatura 6-10 ===== */
+{s:'PORT',n:6,hab:'Compreender o fenômeno da heteronímia em Fernando Pessoa',
+ stmt:'Fernando Pessoa criou diferentes poetas fictícios, os heterônimos. Alberto Caeiro, o "mestre" entre eles, valoriza a observação direta e sensorial da natureza e recusa explicações abstratas e reflexões metafísicas sobre o mundo. Essa postura de Caeiro pode ser caracterizada como uma',
+ o:['reflexão constante sobre a própria escrita.','marca de experiências futuristas e urbanas.','ênfase no conceito de carpe diem.','abordagem antifilosófica das coisas.','visão baseada em conceitos predefinidos.'],
+ c:3,e:'Caeiro rejeita o pensamento abstrato e propõe "ver" as coisas como são, sem filosofar — daí sua abordagem antifilosófica.'},
+
+{s:'PORT',n:7,hab:'Distinguir características das vanguardas (surrealismo)',
+ stmt:'O Surrealismo, vanguarda do início do século XX, buscou expressar o inconsciente e o universo dos sonhos, apresentando imagens ilógicas em que objetos e seres comuns aparecem em situações inesperadas e desconexas da realidade. Uma obra alinhada a essa vanguarda caracteriza-se por',
+ o:['fazer referência apenas a figuras geométricas.','romper com a razão e subverter a realidade.','enaltecer a ironia e aplicar o cinismo estético.','reforçar exclusivamente a angústia existencial.','exaltar a velocidade e as máquinas modernas.'],
+ c:1,e:'O Surrealismo rompe com a lógica racional e subverte o real, criando cenas oníricas e fantasiosas — sua marca central.'},
+
+{s:'PORT',n:8,hab:'Explorar trechos de manifestos modernistas brasileiros',
+ stmt:'O Manifesto da Poesia Pau-Brasil, de Oswald de Andrade (1924), propunha unir a cultura nativa — "a floresta" — à cultura intelectual moderna — "a escola" —, conciliando tradição e renovação. A partir desse ideal, depreende-se que o manifesto buscava incentivar os literatos a',
+ o:['ressaltar a pluralidade identitária brasileira por meio da arte moderna.','ressignificar a linguagem falada com retoques eruditos.','problematizar a miscigenação ao expor a discriminação.','repudiar toda contribuição da cultura estrangeira.','valorizar a tradição lírica em detrimento das experimentações recentes.'],
+ c:0,e:'O manifesto propunha um "composto híbrido" entre o nativo e o moderno, valorizando a pluralidade da identidade brasileira pela arte moderna.'},
+
+{s:'PORT',n:9,hab:'Conhecer características da poesia de Murilo Mendes',
+ stmt:'A poesia modernista de Murilo Mendes frequentemente apresenta pares de ideias opostas — como bem e mal, amar e desamar, construir e destruir —, criando tensão a partir do contraste. Esse traço da obra do poeta é conhecido como',
+ o:['valorização do universo onírico.','evocação de uma figura religiosa.','referência a elementos folclóricos.','utilização de efeitos humorísticos.','presença de construções dualistas.'],
+ c:4,e:'As construções dualistas (oposição de pares) são uma marca recorrente na poesia de Murilo Mendes.'},
+
+{s:'PORT',n:10,hab:'Reconhecer o aspecto formal no Concretismo',
+ stmt:'O Concretismo, poesia experimental surgida no Brasil nos anos 1950, valoriza a materialidade da palavra e explora a disposição visual dos elementos no espaço, tratando a página como parte do próprio poema. Uma obra influenciada por esse movimento evidencia-se, sobretudo, pelo(a)',
+ o:['uso criativo do espaço gráfico.','emprego de elementos clássicos.','crítica à urbanização das cidades.','prevalência da subjetividade lírica.','desprezo pela expressividade verbal.'],
+ c:0,e:'No Concretismo, o espaço gráfico é elemento de composição: a disposição visual das palavras é essencial para o sentido.'},
+
+/* ===== PORTUGUÊS — Interpretação 11-19 ===== */
+{s:'PORT',n:11,hab:'Identificar recursos para a progressão temática e textual',
+ stmt:'Leia:\n"O filme A hora da estrela, de Suzana Amaral, é um clássico do cinema brasileiro. No ano de seu lançamento, conquistou dez prêmios no Festival de Brasília e ainda foi premiado em festivais internacionais.\nPara além das merecidas condecorações, pode-se dizer que um de seus maiores méritos foi apresentar o universo de Clarice Lispector a um público mais amplo."\nA expressão do último parágrafo que retoma diretamente a ideia do parágrafo anterior é',
+ o:['"universo de Clarice Lispector".','"merecidas condecorações".','"maiores méritos".','"público mais amplo".','"clássico do cinema brasileiro".'],
+ c:1,e:'"Merecidas condecorações" retoma os prêmios citados antes, garantindo a progressão temática (coesão referencial).'},
+
+{s:'PORT',n:12,hab:'Identificar os operadores argumentativos',
+ stmt:'Leia:\n"A memória é muito mais do que um arquivo do passado; é o prisma através do qual vemos a nós mesmos, aos outros e ao mundo", afirma o neurocientista.\nAo empregar o operador "muito mais do que", o autor estabelece, em sua fala, uma',
+ o:['restrição sobre o que é a memória.','negação do que representa a memória.','conclusão sobre a eficiência da memória.','comparação entre ideias sobre a memória.','aprovação do conceito clássico de memória.'],
+ c:3,e:'"Muito mais do que" compara a noção comum (memória = arquivo do passado) com uma concepção mais ampla, ampliando o conceito.'},
+
+{s:'PORT',n:13,hab:'Reconhecer efeitos das estratégias modalizadoras',
+ stmt:'Leia:\n"Talvez não tenha havido época mais avessa à reflexão do que a nossa."\nO advérbio "talvez", nesse contexto, funciona como recurso de modalização epistêmica com o objetivo de',
+ o:['reforçar a ideia de possibilidade.','duvidar dos conceitos apresentados.','questionar a credibilidade da afirmação.','atribuir um caráter absoluto ao argumento.','promover uma crítica ao momento histórico.'],
+ c:0,e:'"Talvez" indica possibilidade: o autor apresenta sua afirmação como provável, relativizando a certeza.'},
+
+{s:'PORT',n:14,hab:'Reconhecer as características da ironia',
+ stmt:'Em uma tira, ao ouvir no rádio a previsão de mais frio para todo o estado, uma personagem visivelmente encolhida e agasalhada exclama: "Maravilha! Agora conta uma novidade." Considerando a expressão facial e o contexto, percebe-se que há ironia na fala porque a personagem',
+ o:['trata a notícia como algo pouco convencional.','reforça o desejo de esperar por uma novidade.','demonstra surpresa em relação ao fato noticiado.','expressa verbalmente o oposto do que parece pensar.','mostra satisfação genuína pela manutenção do frio.'],
+ c:3,e:'A ironia está no contraste entre o que se diz ("Maravilha!") e o que de fato se sente (desagrado com o frio).'},
+
+{s:'PORT',n:15,hab:'Reconhecer a articulação de linguagens em texto multimodal',
+ stmt:'Em um texto multimodal — como um infográfico que combina dados percentuais escritos com imagens e gráficos de barras que representam esses mesmos dados —, a relação entre os elementos verbais e visuais costuma ser de',
+ o:['contraposição, pois os dados verbais são objetivos e os visuais, subjetivos.','integração conflituosa, pois a imagem nega o texto.','complementaridade, pois as imagens reforçam e organizam visualmente os dados verbais.','anulação, pois as figuras revelam conclusões diferentes do texto.','equivalência total, pois ambos transmitem exatamente as mesmas informações.'],
+ c:2,e:'Em infográficos, os elementos verbais e visuais se complementam: a imagem organiza e reforça visualmente as informações do texto.'},
+
+{s:'PORT',n:16,hab:'Identificar mecanismos de modalização deôntica',
+ stmt:'Um cartaz de campanha pela economia de água e energia traz orientações como "Desligue a luz ao sair", "Feche bem as torneiras" e "Retire os aparelhos da tomada". Nesse cartaz, o mecanismo de modalização deôntica — que expressa ações necessárias ou obrigatórias — é evidenciado pelo(a)',
+ o:['seleção de vocabulário técnico.','uso de verbos no imperativo.','referência a um órgão público.','negação de comportamentos esperados.','emprego de formas impessoais de tratamento.'],
+ c:1,e:'Os verbos no imperativo (desligue, feche, retire) expressam ordem/dever — principal recurso de modalização deôntica.'},
+
+{s:'PORT',n:17,hab:'Reconhecer efeitos da modalização deôntica e apreciativa',
+ stmt:'Leia:\n"Algumas profissões serão duramente afetadas pela Inteligência Artificial. Em outras, a IA terá mais dificuldade de avançar. E, ainda bem, a IA comete falhas bem humanas."\nA construção apreciativa "ainda bem" reforça, por parte do autor, uma(a)',
+ o:['contrariedade ao avanço da IA.','possibilidade de que a IA seja bem-sucedida.','visão positiva sobre o fato de a IA também cometer erros.','condição para a substituição de trabalhadores por IA.','desejo de que profissionais sejam substituídos por IA.'],
+ c:2,e:'"Ainda bem" expressa apreciação positiva do autor diante de a IA cometer erros, o que dificultaria a substituição de humanos.'},
+
+{s:'PORT',n:18,hab:'Identificar relações lógico-discursivas entre tese e argumentos',
+ stmt:'Leia:\n"Em 2023, o El Niño demonstrou sua natureza mais severa sobre o Brasil. No Sudeste e no Centro-Oeste, ondas de calor intensas castigaram a população, e a vazão de importantes barragens caiu até 50% em relação ao normal."\nO principal argumento que reforça a tese de que é preciso agir com urgência diante da crise climática é o(a)',
+ o:['menção à resiliência e à capacidade de adaptação da população.','dado concreto relativo às consequências de eventos climáticos severos.','apelo às autoridades em convenções internacionais.','ideia de que os países devem pensar nas comunidades vulneráveis.','consenso entre especialistas sobre o impacto humano no clima.'],
+ c:1,e:'O texto usa dados concretos (ondas de calor, queda de 50% nas barragens) para demonstrar a gravidade e a urgência da crise.'},
+
+{s:'PORT',n:19,hab:'Reconhecer efeitos dos recursos de linguagem das HQs',
+ stmt:'Em uma tira, uma bola de neve desce uma montanha em direção a uma personagem. Nos primeiros quadros ela aparece cada vez maior e mais próxima, cercada por linhas e traços soltos ao redor. Esses recursos verbovisuais permitem identificar que a bola de neve',
+ o:['permanece imóvel, fora do ambiente da personagem.','está em movimento e cresce conforme se aproxima da personagem.','faz um percurso longo, distanciando-se da personagem.','diminui à medida que rola pela montanha.','atinge a personagem lentamente, sem que ela perceba.'],
+ c:1,e:'As linhas de movimento e o aumento progressivo da bola nos quadros indicam que ela se desloca e cresce ao se aproximar.'},
+
+/* ===== INGLÊS 20-24 ===== */
+{s:'ING',n:20,hab:'Reflect about the concept of artificial intelligence',
+ stmt:'Read the text:\n"Generative AI programs, such as ChatGPT and Midjourney, learn from huge amounts of data — like online texts and images — in order to create new content that feels human-made."\nAccording to the text, classifying an artificial intelligence as "generative" indicates that it',
+ o:['manipulates images only to produce videos.','eliminates all margin of error in programs.','explores information only from paid websites.','creates original material without relying on other content.','learns from large amounts of data.'],
+ c:4,e:'The text states generative AI "learns from huge amounts of data" to generate new content — its defining feature.'},
+
+{s:'ING',n:21,hab:'Interact with campaign posters, website news, and infographics',
+ stmt:'A health campaign poster states: "Less than half of people in England are aware that physical activity can reduce symptoms of anxiety." The main idea highlighted in this poster is the',
+ o:['resistant health of English citizens.','consequences of too much exercise.','relationship between physical activity and mental health.','behaviour of people who suffer from diseases.','existence of alternative therapies for diseases.'],
+ c:2,e:'The poster links physical activity to reduced anxiety symptoms, stressing the connection between exercise and mental health.'},
+
+{s:'ING',n:22,hab:'Understand and use third conditional',
+ stmt:'Read the sentence:\n"If we had been across the border, the signs would have been in German and Russian."\nThe highlighted structure (third conditional) indicates that the speaker is talking about something that',
+ o:['happened completely in the past.','is happening at the moment of speaking.','started in the past and is being completed now.','would have happened if other conditions had been met.','will happen soon under other circumstances.'],
+ c:3,e:'The third conditional (if + past perfect ... would have + participle) describes an unreal past — what would have happened under conditions that were not met.'},
+
+{s:'ING',n:23,hab:'Understand and use the reported speech',
+ stmt:'Read the text:\n"Actor Hugh Jackman has explained how his mother is the reason he supports Norwich City. Jackman told the BBC how, as a child in Australia, he decided to support the club after asking his English parents where they were from."\nIn the text, the use of indirect (reported) speech serves to',
+ o:['cast doubt on the authorship of the comment.','create suspense about who said the sentence.','reproduce the interviewee\'s exact words.','report something the interviewed actor said about himself.','give more importance to the topic than to the person.'],
+ c:3,e:'Verbs like "explained" and "told" introduce reported speech, relaying what Jackman said about himself, not his exact words.'},
+
+{s:'ING',n:24,hab:'Interact with opinative texts',
+ stmt:'Read the text:\n"Physical inactivity is the fourth leading cause of death worldwide and is linked to chronic illness. Regular physical activity helps to prevent and manage many chronic diseases; popular ways to stay active include walking, cycling and playing sports."\nTo stress the importance of staying physically active, the text indicates that',
+ o:['exercise helps to prevent and treat chronic diseases.','physical inactivity is the main cause of death in the world.','exercising reduces people\'s contact with screens.','intellectual development depends on moderate physical activities.','physical training only works if practised very intensely.'],
+ c:0,e:'The text highlights that regular physical activity prevents and manages chronic diseases. (Inactivity is the FOURTH cause, not the main one.)'},
+
+/* ===== MATEMÁTICA 1 (25-36) ===== */
+{s:'MAT',n:25,hab:'Resolver situações-problema com permutações simples',
+ stmt:'Para acessar uma caixa de e-mail, cria-se uma senha de 5 caracteres formada por um dos anagramas da palavra SENHA (cujas cinco letras são distintas). Quantas senhas diferentes podem ser criadas?',
+ o:['20','40','60','120','240'],
+ c:3,e:'São 5 letras distintas: P₅ = 5! = 120 anagramas.'},
+
+{s:'MAT',n:26,hab:'Resolver situações-problema com permutação circular',
+ stmt:'Uma formanda e sua mãe sentarão, junto com mais 4 convidados, ao redor de uma mesa circular, de modo que mãe e filha fiquem lado a lado. De quantas maneiras diferentes isso pode acontecer?',
+ o:['24','48','60','120','720'],
+ c:1,e:'Mãe e filha juntas contam como 1 elemento: PC = (5−1)! = 24. Como podem trocar entre si: 24 × 2 = 48.'},
+
+{s:'MAT',n:27,hab:'Resolver problemas de arranjo ou combinação',
+ stmt:'Uma loja disponibiliza 8 brindes, e um cliente deve escolher 3 deles. De quantas maneiras diferentes ele pode escolher seus 3 brindes?',
+ o:['10','24','56','120','336'],
+ c:2,e:'A ordem não importa: C(8,3) = 8! / (3!·5!) = 56.'},
+
+{s:'MAT',n:28,hab:'Resolver problemas com conceitos probabilísticos básicos',
+ stmt:'Um lote de 200 camisas tem 10 com defeito. Escolhendo-se uma camisa ao acaso, qual é a probabilidade de ela ter defeito?',
+ o:['1/21','1/20','1/19','10/19','19/20'],
+ c:1,e:'P = 10/200 = 1/20.'},
+
+{s:'MAT',n:29,hab:'Usar evento complementar, união e interseção de eventos',
+ stmt:'Em uma rifa com 200 bilhetes numerados de 1 a 200, o professor de Matemática comprou todos os bilhetes cujos números são múltiplos de 5 ou de 6. Qual é a probabilidade de ele ganhar o sorteio de um único bilhete?',
+ o:['33/200','40/200','67/200','73/200','79/200'],
+ c:2,e:'Múltiplos de 5: 40; de 6: 33; de 30 (5 e 6): 6. União = 40 + 33 − 6 = 67. P = 67/200.'},
+
+{s:'MAT',n:30,hab:'Interpretar e representar dados por meio de gráficos',
+ fig:svgBarras,
+ stmt:'O gráfico mostra que a área colhida no bioma Amazônia passou de 3,8 milhões de hectares (2000) para 11,4 milhões de hectares (2020). Em quantos por cento essa área cresceu no período?',
+ o:['44%','77%','114%','200%','300%'],
+ c:3,e:'Crescimento = (11,4 − 3,8) / 3,8 = 7,6 / 3,8 = 2 = 200%.'},
+
+{s:'MAT',n:31,hab:'Calcular variância e desvio-padrão de um conjunto de dados',
+ stmt:'O consumo anual per capita de peixe (kg), de 2019 a 2023, foi: 8, 10, 11, 9 e 12, totalizando 50 kg. Qual é o desvio-padrão desse consumo, em kg?',
+ o:['\u221A2','\u221A2,5','2','2,5','\u221A10'],
+ c:0,e:'Média = 50/5 = 10. Variância = (4 + 0 + 1 + 1 + 4)/5 = 10/5 = 2. Desvio-padrão = \u221A2.'},
+
+{s:'MAT',n:32,hab:'Determinar média, moda e mediana',
+ stmt:'A taxa de natalidade brasileira (por 1000 pessoas) entre 2014 e 2021 foi: 14,75; 14,73; 14,05; 14,16; 14,13; 13,63; 13,08; 12,88. Qual é a mediana desses valores?',
+ o:['12,88','13,82','14,09','14,16','14,75'],
+ c:2,e:'Ordenando os 8 valores, os centrais são 14,05 e 14,13. Mediana = (14,05 + 14,13)/2 = 14,09.'},
+
+{s:'MAT',n:33,hab:'Resolver situações-problema com sistemas lineares',
+ stmt:'Numa papelaria com um único modelo de caderno (C), agenda (A) e estojo (E): 2 cadernos e 1 agenda custam R$ 58,00; 1 estojo e 2 agendas, R$ 51,00; 2 estojos e 1 caderno, R$ 50,00. Quanto pagaria alguém que comprasse 1 caderno, 2 agendas e 3 estojos?',
+ o:['R$ 53,00','R$ 68,00','R$ 101,00','R$ 106,00','R$ 111,00'],
+ c:2,e:'Do sistema: C = 20, A = 18, E = 15. Logo C + 2A + 3E = 20 + 36 + 45 = 101.'},
+
+{s:'MAT',n:34,hab:'Resolver problemas de pesquisa estatística',
+ stmt:'Em uma pesquisa, os percentuais por faixa etária são: 14 a 17 anos → 31,7%; 18 a 24 anos → 18%. Uma prefeitura fará uma pesquisa com 2 800 pessoas seguindo essa distribuição. Qual é a quantidade aproximada de participantes de 14 a 17 anos ou de 18 a 24 anos?',
+ o:['218','722','888','1 106','1 392'],
+ c:4,e:'(31,7% + 18%) × 2800 = 49,7% × 2800 = 1391,6 ≈ 1392.'},
+
+{s:'MAT',n:35,hab:'Determinar elementos de uma matriz por sua lei de formação',
+ stmt:'Seja A = (aᵢⱼ)₃ₓ₃ com: aᵢⱼ = 0, se i = j; aᵢⱼ = i + j, se i > j; aᵢⱼ = i − j, se i < j. Qual é a representação da matriz A?',
+ o:[mtx([[0,MINUS+'1',MINUS+'2'],[3,0,MINUS+'1'],[4,5,0]]),
+    mtx([[0,1,2],[MINUS+'3',0,1],[MINUS+'4',MINUS+'5',0]]),
+    mtx([[MINUS+'4',1,0],[MINUS+'3',0,1],[0,MINUS+'5',2]]),
+    mtx([[4,MINUS+'1',0],[3,0,MINUS+'1'],[0,5,MINUS+'2']]),
+    mtx([[0,1,2],[3,0,1],[4,5,0]])],
+ c:0,e:'Diagonal (i=j)=0. Abaixo (i>j)=i+j: a₂₁=3, a₃₁=4, a₃₂=5. Acima (i<j)=i−j: a₁₂=−1, a₁₃=−2, a₂₃=−1.'},
+
+{s:'MAT',n:36,hab:'Realizar operações com igualdade de matrizes',
+ stmt:'Considere a equação matricial A = X − B, com A = [[2, 4],[6, 8]] e B = [[3, −6],[−3, 0]]. Qual é a matriz X?',
+ o:[mtx([[MINUS+'1',MINUS+'10'],[MINUS+'9',MINUS+'8']]),
+    mtx([[MINUS+'5',2],[MINUS+'3',MINUS+'8']]),
+    mtx([[MINUS+'1',10],[MINUS+'9',MINUS+'8']]),
+    mtx([[5,MINUS+'2'],[3,8]]),
+    mtx([[5,2],[3,8]])],
+ c:3,e:'De A = X − B temos X = A + B = [[2+3, 4−6],[6−3, 8+0]] = [[5, −2],[3, 8]].'},
+
+/* ===== MATEMÁTICA 2 (37-48) ===== */
+{s:'MAT',n:37,hab:'Definir funções trigonométricas inversas (arco seno)',
+ stmt:'O tampo de uma cama-baú tem 188 cm de comprimento e, aberto na inclinação máxima, atinge 94 cm de altura, formando um triângulo retângulo em que o tampo é a hipotenusa. Qual é a inclinação máxima (θ) do tampo?',
+ o:['15°','30°','45°','60°','75°'],
+ c:1,e:'sen θ = cateto oposto / hipotenusa = 94/188 = 0,5. Logo θ = arcsen 0,5 = 30°.'},
+
+{s:'MAT',n:38,hab:'Efetuar cálculos de áreas e volumes de pirâmides',
+ stmt:'Uma loja terá a forma de uma pirâmide reta de 8 m de altura e base quadrada de 12 m de lado. As quatro faces laterais serão revestidas. Qual é a área total a ser revestida, em m²?',
+ o:['120','160','180','240','480'],
+ c:3,e:'Apótema: a² = 6² + 8² = 100 → a = 10 m. Área lateral = 4 × (12·10)/2 = 240 m².'},
+
+{s:'MAT',n:39,hab:'Reconhecer gráficos de funções e suas propriedades',
+ stmt:'Considere a função definida por f(x) = 3 + sec(x). O domínio e a imagem dessa função são, respectivamente,',
+ o:['D(f)={x∈ℝ; x≠π/2 + kπ}; Im(f)={y∈ℝ; y≤−1 ou y≥1}.','D(f)={x∈ℝ; x≠kπ}; Im(f)={y∈ℝ; y≤2 ou y≥4}.','D(f)={x∈ℝ; x≠kπ}; Im(f)={y∈ℝ; 2≤y≤4}.','D(f)={x∈ℝ; x≠kπ}; Im(f)={y∈ℝ; y≤−1 ou y≥1}.','D(f)={x∈ℝ; x≠π/2 + kπ}; Im(f)={y∈ℝ; y≤2 ou y≥4}.'],
+ c:4,e:'sec(x) não existe onde cos(x)=0, ou seja, x≠π/2 + kπ. Como Im(sec)={y≤−1 ou y≥1}, somando 3: Im(f)={y≤2 ou y≥4}.'},
+
+{s:'MAT',n:40,hab:'Nomear e classificar um prisma',
+ stmt:'O corpo principal de uma capela tem, em sua vista superior (planta), a forma de um hexágono, e suas paredes são verticais e retangulares. Essa parte da construção pode ser classificada como um(a)',
+ o:['prisma retangular.','prisma pentagonal.','prisma hexagonal.','pirâmide pentagonal.','pirâmide hexagonal.'],
+ c:2,e:'Duas bases hexagonais paralelas e faces laterais retangulares caracterizam um prisma hexagonal.'},
+
+{s:'MAT',n:41,hab:'Identificar posições relativas entre retas e planos',
+ stmt:'Um plano α é interceptado por uma reta r em um único ponto P, enquanto uma reta s não possui nenhum ponto em comum com α. Em relação a α, as posições das retas r e s são, respectivamente,',
+ o:['secante e contida.','paralela e contida.','contida e paralela.','paralela e secante.','secante e paralela.'],
+ c:4,e:'A reta r, com um único ponto comum a α, é secante; a reta s, sem pontos comuns, é paralela ao plano.'},
+
+{s:'MAT',n:42,hab:'Efetuar cálculos de áreas e volumes de pirâmides',
+ stmt:'Uma escultura foi feita a partir de um cubo de 30 cm de aresta, do qual se retirou uma pirâmide de base quadrada com 27 cm de altura, cuja base coincide com uma face do cubo. Qual é o volume da escultura, em cm³?',
+ o:['13 122','16 200','18 000','18 900','20 439'],
+ c:3,e:'V_cubo = 30³ = 27000. V_pirâmide = (1/3)·30²·27 = 8100. V = 27000 − 8100 = 18900 cm³.'},
+
+{s:'MAT',n:43,hab:'Aplicar a relação de Euler',
+ stmt:'Um poliedro convexo tem seis vértices dos quais partem 3 arestas e quatro vértices dos quais partem 4 arestas, totalizando dez vértices. Os números de faces e de arestas desse poliedro são, nessa ordem,',
+ o:['4 e 12.','5 e 17.','9 e 17.','22 e 34.','26 e 34.'],
+ c:2,e:'Soma por vértice: 6·3 + 4·4 = 34; A = 34/2 = 17. Euler: F + V = A + 2 → F + 10 = 19 → F = 9.'},
+
+{s:'MAT',n:44,hab:'Efetuar cálculos de áreas e volumes de cilindros',
+ stmt:'Uma vela é feita em um copo cilíndrico de 8 cm de altura e 6 cm de diâmetro interno, totalmente preenchido com parafina de densidade 0,85 g/cm³. Use π ≈ 3. Quantos gramas de parafina são usados em cada vela?',
+ o:['183,6','216,0','254,1','684,0','734,4'],
+ c:0,e:'raio = 3 cm. V = π·r²·h = 3·9·8 = 216 cm³. Massa = 0,85 × 216 = 183,6 g.'},
+
+{s:'MAT',n:45,hab:'Efetuar cálculos de áreas e volumes de esferas',
+ stmt:'Uma bancada retangular de 50 cm × 40 cm tem, no centro, uma cuba semiesférica de 30 cm de diâmetro. Serão revestidas a parte visível da bancada (retângulo menos o círculo) e a superfície interna da cuba (semiesfera). Use π ≈ 3. Quantos cm² de papel são necessários?',
+ o:['2 000','2 675','2 700','4 025','4 700'],
+ c:1,e:'Bancada: 50·40 − 3·15² = 2000 − 675 = 1325. Cuba (semiesfera, r=15): (1/2)·4·3·15² = 1350. Total = 2675 cm².'},
+
+{s:'MAT',n:46,hab:'Representar uma figura espacial por projeção ortogonal',
+ stmt:'Uma pessoa sobe uma escada em "L", com dois lances de degraus de mesma quantidade (mesmo comprimento horizontal), ligados por um pequeno patamar. Projetando ortogonalmente o percurso sobre o plano do piso (vista de cima), a imagem obtida é formada por',
+ o:['dois segmentos paralelos e congruentes ligados por um segmento menor.','um único segmento reto, sem interrupções.','dois segmentos perpendiculares de comprimentos muito diferentes.','uma curva contínua em forma de arco.','três segmentos de comprimentos todos diferentes.'],
+ c:0,e:'Como os dois lances têm o mesmo comprimento, suas projeções são segmentos paralelos e congruentes; o patamar projeta-se como um segmento menor entre eles.'},
+
+{s:'MAT',n:47,hab:'Calcular o volume do tronco de um cone',
+ stmt:'Um balde de gelo tem a forma de um tronco de cone com 18 cm de altura e raios das bases de 8 cm e 6 cm. Use π ≈ 3 e 1 dm³ = 1 L. Qual é a capacidade do balde, em litros?',
+ o:['5,328','4,466','3,272','3,032','2,664'],
+ c:4,e:'V = (1/3)·π·h·(R² + r² + R·r) = (1/3)·3·18·(64 + 36 + 48) = 18·148 = 2664 cm³ = 2,664 L.'},
+
+{s:'MAT',n:48,hab:'Calcular distância entre dois pontos no plano cartesiano',
+ fig:svgPontos,
+ stmt:'Um robô percorre, em linha reta, os pontos A(2, 2), B(10, 8), C(12, 8) e D(16, 5), nessa ordem (distâncias em metros). Quantos metros ele percorreu ao todo?',
+ o:['13','15','17','21','23'],
+ c:2,e:'d(A,B)=\u221A(8²+6²)=10; d(B,C)=\u221A(2²+0²)=2; d(C,D)=\u221A(4²+(−3)²)=5. Total = 10+2+5 = 17 m.'},
+
+/* ===== BIOLOGIA (49-56) ===== */
+{s:'BIO',n:49,hab:'Relacionar permutação cromossômica e gametas recombinantes',
+ stmt:'No cruzamento-teste de uma mosca-da-fruta fêmea cinza de asa normal (PpVv) com um macho preto de asa vestigial (ppvv), 82% da prole teve fenótipo igual ao de um dos parentais e 18% teve fenótipos diferentes de ambos (recombinantes). Com base nesses resultados, conclui-se que',
+ o:['os genes segregaram de maneira totalmente independente.','a proporção fenotípica seguiu a Segunda Lei de Mendel.','as moscas sofreram mutações que produziram gametas mutantes.','a determinação de parte dos gametas foi influenciada pela permutação cromossômica.','os genes para cor e para asa foram herdados separadamente.'],
+ c:3,e:'A presença de 18% de recombinantes (menos de 50%) indica genes ligados que sofreram permutação (crossing-over), gerando gametas recombinantes.'},
+
+{s:'BIO',n:50,hab:'Conhecer as moléculas da expressão gênica',
+ stmt:'Estuda-se o uso do RNA mensageiro para induzir células imunológicas a atacar células cancerosas, por meio da expressão de um antígeno. No processo de expressão gênica, o RNA mensageiro tem o papel de',
+ o:['selecionar um aminoácido específico para a cadeia peptídica.','determinar a sequência de aminoácidos de uma proteína.','catalisar a produção de ácidos nucleicos no núcleo.','indicar apenas o sítio de iniciação da tradução.','formar o local onde ocorre a síntese proteica.'],
+ c:1,e:'O RNAm carrega, em seus códons, a informação que determina a sequência de aminoácidos da proteína.'},
+
+{s:'BIO',n:51,hab:'Analisar o mecanismo da seleção natural',
+ stmt:'Uma população de ratos tem indivíduos de pelagem branca e cinza, predados por uma raposa em ambiente escuro. Ao longo do tempo, a população passa a ser formada predominantemente por ratos cinza. Esse cenário se deve ao fato de os ratos cinza terem',
+ o:['sido selecionados ao acaso, sem relação com o ambiente.','apresentado maior taxa de sobrevivência e reprodução.','desenvolvido a coloração de propósito para não serem predados.','tido menos acesso a recursos do que os ratos brancos.','adquirido a coloração já adultos, por mutação induzida.'],
+ c:1,e:'A pelagem cinza favorece a camuflagem no ambiente escuro; esses ratos sobrevivem e se reproduzem mais, tornando-se predominantes.'},
+
+{s:'BIO',n:52,hab:'Diferenciar os tipos de seleção natural',
+ stmt:'Com o uso inadequado de antibióticos, as bactérias "sensíveis" são eliminadas, enquanto as "resistentes" sobrevivem e se multiplicam, tornando a população cada vez mais resistente. Essa situação é um exemplo de seleção natural do tipo',
+ o:['estabilizadora.','direcional.','disruptiva.','artificial.','sexual.'],
+ c:1,e:'A seleção favorece um fenótipo extremo (alta resistência), deslocando a média da população nessa direção — seleção direcional.'},
+
+{s:'BIO',n:53,hab:'Compreender o processo de sucessão ecológica',
+ stmt:'Uma legislação estabelece que áreas de floresta nativa em estágios sucessionais mais avançados devem receber maior proteção. Segundo esse critério, uma área florestal que deve ter proteção diferenciada é aquela que',
+ o:['possui solo rochoso e ainda em formação.','acomoda principalmente espécies pioneiras.','passou por recolonização em período recente.','apresenta comunidade estável e em equilíbrio.','mantém baixa diversidade de espécies.'],
+ c:3,e:'Estágios sucessionais avançados aproximam-se do clímax, caracterizado por comunidade estável e em equilíbrio.'},
+
+{s:'BIO',n:54,hab:'Conhecer causas e consequências da eutrofização',
+ stmt:'A eutrofização é um processo em que o excesso de nutrientes em um corpo-d\'água provoca crescimento exagerado de algas e cianobactérias, reduzindo o oxigênio disponível. Uma ação humana que pode desencadear esse processo é o(a)',
+ o:['despejo de nutrientes (esgotos e fertilizantes) em corpos-d\'água.','poluição da água por resíduos radioativos.','introdução de espécies exóticas de peixes.','uso de metais pesados em atividade de garimpo.','lançamento de resíduos plásticos no corpo hídrico.'],
+ c:0,e:'Esgotos e fertilizantes são ricos em fósforo e nitrogênio; despejados na água, promovem crescimento excessivo de algas, causando eutrofização.'},
+
+{s:'BIO',n:55,hab:'Identificar adaptações das plantas ao meio terrestre',
+ stmt:'Na transição da vida aquática para a terrestre, as plantas precisaram desenvolver estratégias para evitar a perda de água. Um fator que auxilia nessa proteção é a presença de',
+ o:['tecido responsável por transportar substâncias.','ciclo reprodutivo com alternância de gerações.','tubo especializado relacionado à reprodução.','embrião protegido pelo organismo materno.','revestimento epidérmico ceroso nas folhas (cutícula).'],
+ c:4,e:'A cutícula, revestimento ceroso das folhas, torna-as impermeáveis e reduz a perda de água.'},
+
+{s:'BIO',n:56,hab:'Compreender o ciclo reprodutivo das angiospermas',
+ stmt:'Nas angiospermas ocorre a dupla fecundação: um núcleo espermático funde-se com a oosfera, formando o zigoto diploide, e outro se funde com os núcleos polares, formando uma célula triploide. A partir dessa célula triploide, forma-se um tecido cuja função é',
+ o:['atuar como reserva nutritiva para o embrião (endosperma).','auxiliar na dispersão da semente.','produzir megásporos haploides.','originar os grãos de pólen.','constituir o tubo polínico.'],
+ c:0,e:'A célula triploide origina o endosperma, tecido de reserva que nutre o embrião em desenvolvimento.'},
+
+/* ===== QUÍMICA (57-64) ===== */
+{s:'QUI',n:57,hab:'Reconhecer impactos ambientais dos combustíveis fósseis',
+ stmt:'Em grandes cidades, óxidos de nitrogênio (NOₓ) e compostos orgânicos voláteis (COVs), emitidos pela queima de combustíveis fósseis, reagem sob luz solar formando ozônio troposférico e outros poluentes, resultando em uma névoa densa e tóxica. Esse impacto corresponde ao(à)',
+ o:['descarte de efluentes líquidos.','formação de fuligem.','aquecimento global.','smog fotoquímico.','chuva ácida.'],
+ c:3,e:'A névoa formada por reações fotoquímicas entre NOₓ e COVs, com ozônio troposférico, é o smog fotoquímico.'},
+
+{s:'QUI',n:58,hab:'Identificar funções orgânicas nitrogenadas (aminas, amidas)',
+ stmt:'O hormônio α-MSH é uma molécula peptídica. Como todo peptídeo, sua cadeia forma-se por ligações entre aminoácidos, apresentando o grupo amina (derivado da amônia por substituição de hidrogênios) e o grupo característico da ligação peptídica (grupo acila ligado ao nitrogênio). As funções nitrogenadas presentes são',
+ o:['amina e nitrila.','amina e amida.','nitrila e nitrocomposto.','amida e nitrocomposto.','amina e nitrocomposto.'],
+ c:1,e:'Peptídeos apresentam grupos amina (–NH₂) e amida (ligação peptídica –CO–NH–). Não há nitro (–NO₂) nem nitrila (–C≡N).'},
+
+{s:'QUI',n:59,hab:'Identificar grupos funcionais oxigenados',
+ stmt:'O furfural (C₅H₄O₂), formado na reação de Maillard, é um composto cíclico com dois grupos funcionais oxigenados: um grupo –CHO ligado ao anel e um oxigênio dentro do anel (éter cíclico). Uma das funções oxigenadas presentes no furfural é o(a)',
+ o:['hidrocarboneto.','aldeído.','cetona.','álcool.','fenol.'],
+ c:1,e:'O grupo –CHO caracteriza a função aldeído; o furfural também possui um éter cíclico (oxigênio no anel).'},
+
+{s:'QUI',n:60,hab:'Reconhecer fatores que influenciam a velocidade das reações',
+ stmt:'A adição de CO₂ em bebidas cria um ambiente ácido que inibe a proliferação de microrganismos, prolongando a vida de prateleira. Uma forma de aumentar ainda mais o tempo de prateleira dessas bebidas gaseificadas é',
+ o:['elevar a temperatura no estoque.','adicionar um catalisador ao produto.','diminuir a pressão do gás dentro da embalagem.','aumentar a concentração do gás dentro da embalagem.','reduzir a área de contato entre o gás e o produto.'],
+ c:3,e:'Mais CO₂ dissolvido → meio mais ácido → menor proliferação de bactérias → maior tempo de prateleira. Temperatura alta ou catalisador acelerariam a degradação.'},
+
+{s:'QUI',n:61,hab:'Calcular a entalpia de reação pela Lei de Hess',
+ stmt:'Na produção de cimento ocorrem:\n1) CaCO₃(s) → CaO(s) + CO₂(g); ΔH₁ = +178,0 kJ/mol\n2) CO₂(g) → CO(g) + ½O₂(g); ΔH₂ = +284,0 kJ/mol\n3) CO(g) → C(s) + ½O₂(g); ΔH₃ = +110,0 kJ/mol\nSomando as três etapas (produção de carbono a partir do carbonato de cálcio), a reação global',
+ o:['libera 572 kJ de energia.','libera 352 kJ de energia.','libera 216 kJ de energia.','absorve 572 kJ de energia.','absorve 352 kJ de energia.'],
+ c:3,e:'ΔH = 178 + 284 + 110 = +572 kJ/mol. Como ΔH > 0, a reação é endotérmica: absorve 572 kJ.'},
+
+{s:'QUI',n:62,hab:'Conhecer o efeito de meia-vida de isótopos radioativos',
+ stmt:'O césio-137 tem meia-vida de ≈ 30 anos. Considerando a contaminação de uma região com 1 tonelada (1000 kg) de césio-137, quantos anos são necessários para reduzir essa massa a 125 kg?',
+ o:['30','60','90','120','150'],
+ c:2,e:'1000 → 500 → 250 → 125 kg: 3 meias-vidas. 3 × 30 = 90 anos.'},
+
+{s:'QUI',n:63,hab:'Identificar casos de isomeria constitucional',
+ stmt:'O etanol (um álcool, com grupo –OH) e o dimetil éter (um éter, R–O–R\') têm a mesma fórmula molecular, C₂H₆O, mas pertencem a funções orgânicas diferentes. A isomeria entre esses compostos é do tipo',
+ o:['dinâmica.','funcional.','de cadeia.','de posição.','de compensação.'],
+ c:1,e:'Mesma fórmula molecular e funções orgânicas distintas (álcool e éter) → isomeria funcional (ou de função).'},
+
+{s:'QUI',n:64,hab:'Conhecer reações reversíveis e o equilíbrio químico',
+ stmt:'Considere a reação reversível A₂(g) + 3 B₂(g) ⇌ 2 AB₃(g). No início há apenas os reagentes A₂ e B₂ (proporção 1:3) e nenhum produto. À medida que a reação avança até o equilíbrio, o comportamento correto das concentrações é:',
+ o:['as concentrações de A₂ e B₂ diminuem e a de AB₃ aumenta, até todas se estabilizarem no equilíbrio.','a concentração de AB₃ diminui, enquanto as de A₂ e B₂ aumentam.','todas as concentrações aumentam continuamente, sem se estabilizar.','as concentrações permanecem constantes desde o início.','apenas a concentração de A₂ varia; as demais permanecem fixas.'],
+ c:0,e:'Reagentes (A₂ e B₂) são consumidos e o produto (AB₃), inicialmente nulo, é formado. No equilíbrio, todas as concentrações se estabilizam.'},
+
+/* ===== FÍSICA (65-72) ===== */
+{s:'FIS',n:65,hab:'Estabelecer a potência da corrente elétrica',
+ stmt:'Um chuveiro elétrico tem potência nominal de 6 800 W e tensão de 220 V. A intensidade da corrente que percorre o circuito do chuveiro é mais próxima de, em ampères,',
+ o:['7','9','28','31','45'],
+ c:3,e:'P = U·i → 6800 = 220·i → i ≈ 30,9 ≈ 31 A.'},
+
+{s:'FIS',n:66,hab:'Analisar imagem e objeto em dioptros planos',
+ stmt:'Uma pessoa observa um peixe a 3 cm da superfície de vidro de um aquário (dioptro plano). Considere os índices de refração do ar e da água iguais a 1 e 1,2. Qual é a posição da imagem do peixe em relação à superfície?',
+ o:['2,5 cm','3,0 cm','3,6 cm','5,0 cm','7,5 cm'],
+ c:0,e:'p/p\' = n_água / n_ar → 3/p\' = 1,2/1 → p\' = 3/1,2 = 2,5 cm.'},
+
+{s:'FIS',n:67,hab:'Determinar as leis de Ohm',
+ stmt:'Em um condutor ôhmico, a tensão (U) e a corrente (i) obedecem à relação U = R·i, com R constante. O gráfico que representa corretamente U (eixo vertical) em função de i (eixo horizontal) para esse condutor é uma',
+ o:['reta crescente que passa pela origem.','reta horizontal (U constante).','reta decrescente.','curva crescente (parábola).','curva decrescente.'],
+ c:0,e:'Como U e i são diretamente proporcionais (U = R·i, R constante), o gráfico é uma reta crescente que passa pela origem.'},
+
+{s:'FIS',n:68,hab:'Determinar associações de resistores em série e paralelo',
+ stmt:'Um reostato seleciona resistências em série de 5 Ω, 10 Ω, 15 Ω, 20 Ω e 25 Ω. Na posição A, apenas o resistor de 5 Ω é percorrido e a corrente é 1,5 A. Mantendo a d.d.p. constante, na posição E todos os resistores ficam em série. Qual é a corrente nessa posição?',
+ o:['0,1 A','0,3 A','0,5 A','1,5 A','7,5 A'],
+ c:0,e:'U = R·i = 5·1,5 = 7,5 V. Em série: R_eq = 5+10+15+20+25 = 75 Ω. i = 7,5/75 = 0,1 A.'},
+
+{s:'FIS',n:69,hab:'Reconhecer tipos de lentes esféricas',
+ stmt:'Um dispositivo usa duas lentes: a Lente 1 tem bordas finas e as duas faces curvas para fora; a Lente 2 tem bordas espessas, com uma face plana e a outra curvada para dentro. Os nomes das lentes 1 e 2 são, respectivamente,',
+ o:['plano-convexa e bicôncava.','bicôncava e biconvexa.','biconvexa e plano-côncava.','plano-côncava e biconvexa.','biconvexa e bicôncava.'],
+ c:2,e:'Duas faces para fora e bordas finas → lente biconvexa. Face plana + face côncava, com bordas espessas → lente plano-côncava.'},
+
+{s:'FIS',n:70,hab:'Determinar período e frequência, relacionando-os',
+ stmt:'Um bloco preso a uma mola oscila sobre uma superfície sem atrito. Observando suas posições sucessivas, o bloco retorna à mesma posição, completando uma oscilação, a cada 3 s. A frequência de oscilação é de, aproximadamente,',
+ o:['1,33 Hz','0,67 Hz','0,33 Hz','0,05 Hz','0,025 Hz'],
+ c:2,e:'Período T = 3 s. f = 1/T = 1/3 ≈ 0,33 Hz.'},
+
+{s:'FIS',n:71,hab:'Aplicar as leis de Kirchhoff aos circuitos elétricos',
+ stmt:'Num circuito, dois geradores ideais de 6 V alimentam cinco resistores. As malhas ABEF e BCDE são simétricas: em cada uma há um gerador de 6 V, um resistor de 1 Ω e um resistor de 3 Ω. O resistor central R₃ = 8 Ω (entre B e E) é percorrido pela soma das correntes das duas malhas (2i). Aplicando a Lei das Malhas à malha ABEF: 6 − 1·i − 8·(2i) − 3·i = 0. A corrente que percorre R₃ vale',
+ o:['0,3 A','0,6 A','0,9 A','1,0 A','2,0 A'],
+ c:1,e:'6 − i − 16i − 3i = 0 → 20i = 6 → i = 0,3 A. Como R₃ é percorrida por 2i: i₃ = 2 × 0,3 = 0,6 A.'},
+
+{s:'FIS',n:72,hab:'Compreender a reflexão e a refração de ondas',
+ stmt:'Ondas de frequência constante são produzidas em um lago. Ao se aproximarem da margem, são refratadas com diminuição do comprimento de onda. Nessas condições, a velocidade de propagação e a frequência das ondas, respectivamente,',
+ o:['aumenta e não varia.','não varia e diminui.','diminui e aumenta.','aumenta e diminui.','diminui e não varia.'],
+ c:4,e:'Como v = λ·f e f é constante, a diminuição de λ implica diminuição de v; a frequência não varia na refração.'},
+
+/* ===== HISTÓRIA (73-81) ===== */
+{s:'HIS',n:73,hab:'Compreender as unificações italiana e alemã',
+ stmt:'Giuseppe Mazzini (1805–1872), no contexto do Risorgimento, dedicou-se à criação de uma Itália unida e republicana, opondo-se às monarquias absolutistas e defendendo a participação popular. Qual foi a principal estratégia adotada por ele como líder da unificação italiana?',
+ o:['Modernização da indústria romana.','Propagação de projeto nacionalista.','Consolidação das elites tradicionais.','Integração de rebeliões americanas.','Coalizão com a monarquia austríaca.'],
+ c:1,e:'Mazzini defendia a propagação de um projeto nacionalista, chamando o povo italiano a lutar pela nação unificada contra o domínio austríaco.'},
+
+{s:'HIS',n:74,hab:'Avaliar consequências da Primeira Guerra Mundial',
+ stmt:'Ao analisar o cenário posterior à Primeira Guerra Mundial, um historiador destaca o fim dos impérios otomano e austro-húngaro, a fragilização das potências coloniais europeias e a ascensão dos Estados Unidos como novo centro econômico e político. Esse texto ressalta o(a)',
+ o:['término da polarização política.','isolacionismo dos estadunidenses.','consolidação de um período de paz.','fortalecimento de regimes socialistas.','diluição da hegemonia europeia.'],
+ c:4,e:'O texto enfatiza o enfraquecimento (diluição) da hegemonia europeia e a ascensão dos EUA após a guerra.'},
+
+{s:'HIS',n:75,hab:'Conhecer a crise de 1929 e as ações para superá-la',
+ stmt:'Por meio do New Deal, Roosevelt propôs uma reconstrução das relações entre Estado e sociedade, adotando postura mais ativa para conter os efeitos da Crise de 1929. Considerando o modelo econômico dos EUA, essa ação foi inovadora porque promoveu a',
+ o:['formulação de ações com foco no equilíbrio dos cofres públicos.','rejeição das ideias keynesianas que regulavam o liberalismo.','intensificação de programas assistenciais para aliviar desigualdades.','criação de iniciativas destinadas à ampliação da influência empresarial.','intervenção sistemática do poder público no funcionamento do mercado.'],
+ c:4,e:'O New Deal inovou ao estabelecer forte intervenção estatal na economia (obras públicas, geração de empregos), rompendo com o liberalismo não intervencionista.'},
+
+{s:'HIS',n:76,hab:'Compreender o avanço do nazifascismo e a Segunda Guerra',
+ stmt:'Um texto descreve que a Segunda Guerra começou em 1939, após a Alemanha invadir a Polônia, e que, em 1940, os alemães ocuparam rapidamente vários países europeus. Ao analisar o contexto inicial do conflito, o texto destaca como elemento responsável por seu início o(a)',
+ o:['atenuação do revanchismo germânico.','evolução do expansionismo alemão.','alteração de acordos pacifistas.','formação de alianças militares.','rendição de tropas britânicas.'],
+ c:1,e:'O avanço expansionista da Alemanha (invasão da Polônia e ocupação de países vizinhos) é apontado como o motor do início da guerra.'},
+
+{s:'HIS',n:77,hab:'Conhecer o mundo bipolarizado do pós-guerra',
+ stmt:'O Artigo 5º do Tratado do Atlântico Norte (1949) prevê que um ataque armado contra um dos membros será considerado ataque a todos, obrigando à defesa mútua. Esse tratado oficializa o(a)',
+ o:['fim da polarização entre capitalistas e socialistas.','programa de auxílio econômico entre nações europeias.','formação de uma aliança militar entre países capitalistas.','criação do pacto de não agressão entre países socialistas.','reconhecimento de processos de autodeterminação dos povos.'],
+ c:2,e:'O tratado criou a OTAN, aliança militar de defesa mútua dos países capitalistas liderados pelos EUA, na Guerra Fria.'},
+
+{s:'HIS',n:78,hab:'Compreender a política do café com leite',
+ stmt:'Durante a Primeira República, uma charge retrata os estados de São Paulo e Minas Gerais disputando/ocupando o poder da "Presidência da República", enquanto outros estados aparecem à margem. Qual característica da Primeira República é evidenciada nessa representação?',
+ o:['Manutenção da política do café com leite.','Contestação da política dos governadores.','Finalização das revoltas messiânicas.','Organização dos votos de cabresto.','Ascensão de lideranças militares.'],
+ c:0,e:'A alternância de poder entre as oligarquias de São Paulo (café) e Minas Gerais (leite) caracteriza a política do "café com leite".'},
+
+{s:'HIS',n:79,hab:'Compreender o início do movimento operário brasileiro',
+ stmt:'Durante a Greve Geral de 1917, um jornal anarquista noticiou as reivindicações operárias: libertação de grevistas presos, direito de associação, jornada de oito horas, aumento salarial e redução de preços de alimentos e aluguéis. Essas demandas indicam que os movimentos operários do início da Primeira República foram caracterizados pela',
+ o:['adesão às revoltas de caráter separatista.','desconexão com as demandas populares.','segregação de unidades trabalhistas regionais.','criação de rebeliões favoráveis à deposição do governo.','influência de ideias ligadas ao anarcossindicalismo.'],
+ c:4,e:'A valorização do sindicato e da ação direta dos trabalhadores revela a influência anarcossindicalista no movimento operário.'},
+
+{s:'HIS',n:80,hab:'Conhecer a ascensão e queda do governo de Getúlio Vargas',
+ stmt:'Em 1943, um manifesto assinado por membros da elite mineira reivindicava garantias constitucionais e liberdade de pensamento, defendendo a restituição da democracia. Esse Manifesto dos Mineiros criticava o governo vigente ao acusá-lo de',
+ o:['priorizar a economia urbana.','recusar a influência estrangeira.','apoiar os movimentos liberais.','proibir a manifestação operária.','desrespeitar os direitos políticos.'],
+ c:4,e:'O Estado Novo era autoritário e suspendeu liberdades; o manifesto o denunciava por desrespeitar os direitos políticos dos cidadãos.'},
+
+{s:'HIS',n:81,hab:'Conhecer as propostas de desenvolvimento do Brasil',
+ stmt:'O Plano de Metas do presidente Juscelino Kubitschek reunia programas setoriais de investimento voltados à execução de obras e à implantação de indústrias e serviços. Esse trecho aponta para qual característica desse governo?',
+ o:['organização de medidas mercantis protecionistas.','elaboração de políticas de controle inflacionário.','priorização do desenvolvimento econômico.','destinação de verbas para tópicos sociais.','diminuição das desigualdades regionais.'],
+ c:2,e:'O Plano de Metas priorizava a industrialização e o desenvolvimento econômico como eixo da modernização nacional.'},
+
+/* ===== GEOGRAFIA (82-90) ===== */
+{s:'GEO',n:82,hab:'Relacionar estrutura populacional e pirâmide etária',
+ stmt:'Uma pirâmide etária apresenta base muito larga (grande proporção de crianças e jovens) e topo estreito (poucos idosos), indicando alta taxa de natalidade e baixa expectativa de vida. Essa distribuição populacional é mais comum em',
+ o:['países socialistas, porque a maioria está em idade produtiva.','países periféricos, pois há mais adultos que crianças.','países desenvolvidos, com baixo índice de fecundidade.','países emergentes, com elevada expectativa de vida.','países em desenvolvimento, com alta taxa de natalidade.'],
+ c:4,e:'Base larga indica alta natalidade; topo estreito, baixa expectativa de vida — perfil típico de países em desenvolvimento.'},
+
+{s:'GEO',n:83,hab:'Compreender migrações e identidades culturais',
+ stmt:'O bairro da Liberdade, em São Paulo, reúne influências japonesas, coreanas e chinesas, sendo considerado "um pedaço da Ásia no Brasil", onde é possível conhecer gastronomia, festas e costumes desses povos. Esse caso demonstra que os movimentos migratórios contribuem para a',
+ o:['formação de territórios autônomos.','intocabilidade de tradições religiosas.','promoção de intercâmbios culturais.','padronização de identidades étnicas.','aceleração do crescimento vegetativo.'],
+ c:2,e:'A convivência de diferentes origens no bairro favorece a troca de experiências e intercâmbios culturais.'},
+
+{s:'GEO',n:84,hab:'Compreender o sistema financeiro global',
+ stmt:'Em 2022, o Egito adotou o sistema de câmbio flutuante para a libra egípcia, buscando que as cotações reflitam as forças de oferta e demanda. Esse sistema influencia a economia do país ao',
+ o:['determinar a dinâmica do comércio africano.','incitar a intervenção de multinacionais.','garantir a dependência de uma lei de padronização de moedas.','permitir a variação de acordo com o mercado internacional.','estabelecer o controle estatal sobre os capitais estrangeiros.'],
+ c:3,e:'No câmbio flutuante, a taxa é determinada pelo mercado (oferta e demanda), variando conforme as condições internas e internacionais.'},
+
+{s:'GEO',n:85,hab:'Interpretar a situação dos refugiados e o papel do ACNUR',
+ stmt:'Na Ucrânia, o Alto Comissariado das Nações Unidas para os Refugiados (ACNUR) atua junto a deslocados internos e a pessoas que retornam às suas áreas de origem, oferecendo informações e apoio. O texto indica que essa agência da ONU tem como um de seus objetivos',
+ o:['fornecer assistência humanitária a pessoas forçadas a deixar seus locais de habitação.','promover cooperação militar entre países para evitar conflitos.','atuar na erradicação das problemáticas provocadas pela desigualdade de renda.','deliberar sobre processos de demarcação territorial.','estimular a integração sociocultural entre continentes.'],
+ c:0,e:'O ACNUR presta assistência humanitária (abrigo, alimentos, água, saúde) a refugiados e deslocados forçados.'},
+
+{s:'GEO',n:86,hab:'Compreender o comércio global e o papel da OMC',
+ stmt:'As disputas comerciais que envolvem políticas ambientais são um desafio complexo para a OMC, pois países em desenvolvimento alegam que padrões ambientais elevados reduzem seu acesso aos mercados e impõem custos ao crescimento. Nesse contexto, o desafio da OMC envolve diretamente a busca pelo(a)',
+ o:['promoção da livre concorrência entre as nações.','derrubada das barreiras alfandegárias internacionais.','fortalecimento de medidas protecionistas.','transparência das transações entre blocos.','equilíbrio entre sustentabilidade e progresso econômico.'],
+ c:4,e:'A OMC precisa conciliar as demandas ambientais (sustentabilidade) com o desenvolvimento econômico dos países.'},
+
+{s:'GEO',n:87,hab:'Reconhecer os blocos econômicos mundiais',
+ stmt:'O Mercosul adotou a Tarifa Externa Comum (TEC) em 1995, o que significa que o Brasil não pode, sozinho, reduzir a taxação de um produto importado de fora do bloco — é preciso negociar em conjunto com os demais membros. Esse aspecto caracteriza o Mercosul como',
+ o:['união aduaneira.','mercado comum.','integração monetária.','zona de livre-comércio.','mera cooperação econômica.'],
+ c:0,e:'A adoção de uma tarifa externa comum frente a terceiros é característica de uma união aduaneira.'},
+
+{s:'GEO',n:88,hab:'Identificar desafios do Brasil no comércio exterior',
+ stmt:'A burocracia alfandegário-aduaneira é apontada como um dos principais entraves às exportações brasileiras, já que o mercado internacional exige não só bons preços e qualidade, mas também prazos rápidos e previsibilidade. Esse entrave pode comprometer a economia brasileira na medida em que',
+ o:['dificulta as operações com o comércio exterior.','gera o encolhimento da arrecadação tributária.','amplia a dependência do setor agrícola.','incita a desconcentração dos complexos produtivos.','reduz a durabilidade dos itens de alto valor agregado.'],
+ c:0,e:'A burocracia atrasa e complica as operações de exportação, prejudicando a competitividade no comércio exterior.'},
+
+{s:'GEO',n:89,hab:'Comparar modais de transporte',
+ stmt:'Um infográfico compara modais: uma embarcação de cabotagem (hidroviário) transporta 5 000 toneladas, equivalendo à capacidade de cerca de 72 vagões ferroviários e 143 carretas rodoviárias. Essa comparação evidencia que o modal hidroviário é mais vantajoso por',
+ o:['apresentar menor necessidade de fiscalização.','alcançar maior velocidade de deslocamento.','emitir menor quantidade de poluentes.','possuir maior capacidade de carga.','ter menor dependência do clima.'],
+ c:3,e:'Uma única embarcação transporta o equivalente a dezenas de vagões e carretas, evidenciando a maior capacidade de carga do modal hidroviário.'},
+
+{s:'GEO',n:90,hab:'Investigar a atuação das ONGs e do terceiro setor',
+ stmt:'O WWF-Brasil é uma organização não governamental (ONG) dedicada à conservação da natureza, integrando a maior rede independente de conservação do mundo. Como parte do terceiro setor, essa organização promove ações que são',
+ o:['responsáveis pela definição dos acordos ambientais globais.','concentradas na denúncia de corrupção política.','independentes da iniciativa estatal e sem fins lucrativos.','voltadas ao financiamento de programas sociais.','contrárias aos interesses dos governos nacionais.'],
+ c:2,e:'As organizações do terceiro setor, como o WWF, atuam de forma independente do Estado e sem fins lucrativos.'},
+
+/* ===== FILOSOFIA/SOCIOLOGIA (91-96) ===== */
+{s:'FIL',n:91,hab:'Compreender a propaganda totalitária (Hannah Arendt)',
+ stmt:'Para Hannah Arendt, o que caracteriza a propaganda totalitária, mais do que as ameaças diretas, é o uso de insinuações indiretas e ameaçadoras contra todos os que não seguem os ensinamentos do regime. Segundo essa análise, em regimes totalitários as propagandas costumam ser utilizadas para',
+ o:['ridicularizar governos populistas.','combater opositores políticos.','diversificar práticas culturais.','divulgar conquistas bélicas.','regular disputas eleitorais.'],
+ c:1,e:'A propaganda totalitária serve para intimidar e combater a oposição, insinuando ameaças contra quem discorda do regime.'},
+
+{s:'FIL',n:92,hab:'Analisar a desumanização da arte (Ortega y Gasset)',
+ stmt:'Para Ortega y Gasset, a "desumanização" da arte contemporânea resulta de uma obsessão pela novidade e pela ruptura com o passado, levando a definir como inovação as formas que não fazem referência a outras escolas artísticas. Nesse excerto, o filósofo estabelece uma crítica ao(à)',
+ o:['incentivo à venda de obras de artistas antigos.','permanência de expressões artísticas elitistas.','exagero na busca pela inovação artística.','falta de originalidade dos artistas atuais.','distorção da realidade nas produções artísticas.'],
+ c:2,e:'Ortega critica a obsessão pela novidade e pela ruptura constante com o passado — o exagero na busca pela inovação.'},
+
+{s:'FIL',n:93,hab:'Compreender o contratualismo de John Locke',
+ stmt:'Segundo John Locke, quando um grupo de homens consente em formar uma comunidade ou governo, eles se incorporam em um único corpo político, no qual a maioria tem o direito de agir pelos demais. Para Locke, a transição do estado de natureza para a sociedade civil ocorre por meio de um(a)',
+ o:['consenso coletivo.','imposição forçada.','iniciativa individual isolada.','debate meramente democrático.','projeto expansionista.'],
+ c:0,e:'Em Locke, a sociedade civil nasce do livre consentimento (consenso coletivo) dos indivíduos para formar o corpo político.'},
+
+{s:'FIL',n:94,hab:'Relacionar escolaridade e desigualdade social',
+ stmt:'Dados indicam que, no Brasil, 52% das pessoas entre 25 e 64 anos não concluíram o ensino fundamental ou médio e que muitos jovens de 19 anos não terminaram o ensino médio. Esses dados apontam para um dos fatores que têm contribuído para o(a)',
+ o:['corte de investimentos no setor educacional.','redução da oferta de cursos universitários.','fortalecimento de desigualdades sociais.','decréscimo dos postos de emprego.','recorrência de crises econômicas.'],
+ c:2,e:'A baixa escolaridade limita as oportunidades de emprego e renda, contribuindo para a perpetuação das desigualdades sociais.'},
+
+{s:'FIL',n:95,hab:'Analisar tecnologia e mundo do trabalho',
+ stmt:'Com a globalização e as ferramentas digitais, tornou-se possível trabalhar no formato home office para empresas locais ou de outros países, ultrapassando fronteiras por meio da mobilidade tecnológica. O texto indica uma relação entre a evolução tecnológica e a',
+ o:['organização de estruturas de trabalho isentas de hierarquias.','eliminação dos processos e fluxos de trabalho.','difusão de modalidades de trabalho marcadas pela flexibilidade.','desburocratização dos processos de contratação.','redução do número de trabalhadores nas corporações.'],
+ c:2,e:'A tecnologia permitiu a difusão do trabalho remoto (home office), modalidade marcada pela flexibilidade de local.'},
+
+{s:'FIL',n:96,hab:'Compreender o patrimonialismo (Sérgio Buarque de Holanda)',
+ stmt:'Para Sérgio Buarque de Holanda, o funcionário "patrimonial" vê a gestão política como assunto de seu interesse particular, relacionando funções e benefícios a direitos pessoais, e não a interesses objetivos, como ocorreria no verdadeiro Estado burocrático. Nesse texto, o autor evidencia a dificuldade que alguns indivíduos têm de',
+ o:['prezar pela continuidade de princípios familiares.','lutar por suas reivindicações de modo individual.','compreender a distinção entre moral e ética.','conviver em harmonia com outras pessoas.','separar a esfera privada da pública.'],
+ c:4,e:'O patrimonialismo, para Sérgio Buarque, revela a dificuldade de separar o público do privado na gestão do Estado.'}
+];
+
+/* ---------- state ---------- */
+var LET=['A','B','C','D','E'];
+var answers={}; // n -> chosen index
+var current=subjects[0].key;
+
+var elTabs=document.getElementById('tabs');
+var elQ=document.getElementById('questions');
+var elSubTitle=document.getElementById('subTitle');
+var elSubRange=document.getElementById('subRange');
+var elSummary=document.getElementById('summary');
+
+function colorOf(key){ var s=subjects.find(function(x){return x.key===key}); return s?s.color:'var(--port)'; }
+function questionsOf(key){ return Q.filter(function(q){return q.s===key}); }
+
+function setAccent(key){ document.documentElement.style.setProperty('--accent', colorOf(key)); }
+
+function buildTabs(){
+  elTabs.innerHTML='';
+  subjects.forEach(function(s){
+    var qs=questionsOf(s.key);
+    var answered=qs.filter(function(q){return answers[q.n]!==undefined}).length;
+    var b=document.createElement('button');
+    b.className='tab'+(s.key===current?' active':'')+(answered===qs.length?' done':'');
+    b.style.setProperty('--c', s.color);
+    b.innerHTML='<span class="dot"></span>'+s.label+' <span class="cnt">'+answered+'/'+qs.length+'</span>';
+    b.onclick=function(){ current=s.key; render(); window.scrollTo({top:0,behavior:'smooth'}); };
+    elTabs.appendChild(b);
+  });
+}
+
+function renderQuestion(q){
+  var card=document.createElement('div');
+  card.className='q';
+  var chosen=answers[q.n];
+  var locked=chosen!==undefined;
+
+  var top=document.createElement('div'); top.className='qtop';
+  top.innerHTML='<span class="qnum">Q'+q.n+'</span><span class="hab"><b>Habilidade SAS</b><br>'+q.hab+'</span>';
+  card.appendChild(top);
+
+  var st=document.createElement('div'); st.className='stmt'; st.textContent=q.stmt;
+  card.appendChild(st);
+
+  if(q.fig){ var f=document.createElement('div'); f.className='figura'; f.innerHTML=q.fig; card.appendChild(f); }
+
+  var ul=document.createElement('ul'); ul.className='opts';
+  q.o.forEach(function(opt,i){
+    var li=document.createElement('li'); li.className='opt';
+    if(locked){
+      li.classList.add('locked');
+      if(i===q.c) li.classList.add('correct');
+      else if(i===chosen) li.classList.add('wrong');
+      else li.classList.add('dim');
+    }
+    li.innerHTML='<span class="letter">'+LET[i]+'</span><span class="txt">'+opt+'</span>';
+    if(!locked){ li.onclick=function(){ answer(q.n,i); }; }
+    ul.appendChild(li);
+  });
+  card.appendChild(ul);
+
+  var ex=document.createElement('div'); ex.className='expl';
+  if(locked){
+    var right=chosen===q.c;
+    ex.classList.add('show', right?'good':'bad');
+    ex.innerHTML='<span class="tag">'+(right?'Correto':'Resposta: '+LET[q.c])+'</span>'+q.e;
+  }
+  card.appendChild(ex);
+  return card;
+}
+
+function render(){
+  setAccent(current);
+  buildTabs();
+  var s=subjects.find(function(x){return x.key===current});
+  var qs=questionsOf(current);
+  elSubTitle.textContent=s.label;
+  elSubRange.textContent='Questões '+qs[0].n+' a '+qs[qs.length-1].n;
+
+  elQ.innerHTML='';
+  qs.forEach(function(q){ elQ.appendChild(renderQuestion(q)); });
+
+  // subject summary if all answered
+  var answered=qs.filter(function(q){return answers[q.n]!==undefined});
+  if(answered.length===qs.length){
+    var acertos=qs.filter(function(q){return answers[q.n]===q.c}).length;
+    elSummary.className='summary show';
+    elSummary.innerHTML='<h3>Matéria concluída: '+s.label+'</h3><div class="big">'+acertos+' / '+qs.length+'</div><p>'+Math.round(acertos/qs.length*100)+'% de acertos nesta matéria</p>';
+  } else {
+    elSummary.className='summary';
+    elSummary.innerHTML='';
+  }
+  updateScore();
+}
+
+function answer(n,i){
+  if(answers[n]!==undefined) return;
+  answers[n]=i;
+  render();
+}
+
+function updateScore(){
+  var total=Q.length;
+  var respondidas=Object.keys(answers).length;
+  var acertos=Q.filter(function(q){return answers[q.n]===q.c}).length;
+  document.getElementById('stRespondidas').textContent=respondidas;
+  document.getElementById('stAcertos').textContent=acertos;
+  document.getElementById('stAproveitamento').textContent=respondidas?Math.round(acertos/respondidas*100)+'%':'—';
+  document.getElementById('progCount').textContent=respondidas+' / '+total;
+  document.getElementById('progBar').style.width=(respondidas/total*100)+'%';
+}
+
+document.getElementById('restart').onclick=function(){
+  answers={}; current=subjects[0].key; render(); window.scrollTo({top:0,behavior:'smooth'});
+};
+
+render();
+</script>
+</body>
+</html>
