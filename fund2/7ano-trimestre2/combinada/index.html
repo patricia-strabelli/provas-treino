@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2ª Prova Treino · 7º ano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f5f8; --card:#ffffff; --ink:#1c2230; --muted:#5b6472;
+    --line:#e4e7ee; --ok:#1a8a53; --ok-bg:#e7f6ee; --err:#c8362f; --err-bg:#fceceb;
+    --mat:#2E7DD1;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:820px;margin:0 auto;padding:0 16px 80px}
+
+  header.top{background:var(--mat);color:#fff;padding:26px 16px 22px;transition:background .25s}
+  .top-in{max-width:820px;margin:0 auto}
+  header.top h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(24px,5vw,34px);margin:0;letter-spacing:-.5px}
+  header.top .sub{font-size:14px;opacity:.92;margin-top:4px}
+  header.top .modo{display:inline-block;margin-top:12px;font-size:12px;font-weight:600;background:rgba(255,255,255,.18);padding:5px 11px;border-radius:20px}
+
+  .painel{position:sticky;top:0;z-index:20;background:rgba(244,245,248,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+  .painel-in{max-width:820px;margin:0 auto;padding:10px 16px}
+  .stats{display:flex;gap:10px;flex-wrap:wrap;align-items:center;font-size:13px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 11px;display:flex;gap:7px;align-items:center}
+  .stat b{font-family:"Space Mono",monospace;font-weight:700;font-size:15px}
+  .stat .lbl{color:var(--muted)}
+  .barra{height:8px;background:#e6e9f0;border-radius:6px;margin-top:9px;overflow:hidden}
+  .barra > i{display:block;height:100%;width:0;background:var(--mat);border-radius:6px;transition:width .35s ease}
+
+  .abas{display:flex;gap:8px;overflow-x:auto;padding:14px 0 4px;-webkit-overflow-scrolling:touch}
+  .abas::-webkit-scrollbar{height:0}
+  .aba{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--muted);font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:14px;padding:8px 15px;border-radius:22px;cursor:pointer;white-space:nowrap;transition:.15s}
+  .aba:hover{border-color:#c9cfdb}
+  .aba.on{color:#fff;border-color:transparent}
+  .aba .n{font-family:"Space Mono",monospace;font-size:12px;opacity:.85;margin-left:6px}
+
+  .q{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 20px 18px;margin:16px 0;box-shadow:0 1px 2px rgba(20,30,50,.04)}
+  .q-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+  .q-num{font-family:"Space Mono",monospace;font-weight:700;font-size:13px;color:#fff;background:var(--mat);border-radius:8px;padding:3px 9px}
+  .q-hab{font-family:"Space Mono",monospace;font-size:11px;color:var(--muted);border:1px dashed var(--line);border-radius:20px;padding:3px 10px}
+  .q-enun{font-size:16px;margin:2px 0 14px}
+  .q-enun em{color:#374151}
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;background:#fbfbfd;border:1.5px solid var(--line);border-radius:11px;padding:12px 14px;font-size:15px;font-family:inherit;color:var(--ink);cursor:pointer;transition:.12s}
+  .opt:hover:not(:disabled){border-color:#b9c0cf;background:#fff}
+  .opt:disabled{cursor:default}
+  .opt .letra{font-family:"Space Mono",monospace;font-weight:700;font-size:13px;color:var(--muted);border:1.5px solid var(--line);border-radius:7px;min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .opt.correta{background:var(--ok-bg);border-color:var(--ok)}
+  .opt.correta .letra{background:var(--ok);border-color:var(--ok);color:#fff}
+  .opt.errada{background:var(--err-bg);border-color:var(--err)}
+  .opt.errada .letra{background:var(--err);border-color:var(--err);color:#fff}
+  .fb{margin-top:13px;font-size:14.5px;border-radius:11px;padding:11px 14px;display:none}
+  .fb.show{display:block}
+  .fb.g{background:var(--ok-bg);color:#155e39}
+  .fb.r{background:var(--err-bg);color:#8f241f}
+  .fb .v{font-weight:700}
+  .fb .exp{margin-top:5px;color:#333}
+
+  .fig{margin:6px 0 14px;text-align:center}
+  .fig-leg{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+  .tbl{border-collapse:collapse;margin:0 auto;font-size:14px}
+  .tbl th,.tbl td{border:1px solid var(--line);padding:8px 12px;text-align:center;font-family:"Space Mono",monospace}
+  .tbl th{background:#f2f4f8;font-weight:700}
+  .tbl.tbl-l th,.tbl.tbl-l td{text-align:left;font-family:inherit}
+  .tbl.tbl-l th{white-space:nowrap}
+  .fluxo{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+  .fluxo .fx{background:#f2f4f8;border:1px solid var(--line);border-radius:10px;padding:7px 12px;font-size:14px;font-weight:600}
+  .fluxo .seta{font-family:"Space Mono",monospace;color:var(--muted);font-weight:700}
+
+  .resumo{background:linear-gradient(180deg,#fff,#fbfbfd);border:1.5px solid var(--line);border-radius:16px;padding:18px 20px;margin:16px 0;display:none}
+  .resumo.show{display:block}
+  .resumo h3{font-family:"Bricolage Grotesque",sans-serif;margin:0 0 6px;font-size:18px}
+  .resumo .placar{font-family:"Space Mono",monospace;font-size:15px;color:var(--muted)}
+  .resumo .placar b{color:var(--ink);font-size:18px}
+
+  .rodape{display:flex;justify-content:center;margin-top:26px}
+  .btn{font-family:"Bricolage Grotesque",sans-serif;font-weight:600;font-size:15px;border:none;background:var(--ink);color:#fff;padding:12px 26px;border-radius:26px;cursor:pointer;transition:.15s}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(20,30,50,.18)}
+  .fim{text-align:center;font-family:"Bricolage Grotesque",sans-serif;font-size:20px;margin:22px 0 8px;display:none}
+  .fim.show{display:block}
+</style>
+</head>
+<body>
+  <header class="top">
+    <div class="top-in">
+      <h1>2ª Prova Treino</h1>
+      <div class="sub">7º ano · Ensino Fundamental — correção na hora</div>
+      <span class="modo">Modo prática · sem nota</span>
+    </div>
+  </header>
+
+  <div class="painel">
+    <div class="painel-in">
+      <div class="stats">
+        <div class="stat"><span class="lbl">Respondidas</span><b id="s-resp">0/100</b></div>
+        <div class="stat"><span class="lbl">Acertos</span><b id="s-ok">0</b></div>
+        <div class="stat"><span class="lbl">Aproveitamento</span><b id="s-pct">—</b></div>
+      </div>
+      <div class="barra"><i id="s-barra"></i></div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="abas" id="abas"></div>
+    <div id="conteudo"></div>
+    <div class="fim" id="fim">Você respondeu todas as questões! Use o botão abaixo para recomeçar.</div>
+    <div class="rodape"><button class="btn" id="recomecar">↺ Recomeçar</button></div>
+  </div>
+
+<script>
+/* 2ª Prova Treino · 7º ano — dados das questões (2023 + 2025)
+   Respostas resolvidas manualmente (sem gabarito oficial); etiqueta "Currículo SAS".
+   Questões com imagem/obra protegida foram substituídas por questões originais
+   de mesma habilidade; diagramas factuais recriados em SVG/HTML. */
+
+const SUBJECTS = [
+  {
+    id: "port", nome: "Língua Portuguesa", cor: "#E4572E",
+    questoes: [
+      { enun: `Leia o trecho a seguir, de uma narrativa infantojuvenil.<br><br><em>«Naquela tarde, Bruno subiu no galho mais alto da goiabeira só para espiar o mundo lá de cima. O quintal parecia menor, e ele imaginou que era o capitão de um navio balançando no vento. A avó chamou para o lanche, mas ele fingiu não ouvir — piratas de verdade não largam o leme por causa de um bolo.»</em><br><br>Assim como outros textos do mesmo gênero, esse fragmento se caracteriza por ser`,
+        ops: ["focado em informações biográficas reais.", "marcado pela presença de um eu lírico.", "definido pela ausência de personagens infantis.", "escrito em prosa, com linguagem simples e acessível."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "O gênero infantojuvenil é narrativo (prosa), com linguagem acessível ao público jovem. Não há eu lírico (isso é da poesia)." },
+
+      { enun: `Leia a frase.<br><br>«As crianças tinham muita <strong>esperança de vitória</strong>.»<br><br>A expressão destacada «de vitória» exerce a função de`,
+        ops: ["complemento verbal, pois completa o verbo «tinham».", "adjunto adnominal, pois caracteriza um verbo.", "adjunto adverbial, pois indica lugar.", "complemento nominal, pois completa o sentido do substantivo «esperança»."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "«De vitória» completa o sentido do substantivo abstrato «esperança», sendo um complemento nominal (introduzido por preposição)." },
+
+      { enun: `Leia o trecho de uma reportagem.<br><br><em>«Hortas comunitárias vêm ganhando espaço nos bairros das grandes cidades. Além de oferecer alimentos frescos a quem participa, esses espaços aproximam vizinhos e ajudam a reduzir o desperdício. Especialistas afirmam que a prática também contribui para a educação ambiental de crianças e adultos.»</em><br><br>Com base na leitura, identifica-se que a reportagem tem como finalidade`,
+        ops: ["narrar acontecimentos vividos por personagens fictícias.", "ensinar o leitor, passo a passo, a montar uma horta.", "informar sobre um assunto de relevância social.", "defender a opinião pessoal de um único morador."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "A reportagem é informativa: apresenta um tema de interesse social (hortas urbanas) com dados e fontes, sem narrar ficção nem ensinar um passo a passo." },
+
+      { enun: `Releia a frase.<br><br>«As abelhas <strong>não</strong> picam sem motivo <strong>nem</strong> abandonam a colmeia à toa.»<br><br>No trecho, as palavras «não» e «nem» são responsáveis por`,
+        ops: ["atribuir ideia afirmativa às ações.", "indicar o lugar onde as ações ocorrem.", "expressar dúvida sobre o comportamento descrito.", "acrescentar aos verbos a ideia de negação."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "«Não» e «nem» são advérbios (adjuntos adverbiais) de negação: acrescentam às formas verbais a ideia de negar a ação." },
+
+      { enun: `O aposto é um termo que explica, resume ou desenvolve outro termo da oração. Leia a frase.<br><br>«Dom Casmurro, obra mais conhecida de Machado de Assis, é lido em muitas escolas.»<br><br>Qual trecho é um aposto?`,
+        ops: ["«é lido em muitas escolas».", "«obra mais conhecida de Machado de Assis».", "«em muitas escolas».", "«Dom Casmurro»."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "«obra mais conhecida de Machado de Assis» explica/detalha o termo «Dom Casmurro», funcionando como aposto explicativo (entre vírgulas)." },
+
+      { enun: `Leia o trecho de uma carta aberta.<br><br><em>«Nós, moradores e associações do bairro, viemos convocar toda a comunidade a apoiar a criação de mais áreas verdes e de espaços seguros para as crianças brincarem. Pedimos o engajamento de todos para transformar essa causa em realidade.»</em><br><br>Esse trecho de carta aberta tem o objetivo de`,
+        ops: ["convocar o público para apoiar uma causa social.", "expor a opinião do governo sobre o bairro.", "ensinar os moradores a construir uma praça.", "narrar uma história vivida por moradores."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "A carta aberta é dirigida à coletividade e tem a função de convocar/mobilizar as pessoas em torno de uma causa social." },
+
+      { enun: `Ainda com base na carta aberta anterior, identifica-se que o assunto principal do texto é a`,
+        ops: ["legislação sobre o trânsito urbano.", "criação de espaços verdes e seguros para as crianças.", "construção de novas escolas particulares.", "punição de quem não cuida das praças."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "O tema central é a reivindicação de mais áreas verdes e espaços seguros para as crianças — foco de toda a carta." },
+
+      { enun: `Leia a oração.<br><br>«O silêncio da biblioteca ajuda na concentração.»<br><br>O núcleo do sujeito dessa oração é um(a)`,
+        ops: ["substantivo antecedido por artigo definido.", "pronome indefinido de valor substantivo.", "oração com função de substantivo.", "verbo substantivado por um artigo."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "O sujeito é «O silêncio da biblioteca»; seu núcleo é o substantivo «silêncio», antecedido pelo artigo definido «O»." },
+
+      { enun: `Leia o trecho a seguir.<br><br><em>«Adorei a reportagem sobre reciclagem publicada na edição passada da revista. Minha turma leu o texto em sala e ficamos animados para começar um projeto na escola. Parabéns pelo conteúdo!»</em><br><br>A principal característica que identifica esse texto como uma carta do leitor é o(a)`,
+        ops: ["conteúdo que se refere a uma publicação feita anteriormente.", "acréscimo de informações novas à reportagem original.", "obrigação de discordar do texto comentado.", "presença de um tema exclusivo para adultos."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "A carta do leitor comenta/reage a algo já publicado. Aqui, o leitor se refere a uma reportagem da «edição passada», traço típico do gênero." },
+
+      { enun: `Leia a frase.<br><br>«O público compareceu <strong>às</strong> apresentações do festival.»<br><br>Em «às apresentações», a crase representa uma`,
+        ops: ["junção de dois artigos definidos.", "contração da preposição «a» com o artigo «as».", "presença apenas de artigo indefinido.", "locução conjuntiva de tempo."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "«Comparecer a» (preposição) + «as apresentações» (artigo) = «às». A crase marca a contração da preposição com o artigo." },
+
+      { enun: `Leia o trecho a seguir.<br><br><em>«Ontem, parado no ponto de ônibus, fiquei observando as pessoas. Cada uma no seu mundo, olhando o celular, e ainda assim tão parecidas na pressa. Pensei comigo: talvez a cidade seja só isso, um monte de gente com pressa fingindo que não repara na gente do lado. E sorri, porque eu também estava com pressa.»</em><br><br>Considerando suas características, identifica-se que o texto é uma crônica porque`,
+        ops: ["conta uma história de ficção científica.", "transmite dados objetivos sobre o transporte.", "relata acontecimentos históricos de uma cidade.", "apresenta reflexões pessoais sobre situações do cotidiano."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "A crônica parte de uma cena banal do dia a dia e traz o olhar pessoal e reflexivo do autor sobre o cotidiano." },
+
+      { enun: `Leia a frase.<br><br>«Todos ali pareciam <strong>gostar</strong> de música.»<br><br>Com base no uso do verbo «gostar», conclui-se que ele é`,
+        ops: ["intransitivo, pois dispensa complemento.", "bitransitivo, pois tem objeto direto e indireto.", "transitivo direto, pois se liga ao objeto sem preposição.", "transitivo indireto, pois se liga ao complemento por preposição."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "Quem gosta, gosta «de» algo. O verbo «gostar» exige complemento com a preposição «de», logo é transitivo indireto." },
+
+      { enun: `Em uma fotorreportagem sobre um grande evento esportivo, o texto verbal vem acompanhado de várias fotos dos atletas e das competições. Nesse gênero, as imagens`,
+        ops: ["apenas enfeitam a página, sem acrescentar informação.", "apresentam detalhes que contradizem o título.", "transmitem informações em conjunto com o texto escrito.", "substituem totalmente a necessidade de qualquer texto."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "Na fotorreportagem, imagem e texto se complementam: as fotos ampliam e reforçam as informações do texto verbal." },
+
+      { enun: `Leia a frase.<br><br>«A nadadora treinou muitos anos. <strong>Ela</strong> conquistou a medalha de ouro.»<br><br>Na segunda oração, o pronome «Ela» tem função de`,
+        ops: ["predicativo do sujeito, junto a um verbo de ligação.", "sujeito da oração, indicando quem praticou a ação.", "objeto direto, completando o verbo.", "objeto indireto, ligado ao verbo por preposição."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "«Ela» é quem pratica a ação de «conquistar»; portanto, funciona como sujeito da oração." },
+
+      { enun: `Leia a frase.<br><br>«Foi o professor que <strong>lhe</strong> entregou o prêmio.»<br><br>A próclise do pronome «lhe» (antes do verbo) ocorre porque`,
+        ops: ["a forma verbal está no passado.", "o sujeito é simples.", "a palavra «que» atrai o pronome para antes do verbo.", "o verbo vem precedido de palavras compostas."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "Palavras atrativas como «que» exigem a próclise: o pronome oblíquo vem antes do verbo («que lhe entregou»)." },
+
+      { enun: `Leia o trecho de uma campanha publicitária.<br><br><em>«Antes de comprar, pergunte-se: eu preciso mesmo disto? Consumir com consciência é pensar no planeta e no seu bolso.»</em><br><br>Com base na mensagem, o texto faz uma crítica ao(à)`,
+        ops: ["prática de consumo sem responsabilidade.", "aumento de preços em datas comemorativas.", "costume de comprar produtos importados.", "falta de persistência para realizar sonhos."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "A campanha estimula o consumo consciente e, por contraste, critica o consumo impulsivo e sem responsabilidade." },
+
+      { enun: `Leia a frase.<br><br>«O projeto contribui para a redução <strong>do desperdício</strong>.»<br><br>A expressão «do desperdício» exerce a função de`,
+        ops: ["objeto indireto, pois amplia o sentido de um verbo.", "adjunto adnominal, pois caracteriza um verbo.", "sujeito, pois indica quem pratica a ação.", "complemento nominal, pois completa o sentido de um substantivo."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "«Do desperdício» completa o sentido do substantivo «redução», sendo complemento nominal (introduzido por preposição)." },
+
+      { enun: `Leia o trecho a seguir.<br><br><em>«Gostei muito da reportagem sobre jogos de raciocínio da edição deste mês. Confesso que sou ótima nos desafios de palavras, mas travo nos de matemática. Ainda assim, adorei a leitura!»</em><br><br>Infere-se que o objetivo do texto é`,
+        ops: ["divulgar uma notícia sobre descobertas científicas.", "relatar apenas uma experiência negativa com a revista.", "explicar como funcionam os jogos de raciocínio.", "apresentar a opinião de um leitor sobre um conteúdo publicado."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "É uma carta do leitor: o leitor comenta e opina sobre uma reportagem já publicada, expressando sua avaliação pessoal." },
+
+      { enun: `Leia a frase.<br><br>«Ela demora <strong>um pouco mais</strong> para resolver os cálculos.»<br><br>A expressão «um pouco mais» indica circunstância de`,
+        ops: ["modo, delimitando o sujeito.", "intensidade, modificando o verbo «demora».", "negação, caracterizando «resolver».", "certeza, alterando o sentido de «cálculos»."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "«Um pouco mais» é adjunto adverbial de intensidade: informa em que grau/medida a ação de «demorar» acontece." },
+
+      { enun: `Leia a frase.<br><br>«Naquela manhã, o time inteiro chegou mais cedo ao treino.»<br><br>A vírgula foi empregada com o objetivo de`,
+        ops: ["isolar um vocativo.", "demarcar o sujeito da oração.", "separar um adjunto adverbial deslocado.", "enfatizar os verbos de ação."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "«Naquela manhã» é um adjunto adverbial de tempo deslocado para o início da frase; por isso vem separado por vírgula." }
+    ]
+  },
+
+  {
+    id: "mat", nome: "Matemática", cor: "#2E7DD1",
+    questoes: [
+      { enun: `Cíntia, João, Mara e Paulo têm álbuns iguais e os preencheram até as semifinais nas frações abaixo.<br><div class="fig"><table class="tbl"><tr><th>Cíntia</th><th>João</th><th>Mara</th><th>Paulo</th></tr><tr><td>8/10</td><td>2/5</td><td>1/2</td><td>4/10</td></tr></table></div>Sabendo que os álbuns são iguais, quem juntou mais figurinhas?`,
+        ops: ["Cíntia.", "João.", "Mara.", "Paulo."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "Igualando os denominadores em décimos: Cíntia 8/10, João 4/10, Mara 5/10, Paulo 4/10. A maior é 8/10 → Cíntia." },
+
+      { enun: `A reta abaixo foi dividida em segmentos de mesma medida.<div class="fig"><svg viewBox="0 0 520 90" width="100%" style="max-width:520px"><line x1="30" y1="45" x2="500" y2="45" stroke="#333" stroke-width="2"/><polygon points="500,45 490,40 490,50" fill="#333"/><circle cx="60" cy="45" r="5" fill="#2E7DD1"/><circle cx="140" cy="45" r="5" fill="#333"/><circle cx="220" cy="45" r="5" fill="#333"/><circle cx="300" cy="45" r="5" fill="#333"/><circle cx="380" cy="45" r="7" fill="#2E7DD1"/><circle cx="460" cy="45" r="5" fill="#333"/><text x="60" y="72" text-anchor="middle" font-family="Space Mono, monospace" font-size="13">-1/4</text><text x="140" y="72" text-anchor="middle" font-family="Space Mono, monospace" font-size="13">0</text><text x="380" y="72" text-anchor="middle" font-family="Space Mono, monospace" font-size="15" font-weight="bold">A</text><text x="460" y="72" text-anchor="middle" font-family="Space Mono, monospace" font-size="13">1</text></svg></div>Nessa reta numérica, a abscissa do ponto A vale`,
+        ops: ["1/4", "2/4", "3/4", "5/4"],
+        ok: 2, hab: "Currículo SAS",
+        exp: "Cada intervalo mede 1/4. Contando de 0: 1/4, 2/4, 3/4. O ponto A está na terceira marca após o zero: 3/4." },
+
+      { enun: `A figura mostra a relação entre o comprimento e a largura de uma piscina retangular.<div class="fig"><svg viewBox="0 0 300 175" width="100%" style="max-width:300px"><rect x="50" y="55" width="190" height="85" fill="#eaf1fb" stroke="#333" stroke-width="2"/><text x="145" y="42" text-anchor="middle" font-family="Space Mono, monospace" font-size="15">2x</text><text x="262" y="102" text-anchor="middle" font-family="Space Mono, monospace" font-size="15">x</text></svg></div>A expressão algébrica que determina o perímetro (p) dessa região é`,
+        ops: ["p = 3x.", "p = 4x.", "p = 6x.", "p = 8x."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "Perímetro = soma dos lados = 2x + x + 2x + x = 6x." },
+
+      { enun: `Joaquim decidiu ler 2 páginas no 1º dia, 4 no 2º, 6 no 3º, 8 no 4º, e assim por diante. A expressão que dá a quantidade de páginas no dia n é`,
+        ops: ["2n.", "4n.", "n + 1.", "n + 2."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "A sequência 2, 4, 6, 8… é formada por múltiplos de 2. No dia n, lê 2n páginas." },
+
+      { enun: `Marta comeu 1/8 de um bolo e seu esposo comeu 1/4. Após o café da manhã, que fração do bolo restou?`,
+        ops: ["3/4", "5/8", "1/2", "3/8"],
+        ok: 1, hab: "Currículo SAS",
+        exp: "Comeram 1/8 + 2/8 = 3/8. Restou 1 − 3/8 = 5/8." },
+
+      { enun: `Em um jogo, cada jogador começa com 200 pontos. A cada acerto ganha 1/2 dos pontos que tem no momento; a cada erro perde 1/4. Um jogador acertou a 1ª pergunta e errou a 2ª. Com quantos pontos terminou?`,
+        ops: ["200", "225", "250", "275"],
+        ok: 1, hab: "Currículo SAS",
+        exp: "Acerto: 200 + 100 = 300. Erro: 300 − 75 = 225." },
+
+      { enun: `Se A = (3/2)³ · (2/3)⁻², o valor de A⁻¹ é`,
+        ops: ["32/243", "2/3", "3/2", "243/32"],
+        ok: 0, hab: "Currículo SAS",
+        exp: "(3/2)³ = 27/8 e (2/3)⁻² = (3/2)² = 9/4. A = 27/8 · 9/4 = 243/32. Logo A⁻¹ = 32/243." },
+
+      { enun: `Três irmãos têm idades que são números naturais consecutivos, cuja soma é 54. Qual é a idade do irmão mais velho?`,
+        ops: ["16 anos.", "17 anos.", "18 anos.", "19 anos."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "x + (x+1) + (x+2) = 54 → 3x + 3 = 54 → x = 17. O mais velho tem x + 2 = 19 anos." },
+
+      { enun: `Pedro comprou 2 cadernos iguais e 7 canetas de mesmo preço, pagando R$ 62,50. Cada caderno custou R$ 22,50. Quanto custou cada caneta?`,
+        ops: ["R$ 1,50", "R$ 2,50", "R$ 3,25", "R$ 4,00"],
+        ok: 1, hab: "Currículo SAS",
+        exp: "2 cadernos = R$ 45,00. Restam 62,50 − 45,00 = 17,50 para 7 canetas → 17,50 ÷ 7 = R$ 2,50." },
+
+      { enun: `Um cofre contém 100 moedas, de R$ 1,00 e de R$ 0,50, totalizando R$ 80,00. Quantas moedas de R$ 1,00 há no cofre?`,
+        ops: ["50", "55", "60", "65"],
+        ok: 2, hab: "Currículo SAS",
+        exp: "Sendo x o nº de moedas de R$1 e y de R$0,50: x + y = 100 e x + 0,5y = 80. Resolvendo, y = 40 e x = 60." },
+
+      { enun: `O número 5,7 é racional e, portanto, pode ser escrito na forma de fração. Qual fração o representa?`,
+        ops: ["57/10", "5/7", "57/100", "5/70"],
+        ok: 0, hab: "Currículo SAS",
+        exp: "5,7 tem uma casa decimal: 5,7 = 57/10." },
+
+      { enun: `Veja a reta numérica, com os pontos P, Q, R e S.<div class="fig"><svg viewBox="0 0 500 90" width="100%" style="max-width:500px"><line x1="20" y1="50" x2="480" y2="50" stroke="#333" stroke-width="2"/><polygon points="480,50 470,45 470,55" fill="#333"/><circle cx="40" cy="50" r="5" fill="#333"/><circle cx="110" cy="50" r="5" fill="#2E7DD1"/><circle cx="180" cy="50" r="7" fill="#2E7DD1"/><circle cx="250" cy="50" r="5" fill="#333"/><circle cx="320" cy="50" r="5" fill="#2E7DD1"/><circle cx="390" cy="50" r="5" fill="#2E7DD1"/><circle cx="460" cy="50" r="5" fill="#333"/><text x="110" y="33" text-anchor="middle" font-family="Space Mono, monospace" font-size="13">P</text><text x="180" y="33" text-anchor="middle" font-family="Space Mono, monospace" font-size="14" font-weight="bold">Q</text><text x="320" y="33" text-anchor="middle" font-family="Space Mono, monospace" font-size="13">R</text><text x="390" y="33" text-anchor="middle" font-family="Space Mono, monospace" font-size="13">S</text><text x="40" y="75" text-anchor="middle" font-family="Space Mono, monospace" font-size="13">-1</text><text x="250" y="75" text-anchor="middle" font-family="Space Mono, monospace" font-size="13">0</text><text x="460" y="75" text-anchor="middle" font-family="Space Mono, monospace" font-size="13">1</text></svg></div>O número racional −1/3 está representado por qual ponto dessa reta?`,
+        ops: ["P", "Q", "R", "S"],
+        ok: 1, hab: "Currículo SAS",
+        exp: "De −1 a 1 a reta está dividida em terços. −1/3 corresponde ao ponto Q, imediatamente à esquerda do zero." },
+
+      { enun: `O quadro mostra a quantidade de alguns ingredientes de uma receita.<div class="fig"><table class="tbl"><tr><th>Açúcar</th><th>Farinha</th><th>Leite</th><th>Óleo</th></tr><tr><td>1/3</td><td>3/4</td><td>1/2</td><td>1/4</td></tr></table><p class="fig-leg">Quantidades em xícara de chá.</p></div>Seguindo a receita, qual ingrediente é utilizado em MENOR quantidade?`,
+        ops: ["Açúcar.", "Farinha.", "Leite.", "Óleo."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "Comparando as frações, 1/4 é a menor de todas → Óleo." },
+
+      { enun: `Uma pessoa destinou 5/6 de um terreno à criação de canteiros de flores. Cada canteiro ocupa exatamente 1/12 da área do terreno. Quantos canteiros foram criados?`,
+        ops: ["10", "12", "24", "30"],
+        ok: 0, hab: "Currículo SAS",
+        exp: "5/6 ÷ 1/12 = 5/6 × 12 = 10 canteiros." },
+
+      { enun: `Se um número X for multiplicado por (0,5)⁻², o resultado obtido será`,
+        ops: ["X/4", "X/2", "2X", "4X"],
+        ok: 3, hab: "Currículo SAS",
+        exp: "(0,5)⁻² = (1/2)⁻² = 2² = 4. Logo, X × 4 = 4X." },
+
+      { enun: `Observe a expressão numérica.<br><br>A = (3/4 + 2⁻¹) · 2 − √(144/36) + 0,5 ÷ 2/5<br><br>Qual é o valor de A?`,
+        ops: ["0,70", "0,90", "1,75", "5,75"],
+        ok: 2, hab: "Currículo SAS",
+        exp: "(0,75 + 0,5)·2 = 2,5; √(144/36) = √4 = 2; 0,5 ÷ (2/5) = 1,25. A = 2,5 − 2 + 1,25 = 1,75." },
+
+      { enun: `A idade de Betina é igual ao dobro da idade de Alice, subtraído de 4 anos. Considerando «a» a idade de Alice, qual é a expressão algébrica da idade de Betina?`,
+        ops: ["a − 4", "2a − 4", "4 − 2a", "2 · (a − 4)"],
+        ok: 1, hab: "Currículo SAS",
+        exp: "Dobro de Alice = 2a; subtraindo 4 → 2a − 4." },
+
+      { enun: `Um aplicativo calcula o custo (C) de uma corrida, em real, por C = d + 2t − (d·t)/10 − 5, em que d é a distância (km) e t é o tempo (min). Qual é o custo para d = 12 km e t = 15 min?`,
+        ops: ["R$ 16,00", "R$ 19,00", "R$ 26,00", "R$ 29,00"],
+        ok: 1, hab: "Currículo SAS",
+        exp: "C = 12 + 30 − (180/10) − 5 = 12 + 30 − 18 − 5 = 19." },
+
+      { enun: `Mariana comprou livros em uma loja on-line e pagou R$ 20,00 de taxa de entrega. Cada livro custou R$ 25,00. Se ela gastou R$ 145,00 no total, quantos livros comprou?`,
+        ops: ["8", "7", "6", "5"],
+        ok: 3, hab: "Currículo SAS",
+        exp: "(145 − 20) ÷ 25 = 125 ÷ 25 = 5 livros." },
+
+      { enun: `Bel comprou 2 sanduíches naturais e 1 tapioca, pagando R$ 48,00. Yuri comprou 1 sanduíche natural e 3 tapiocas, pagando R$ 74,00. Os sanduíches têm o mesmo valor entre si, assim como as tapiocas. Qual é o valor de cada tapioca?`,
+        ops: ["R$ 14,00", "R$ 16,00", "R$ 20,00", "R$ 24,00"],
+        ok: 2, hab: "Currículo SAS",
+        exp: "2s + t = 48 e s + 3t = 74. Isolando t = 48 − 2s e substituindo: s = 14 e t = 20. Cada tapioca custa R$ 20,00." }
+    ]
+  },
+
+  {
+    id: "ing", nome: "Inglês", cor: "#8E44AD",
+    questoes: [
+      { enun: `Read the text.<br><br><em>«Mateus is a young musician from Brazil. Today, he writes his own songs and plays the guitar every day. When he was a child, he was a member of a small school band and he sang in local shows.»</em><br><br>According to the text, in the past, Mateus was`,
+        ops: ["a guitar teacher.", "a member of a school band.", "a writer of famous books.", "a singer on television."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "O texto usa o passado («was a member of a school band») para o que ocorreu na infância. As demais opções não correspondem ao passado descrito." },
+
+      { enun: `Read the short dialogue.<br><br>— How was your day?<br>— ...<br><br>Which answer best completes the dialogue?`,
+        ops: ["It will be tomorrow.", "It was very good. Thank you!", "He is my brother.", "I am twelve years old."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "A pergunta «How was your day?» pede uma resposta sobre como o dia foi. «It was very good. Thank you!» é a resposta adequada." },
+
+      { enun: `Read the text.<br><br><em>«The first bicycles had no pedals. To move them, the rider had to push the ground with the feet. Years later, pedals were added, and cycling became easier and very popular around the world.»</em><br><br>According to the text, in the past, bicycles were`,
+        ops: ["moved forward with the rider's feet.", "faster than modern cars.", "used only inside houses.", "built with electric motors."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "O texto afirma que, no início, as bicicletas não tinham pedais e eram movidas com os pés no chão («moved forward with the rider's feet»)." },
+
+      { enun: `Read the information.<div class="fig"><table class="tbl tbl-l"><tr><th>Event</th><td>Basketball game</td></tr><tr><th>Day</th><td>Sunday, April 9</td></tr><tr><th>Time</th><td>1:00 PM</td></tr></table></div>Consider the use of prepositions and mark the correct option.`,
+        ops: ["The game was in 9th August, in a Sunday.", "The game was in April, at 1pm and 9pm.", "The game was in April, on 9pm.", "The game was on April 9th, at 1pm."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "Usa-se «on» para datas (on April 9th) e «at» para horas (at 1pm). A frase correta é «on April 9th, at 1pm»." },
+
+      { enun: `Read the poster message.<br><br><em>«Do you really need it? Buy less, choose well, and help the planet.»</em><br><br>The objective of the poster is to`,
+        ops: ["promote fast shopping.", "inform about a big sale.", "ask people to buy new clothes every week.", "convince people not to buy things they don't need."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "A mensagem questiona a real necessidade da compra e sugere consumir menos — quer convencer as pessoas a não comprar o que não precisam." },
+
+      { enun: `Read the text.<br><br><em>«The band started in 2013. It was the idea of a producer who wanted to create a new music group. Soon, the band became famous in many countries.»</em><br><br>In the text, the verb «was» expresses an idea of something that`,
+        ops: ["is happening now.", "can happen any time.", "happened in the past.", "will happen in the future."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "«Was» é o passado do verbo «to be». Indica algo que aconteceu no passado (a criação da banda, em 2013)." },
+
+      { enun: `Read the text.<br><br><em>«Origami is the art of folding paper. It is a calm hobby: you don't need to be fast, you only need to focus on each fold. Many people say origami helps them relax and feel less stressed.»</em><br><br>According to the text, origami is a good hobby because`,
+        ops: ["it needs expensive materials.", "it must follow very strict rules.", "it always creates perfect models.", "it helps people to concentrate and reduce stress."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "O texto destaca que o origami ajuda a focar e a relaxar («helps them relax and feel less stressed»)." },
+
+      { enun: `Read the text.<br><br><em>«Before he opened the park, the designer planned every detail for months. He drew maps, chose the colours and imagined each attraction.»</em><br><br>In the text, the word «planned» indicates that the designer`,
+        ops: ["will plan the park in the future.", "built the park without any preparation.", "prepared everything in the past.", "was not sure about the park."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "«Planned» está no passado (simple past) e mostra que a preparação aconteceu antes, no passado." },
+
+      { enun: `Read the excerpt from a blog post.<br><br><em>«Isn't it time to rethink the way we shop? For years we have bought things just because everyone else does. Maybe we should stop and think before buying.»</em><br><br>In this excerpt, the author`,
+        ops: ["says the wish to buy can never change.", "thinks writing about shopping is bad.", "explains how to make more money.", "suggests that our shopping habits should be reconsidered."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "O autor propõe repensar os hábitos de consumo («rethink the way we shop»), sugerindo que devem ser reconsiderados." },
+
+      { enun: `Read the sentences.<br><br><em>«Yesterday, Tom lost his pen. He looked for it everywhere and finally went to the office to ask for a new one.»</em><br><br>Which word is an irregular verb in the past simple?`,
+        ops: ["looked", "asked", "went", "office"],
+        ok: 2, hab: "Currículo SAS",
+        exp: "«Went» é o passado irregular de «to go». «Looked» e «asked» são regulares (terminam em -ed) e «office» é um substantivo." }
+    ]
+  },
+
+  {
+    id: "cie", nome: "Ciências", cor: "#128C7E",
+    questoes: [
+      { enun: `Um estudo citou duas espécies de primatas da Amazônia: <em>Cacajao amuna</em> e <em>Cacajao calvus</em>. Analisando os nomes científicos dos dois animais, conclui-se que eles pertencem`,
+        ops: ["a espécies diferentes, sendo uma «amuna» e outra «Cacajao».", "a gêneros diferentes, «amuna» e «calvus».", "à mesma espécie, ambos «Cacajao».", "ao mesmo gênero, ambos do gênero «Cacajao»."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "No nome científico, a primeira palavra indica o gênero. Como ambos são «Cacajao», pertencem ao mesmo gênero, mas são espécies diferentes (amuna e calvus)." },
+
+      { enun: `Bactérias são organismos microscópicos, unicelulares e procariontes (sem envoltório nuclear e sem organelas membranosas). Elas pertencem ao reino`,
+        ops: ["Animalia.", "Protista.", "Monera.", "Fungi."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "Seres unicelulares e procariontes, como as bactérias, pertencem ao reino Monera." },
+
+      { enun: `Observe a cadeia alimentar.<div class="fig"><div class="fluxo"><span class="fx">Sol</span><span class="seta">→</span><span class="fx">Grama</span><span class="seta">→</span><span class="fx">Gafanhoto</span><span class="seta">→</span><span class="fx">Pássaro</span><span class="seta">→</span><span class="fx">Raposa</span></div></div>Os níveis tróficos da grama, do gafanhoto e da raposa são, respectivamente,`,
+        ops: ["consumidor quaternário, secundário e primário.", "consumidor primário, secundário e terciário.", "produtor, consumidor primário e consumidor secundário.", "produtor, consumidor primário e consumidor terciário."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "Grama = produtor; gafanhoto (come a grama) = consumidor primário; pássaro = secundário; raposa (come o pássaro) = consumidor terciário." },
+
+      { enun: `A tabela apresenta características de cinco reinos.<div class="fig"><table class="tbl tbl-l"><tr><th>Reino</th><th>Características</th></tr><tr><td>A</td><td>Unicelulares, eucariontes e heterotróficos.</td></tr><tr><td>B</td><td>Unicelulares, procariontes; autotróficos ou heterotróficos.</td></tr><tr><td>C</td><td>Pluricelulares, eucariontes e autotróficos fotossintetizantes.</td></tr><tr><td>D</td><td>Pluricelulares, eucariontes e heterotróficos.</td></tr><tr><td>E</td><td>Unicelulares ou pluricelulares, eucariontes e heterotróficos.</td></tr></table></div>Quais letras correspondem aos reinos Plantae e Animalia, respectivamente?`,
+        ops: ["A e B.", "A e D.", "C e E.", "C e D."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "Plantae = pluricelulares, eucariontes e autotróficos fotossintetizantes (C). Animalia = pluricelulares, eucariontes e heterotróficos (D)." },
+
+      { enun: `O Cerrado tem solo profundo e geralmente ácido e clima com estação seca intensa. Uma característica marcante da vegetação desse bioma é a`,
+        ops: ["predominância de espécies com espinhos no lugar de folhas.", "presença de plantas adaptadas a ambientes alagados.", "queda das folhas durante o outono, como nas florestas temperadas.", "existência de espécies resistentes ao fogo (incêndios)."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "As plantas do Cerrado apresentam adaptações ao fogo (cascas grossas, raízes profundas); por isso muitas espécies são resistentes a incêndios." },
+
+      { enun: `Fungos devolvem nutrientes ao ambiente ao decompor a matéria orgânica.<div class="fig"><div class="fluxo"><span class="fx">Folhas secas caem</span><span class="seta">→</span><span class="fx">Fungos decompõem</span><span class="seta">→</span><span class="fx">Nutrientes no solo</span><span class="seta">→</span><span class="fx">Plantas absorvem</span></div><p class="fig-leg">Ciclagem de nutrientes no ecossistema.</p></div>Nos ecossistemas, esses organismos são importantes porque`,
+        ops: ["atuam como decompositores, transformando matéria orgânica em nutrientes.", "produzem oxigênio para outros seres captarem nutrientes minerais.", "absorvem energia luminosa e produzem seu próprio alimento.", "usam água do solo para fazer fotossíntese."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "Fungos são decompositores: transformam matéria orgânica morta em nutrientes, permitindo a ciclagem no ambiente. Eles não fazem fotossíntese." },
+
+      { enun: `Os anfíbios (como rãs e salamandras) vivem parte da vida na água e parte na terra. Uma característica geral desses animais é a`,
+        ops: ["pele coberta de escamas, que reduz a perda de água.", "respiração cutânea, que permite trocas gasosas pela pele.", "fecundação interna, gerando filhotes já desenvolvidos.", "estrutura corporal segmentada, que facilita a perda de partes do corpo."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "Os anfíbios têm pele úmida e permeável e realizam respiração cutânea (trocas gasosas pela pele), além da respiração pulmonar." },
+
+      { enun: `Na cadeia alimentar, a energia é transferida de um nível trófico para o seguinte, de modo unidirecional. Sobre esse processo, observa-se que a energia`,
+        ops: ["transita de um nível para outro, reduzindo a quantidade disponível a cada nível seguinte.", "aumenta à medida que sobe nos níveis tróficos, acumulando-se nos organismos superiores.", "desaparece completamente ao chegar ao último nível, fechando o ciclo.", "volta ao primeiro nível em ciclos para ser reaproveitada."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "A cada nível trófico, parte da energia é perdida (como calor). Assim, a energia disponível diminui do produtor para os consumidores." },
+
+      { enun: `O segundo maior bioma brasileiro apresenta formações savânicas (árvores baixas e tortuosas e muitas gramíneas), além de formações campestres e florestais. Essas características referem-se ao bioma`,
+        ops: ["Amazônia.", "Pantanal.", "Cerrado.", "Pampa."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "As formações savânicas (árvores baixas e tortuosas, gramíneas) são típicas do Cerrado, o segundo maior bioma do Brasil." },
+
+      { enun: `A Taiga é um bioma terrestre típico de regiões frias do Hemisfério Norte, como Canadá e Rússia. Quanto às suas características, esse bioma possui`,
+        ops: ["solo permanentemente congelado e vegetação rasteira de musgos, com baixa biodiversidade.", "alta biodiversidade e vegetação densa de folhas largas, com presença de cipós.", "árvores caducifólias que perdem as folhas no outono e clima temperado com quatro estações.", "clima frio, com invernos longos e rigorosos e verões curtos, e vegetação de coníferas adaptadas ao frio."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "A Taiga (floresta boreal) tem clima frio, invernos longos e vegetação dominada por coníferas adaptadas às baixas temperaturas. A opção (a) descreve a Tundra." }
+    ]
+  },
+
+  {
+    id: "geo", nome: "Geografia", cor: "#D99400",
+    questoes: [
+      { enun: `Na década de 1960, o geógrafo Pedro Pinchas Geiger propôs uma divisão regional do Brasil considerando fatores socioeconômicos, históricos e culturais. Nessa proposta, o país foi dividido em três grandes regiões geoeconômicas, que são`,
+        ops: ["Norte, Nordeste, Centro-Oeste, Sudeste e Sul.", "Amazônia, Nordeste e Centro-Sul.", "Litoral, Sertão e Agreste.", "Regiões Metropolitanas e Interior."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "A regionalização de Geiger («os três Brasis») divide o país em Amazônia, Nordeste e Centro-Sul, com base em critérios socioeconômicos e naturais." },
+
+      { enun: `A Região Concentrada (Sul-Sudeste) apresenta maior densidade de população, capital e técnica, além de forte presença do meio técnico-científico-informacional. Ela tem grande destaque na economia nacional porque`,
+        ops: ["abrange a maior parte do território brasileiro.", "contém a maior quantidade de reservas ambientais.", "possui alto nível de industrialização e oferta de serviços.", "centraliza as maiores propriedades rurais monocultoras."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "A Região Concentrada reúne indústrias, serviços e tecnologia, comandando a economia nacional pelo alto grau de industrialização e oferta de serviços." },
+
+      { enun: `Certa atividade econômica teve forte influência na formação territorial do Brasil, sobretudo no atual Nordeste, permitindo aos europeus fundamentar a ocupação efetiva da colônia. A que base econômica o texto se refere?`,
+        ops: ["Ao escambo do pau-brasil.", "À monocultura da cana-de-açúcar.", "Às policulturas do café e do algodão.", "Ao cultivo de frutas tropicais e uvas."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "A economia açucareira (monocultura da cana), instalada sobretudo no Nordeste, foi a base da ocupação efetiva do Brasil colonial." },
+
+      { enun: `O climograma abaixo representa o município de Juazeiro (BA), no Sertão nordestino (barras = chuva; linha = temperatura).<div class="fig"><svg viewBox="0 0 560 300" width="100%" style="max-width:560px"><line x1="55" y1="245" x2="545" y2="245" stroke="#333"/><line x1="55" y1="60" x2="55" y2="245" stroke="#333"/><rect x="64" y="85" width="24" height="160" fill="#9cc2e8"/><rect x="104" y="105" width="24" height="140" fill="#9cc2e8"/><rect x="144" y="81" width="24" height="164" fill="#9cc2e8"/><rect x="184" y="175" width="24" height="70" fill="#9cc2e8"/><rect x="224" y="215" width="24" height="30" fill="#9cc2e8"/><rect x="264" y="229" width="24" height="16" fill="#9cc2e8"/><rect x="304" y="235" width="24" height="10" fill="#9cc2e8"/><rect x="344" y="235" width="24" height="10" fill="#9cc2e8"/><rect x="384" y="221" width="24" height="24" fill="#9cc2e8"/><rect x="424" y="185" width="24" height="60" fill="#9cc2e8"/><rect x="464" y="181" width="24" height="64" fill="#9cc2e8"/><rect x="504" y="135" width="24" height="110" fill="#9cc2e8"/><polyline points="76,189 116,196 156,189 196,196 236,203 276,210 316,217 356,210 396,203 436,196 476,189 516,189" fill="none" stroke="#D99400" stroke-width="3"/><text x="76" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">J</text><text x="116" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">F</text><text x="156" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">M</text><text x="196" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">A</text><text x="236" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">M</text><text x="276" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">J</text><text x="316" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">J</text><text x="356" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">A</text><text x="396" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">S</text><text x="436" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">O</text><text x="476" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">N</text><text x="516" y="263" text-anchor="middle" font-family="Space Mono, monospace" font-size="12">D</text></svg></div>Os dados indicam, como característica do clima do Sertão nordestino,`,
+        ops: ["temperaturas baixas no período chuvoso.", "umidade elevada das massas de ar o ano todo.", "chuvas irregulares e concentradas em poucos meses do ano.", "índice reduzido de evaporação."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "No Sertão (clima semiárido), as chuvas são escassas e irregulares, concentradas em poucos meses, com altas temperaturas o ano inteiro." },
+
+      { enun: `No século XIX, a cafeicultura tornou-se fundamental na economia do Império, exigindo mais eficiência e enfrentando escassez de mão de obra. Esse desenvolvimento estimulou o(a)`,
+        ops: ["abandono do trabalho nas indústrias nacionais.", "transferência da capital do Brasil para Salvador.", "diminuição das exportações de matérias-primas.", "investimento na infraestrutura da Região Sudeste."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "A expansão do café impulsionou ferrovias, portos e cidades na Região Sudeste, promovendo investimentos em infraestrutura." },
+
+      { enun: `Uma representação cartográfica organiza o território brasileiro em três grandes regiões — Amazônia, Nordeste e Centro-Sul (divisão de Pedro Geiger). Essa forma de organizar o território leva em consideração`,
+        ops: ["apenas a demarcação das divisas estaduais.", "somente a distribuição da densidade populacional.", "a formação socioeconômica e os aspectos naturais.", "exclusivamente a localização geográfica por coordenadas."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "A divisão de Geiger baseia-se em critérios socioeconômicos, históricos e culturais combinados a aspectos naturais, e não apenas em limites estaduais." },
+
+      { enun: `Belém, no Pará, é uma das maiores cidades da Amazônia e porta de entrada para a região. Em relação aos domínios morfoclimáticos, a cidade integra uma região onde predomina a`,
+        ops: ["presença de rios largos e de solos profundos (terras baixas florestadas).", "formação de araucárias e de baixas temperaturas.", "carência de precipitações e de grandes vegetações.", "ocorrência de estações bem definidas e clima subtropical."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "Belém está no domínio amazônico: terras baixas florestadas, rios caudalosos e clima equatorial, quente e úmido." },
+
+      { enun: `No Brasil Colonial (séc. XVII), o açúcar era o principal produto exportado, e os engenhos concentravam-se no Nordeste. Para essa região, o cultivo teve como consequência a`,
+        ops: ["expansão da atividade turística.", "superação do comércio de algodão.", "diversificação da produção agrícola.", "concentração populacional no litoral."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "Os engenhos, instalados na Zona da Mata litorânea, atraíram população para o litoral nordestino, concentrando o povoamento nessa faixa." },
+
+      { enun: `O Nordeste tornou-se destaque na fruticultura graças a clima, solo e localização, mas também ao aporte tecnológico. Entre as contribuições da tecnologia para o cultivo de frutas na região, destaca-se a`,
+        ops: ["transposição de solos férteis de outras regiões.", "aplicação de sistemas de irrigação.", "disseminação de estufas climatizadas por toda a região.", "ampliação natural dos índices pluviométricos."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "A irrigação (por exemplo, no Vale do São Francisco) permite cultivar frutas mesmo com chuvas escassas, sendo a principal contribuição tecnológica." },
+
+      { enun: `A produção de café, iniciada no Sudeste no século XIX, gerou grande riqueza e transformações na região. Essa atividade impactou o Sudeste ao favorecer o(a)`,
+        ops: ["substituição da mão de obra escravizada e da manufatura.", "diminuição da exportação e do movimento migratório.", "desenvolvimento da industrialização e da urbanização.", "aumento da agricultura de subsistência e do desemprego."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "O capital do café financiou ferrovias, indústrias e o crescimento das cidades, impulsionando a industrialização e a urbanização do Sudeste." }
+    ]
+  },
+
+  {
+    id: "his", nome: "História", cor: "#A0522D",
+    questoes: [
+      { enun: `No final do século XV, Portugal e Espanha assinaram o Tratado de Tordesilhas, dividindo as terras descobertas e as que viessem a ser encontradas fora da Europa. O documento demonstra a intenção desses países de`,
+        ops: ["unificar as regiões coloniais.", "aumentar as riquezas industriais.", "equilibrar as balanças comerciais.", "proteger e garantir os territórios (a serem) conquistados."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "O tratado buscava evitar conflitos e assegurar a cada reino o direito sobre os territórios descobertos e futuros — ou seja, proteger/garantir suas conquistas." },
+
+      { enun: `A chegada e a expansão do Islã na África Ocidental permitiram que povos como os Iorubás integrassem aspectos da fé muçulmana às suas práticas, somando-se à diversidade de cultos da região. O texto aponta uma característica da religiosidade africana relacionada à`,
+        ops: ["pluralidade cultural.", "rejeição às tradições locais.", "busca por expansão territorial.", "centralização da economia."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "A integração do Islã aos cultos já existentes revela a pluralidade cultural e religiosa das sociedades africanas." },
+
+      { enun: `Navios saíam do Reino Unido com mercadorias, trocadas na costa africana por pessoas escravizadas; nas Américas, eram carregados com produtos do trabalho escravo (açúcar, rum) levados de volta à Europa. Essas relações destacam práticas do(a)`,
+        ops: ["missão jesuítica.", "comércio triangular.", "implantação da mita.", "sistema de encomienda."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "O circuito Europa → África → Américas → Europa caracteriza o comércio triangular, ligado ao tráfico de escravizados." },
+
+      { enun: `Segundo um autor indígena, a memória cultural se baseia no ensinamento oral da tradição, transmitido pela fala do pai, do avô e do tataravô. Ele indica que a cultura indígena tem sido preservada por meio da`,
+        ops: ["modernização de saberes técnicos.", "elaboração de documentos formais.", "organização de rituais religiosos.", "valorização da oralidade."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "A transmissão dos saberes pela fala, de geração em geração, mostra a valorização da oralidade como forma de preservar a cultura indígena." },
+
+      { enun: `O Parque Indígena do Xingu, criado em 1961, protege terras habitadas por povos indígenas desde tempos imemoriais. O reconhecimento oficial dessas terras é importante para garantir a`,
+        ops: ["interferência do governo em assuntos religiosos.", "exploração industrial de recursos naturais.", "conservação das tradições dos povos nativos.", "transferência dos povos para as cidades."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "Demarcar e reconhecer as terras indígenas protege seu território e permite a conservação de suas tradições e modos de vida." },
+
+      { enun: `As Grandes Navegações transformaram Portugal em grande potência dos séculos XV e XVI, por meio de seu império ultramarino. Esse período de transformação política e econômica foi marcado pela`,
+        ops: ["popularização do escambo de produtos.", "limitação do poder dos monarcas.", "redução do comércio entre nações.", "valorização do acúmulo de metais preciosos."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "No mercantilismo, típico da época, a riqueza era medida pelo acúmulo de metais preciosos (metalismo), estimulando a expansão marítima." },
+
+      { enun: `Koumbi Saleh, cidade poderosa do Reino de Gana no século XI, era ponto de encontro de mercadores e viajantes, com intensa rotina de comércio nas ruas. Essas características refletem o(a)`,
+        ops: ["unificação de uma única religião oficial.", "crescimento apenas da produção agrícola.", "controle de rotas comerciais e de minas de ouro (auríferas).", "isolamento em relação a outros povos."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "A prosperidade do Reino de Gana vinha do controle das rotas comerciais transaarianas e do comércio do ouro (minas auríferas)." },
+
+      { enun: `Em 1533, os espanhóis, aliados a inimigos dos incas, capturaram o imperador Atahualpa e, mais tarde, instituíram o Vice-Reinado do Peru. Esse processo gerou, para os povos indígenas dominados, a`,
+        ops: ["descaracterização da política e da cultura.", "estabilização da organização econômica.", "unificação dos grupos de resistência.", "preservação total das obras arquitetônicas."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "A conquista espanhola impôs novas estruturas de poder e cultura, provocando a descaracterização da política e da cultura indígenas." },
+
+      { enun: `No século XVII, a Inglaterra tinha população disposta a aceitar a servidão por tempo limitado: a pessoa assinava contrato para trabalhar por alguns anos em troca de passagem, manutenção e, ao fim, terra ou dinheiro. Assim, a colonização inglesa se diferenciou da espanhola e da portuguesa pela`,
+        ops: ["instituição de leis de restrição à migração.", "organização de empresas/companhias para atrair colonos.", "aplicação de políticas de financiamento estatal.", "proibição de qualquer forma de trabalho contratado."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "A colonização inglesa usou o trabalho por contrato (servidão temporária), organizado por companhias que atraíam colonos — modelo distinto do ibérico." },
+
+      { enun: `Para alguns povos tupis, a «Terra sem Mal» seria um lugar real, sem morte, onde a terra produz sozinha seus frutos — situado além dos Andes, no oceano ou no interior da Terra. Essa crença religiosa motivou, entre os tupis, a`,
+        ops: ["disputa territorial em defesa de regiões ancestrais.", "migração periódica em busca do lugar sagrado.", "locomoção sazonal apenas para trocar produtos.", "aceitação pacífica das invasões europeias."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "A busca pela «Terra sem Mal» levou muitos grupos tupis a realizar migrações em busca desse lugar sagrado." }
+    ]
+  },
+
+  {
+    id: "fil", nome: "Filosofia", cor: "#5A5FE0",
+    questoes: [
+      { enun: `Leia o trecho a seguir.<br><br><em>«Cada pessoa tem um jeito próprio de ser, de pensar e de enxergar o mundo. As diferenças — de aparência, de origem ou de opinião — não nos separam: elas mostram que ser diferente é algo normal e valioso.»</em><br><br>O texto reforça a importância de`,
+        ops: ["padronizar as atitudes de toda a comunidade.", "expressar opiniões apenas de forma sentimental.", "acolher as particularidades de cada indivíduo.", "apontar as falhas das pessoas."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "O texto valoriza as diferenças e defende o respeito às particularidades de cada indivíduo." },
+
+      { enun: `Na alegoria da caverna, Platão usa a escuridão para representar a falta de conhecimento diante da realidade que existe fora dela; ao encontrar a luz, o ser humano tem a revelação da verdade. Essa alegoria indica a importância de`,
+        ops: ["enxergar os elementos da natureza como criações divinas.", "confiar apenas nas sensações para ter conhecimento seguro.", "encarar as opiniões como fontes de verdade absoluta.", "conhecer o mundo para compreender a realidade."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "Para Platão, sair da caverna (buscar o conhecimento) é essencial para compreender a verdadeira realidade, para além das aparências." },
+
+      { enun: `Segundo um texto, todo grupo humano que se propõe às trocas constrói sua própria cultura, com usos e costumes adotados em comum acordo, que podem variar dentro do mesmo grupo. De acordo com o texto, a cultura é construída a partir do(a)`,
+        ops: ["conjunto de conhecimentos e experiências de uma comunidade.", "reunião de manifestações artísticas criadas pelos governos.", "padronização rígida dos costumes de um único grupo.", "análise das características biológicas de uma pessoa."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "A cultura resulta das trocas, conhecimentos e experiências construídos coletivamente por uma comunidade." },
+
+      { enun: `Leia o trecho.<br><br><em>«Na escola, convivemos com pessoas de todos os tipos. Aprendemos a ouvir e a respeitar as diferenças — mesmo que nem todos considerem isso importante.»</em><br><br>O texto destaca o papel da escola na`,
+        ops: ["formalização dos conhecimentos técnicos.", "compreensão da diversidade entre as pessoas.", "simplificação das relações entre estudantes.", "transmissão de normas culturais de um só povo."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "O texto valoriza a escola como espaço de convivência e respeito às diferenças, ou seja, de compreensão da diversidade." },
+
+      { enun: `Leia o trecho de uma campanha contra o racismo.<br><br><em>«Sozinhos, mudamos pouco. Juntos, construímos o respeito. Diga não ao racismo — todos os dias, com todo mundo.»</em><br><br>A campanha reforça que, para combater o racismo, é preciso haver uma`,
+        ops: ["atitude individual isolada, capaz de eliminar o racismo sozinha.", "imposição do governo que apenas proíba a discriminação.", "ação coletiva para reforçar o respeito entre as pessoas.", "negação da existência de qualquer forma de intolerância."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "A palavra «juntos» indica que o combate ao racismo depende de uma ação coletiva, de toda a sociedade, baseada no respeito." },
+
+      { enun: `O Dia Nacional de Luta da Pessoa com Deficiência busca sensibilizar a sociedade sobre as barreiras que ainda existem e promover a inclusão e a igualdade de oportunidades. A criação dessa data é importante porque`,
+        ops: ["fortalece apenas a imagem do governo ao falar de diversidade.", "valoriza somente experiências individuais por meio da reflexão.", "reforça benefícios exclusivos para poucos grupos.", "incentiva o respeito e o reconhecimento das diferenças."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "A data promove a conscientização, o respeito e o reconhecimento das pessoas com deficiência, incentivando a inclusão." },
+
+      { enun: `Uma professora de História afirma que reconhecer os fazeres africanos e indígenas que compõem a cultura brasileira é essencial para enfrentar o preconceito. Segundo ela, compreender as origens históricas da cultura brasileira ajuda a`,
+        ops: ["fundamentar os estereótipos e as práticas discriminatórias.", "combater as narrativas preconceituosas e a discriminação.", "validar as desigualdades sociais e os conflitos étnicos.", "neutralizar todos os conflitos apenas pela política."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "Reconhecer as diversas origens da cultura brasileira ajuda a desconstruir preconceitos e a combater a discriminação." },
+
+      { enun: `Daniel Munduruku critica o uso da palavra «índio», lembrando que existem centenas de povos, línguas e tradições diferentes no Brasil, cada um com seu modo de viver. Sua crítica explica que o uso genérico dessa palavra`,
+        ops: ["influencia as organizações políticas dos indígenas.", "limita o conhecimento linguístico da sociedade.", "desconsidera a diversidade cultural dos povos originários.", "complexifica demais os hábitos de cada indivíduo."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "Chamar todos de «índio» ignora que há muitos povos originários distintos, com culturas próprias — ou seja, desconsidera essa diversidade." },
+
+      { enun: `A invenção do samba como música nacional envolveu muitos grupos e indivíduos (negros, baianos, cariocas, intelectuais, políticos, poetas, entre outros), e não um único grupo. Esse processo revela que a cultura funciona como um`,
+        ops: ["modelo formado por uma única classe social.", "sistema formado por elementos e origens diversos.", "instrumento marcado por costumes únicos e imutáveis.", "movimento influenciado por um só povo específico."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "A construção do samba por muitos grupos diferentes mostra a cultura como um sistema formado pela mistura de elementos de origens diversas." },
+
+      { enun: `Segundo um autor, as desigualdades entre as pessoas são produzidas histórica, social e economicamente, e não surgem de fatores biológicos ou raciais: ninguém nasce preconceituoso. Assim, o preconceito deve ser entendido como um fenômeno`,
+        ops: ["construído e aprendido por meio da sociedade.", "transmitido e mantido por diferenças regionais.", "determinado e influenciado por herança biológica.", "originado e sustentado por traços de personalidade."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "O preconceito não é natural: é construído e aprendido socialmente, ao longo da história e das relações entre as pessoas." }
+    ]
+  },
+
+  {
+    id: "art", nome: "Arte", cor: "#D6336C",
+    questoes: [
+      { enun: `Em uma coreografia, a bailarina estica o braço e o olhar em direção ao teto, ficando na ponta dos pés, enquanto a saia se eleva ao redor do corpo. Nesse passo, ela explora principalmente a direção do movimento`,
+        ops: ["para cima, sugerida pela elevação do corpo e da roupa.", "para trás, indicada pela posição das pernas.", "para baixo, marcada pelo contato total com o chão.", "para frente, oposta ao restante do corpo."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "Braços, olhar e corpo estendidos para o alto, na ponta dos pés, indicam que o movimento explora a direção para cima." },
+
+      { enun: `O Carimbó, expressão cultural do Pará, tem origem indígena e recebeu influências africanas e europeias ao longo do tempo (instrumentos, palmas, danças). De acordo com essas informações, o carimbó é importante por`,
+        ops: ["separar a manifestação artística do movimento cultural.", "demonstrar a mistura de culturas na formação do Brasil.", "preservar a cultura indígena isolada de outras influências.", "mostrar que a dança não influencia outros costumes."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "O Carimbó reúne influências indígenas, africanas e europeias, evidenciando a mistura de culturas que formou o Brasil." },
+
+      { enun: `Diferentes povos indígenas, como Pataxó e Yanomami, produzem grafismos próprios em pinturas corporais e objetos, com padrões característicos de cada grupo. Esses grafismos representam`,
+        ops: ["identidades específicas de cada etnia.", "desenhos copiados da arte europeia.", "interações frequentes com culturas de outros países.", "padrões criados por designers internacionais."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "Cada povo indígena tem grafismos próprios, que expressam sua identidade cultural específica — não são cópias externas." },
+
+      { enun: `Os trovadores eram artistas da nobreza medieval (diferentes dos jograis, das classes populares), que compunham poesias e melodias, acompanhando-se de instrumentos como o alaúde. No contexto da Idade Média, a manifestação musical dos trovadores era`,
+        ops: ["associada exclusivamente à Igreja Católica.", "realizada por pessoas de boa condição social.", "feita por profissionais que sobreviviam apenas da música.", "considerada teatral, apresentada em feiras de vilarejos."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "Os trovadores pertenciam à nobreza, ou seja, eram pessoas de boa condição social, diferentemente dos jograis populares." },
+
+      { enun: `Observe as características de uma escultura renascentista em mármore: figuras humanas com feições delicadas, corpos bem proporcionados e sensação de movimento e emoção. Uma característica típica da escultura do Renascimento é`,
+        ops: ["representar rostos de forma totalmente abstrata.", "transmitir rigidez e ausência de expressão.", "desconsiderar a proporção entre as figuras.", "expressar emoções e a ideia de movimento na cena."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "A escultura renascentista valoriza o realismo, a proporção e a expressão de emoções e movimento (como em Michelangelo)." },
+
+      { enun: `Em uma apresentação de balé, as bailarinas erguem os braços e uma das pernas acima da linha da cintura, alongando o corpo para o alto. Nesse caso, elas exploram o nível de movimento`,
+        ops: ["alto, pois elevam braços e perna acima da linha da cintura.", "médio, pois mantêm o corpo na altura da cintura.", "baixo, pois concentram os gestos perto do chão.", "nulo, pois realizam movimentos restritos ao solo."],
+        ok: 0, hab: "Currículo SAS",
+        exp: "Quando o corpo e os membros se elevam acima da linha da cintura, a dança explora o nível alto de movimento." },
+
+      { enun: `A catira (ou cateretê) é uma dança que, segundo estudiosos como Mário de Andrade, já existia entre os povos originários e depois se popularizou com a chegada dos portugueses e jesuítas. Assim, a catira é um exemplo de expressão artística que representa a`,
+        ops: ["origem africana das festas populares brasileiras.", "valorização das danças urbanas atuais.", "influência indígena nas tradições populares.", "presença da luta nas danças modernas."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "A catira tem raízes nos povos originários (indígenas), mostrando a influência indígena nas tradições populares brasileiras." },
+
+      { enun: `Os indígenas Juruna, grupo ribeirinho do Rio Xingu, usam grafismos em cerâmicas, canoas, remos e na pintura corporal. Por viverem às margens dos rios, seus motivos lembram muitas vezes as ondas da água. Nesses grafismos, é possível reconhecer a`,
+        ops: ["composição de imagens humanas pintadas com jenipapo.", "repetição de formas geométricas que remetem à flora.", "representação de formas onduladas associadas à natureza ribeirinha.", "utilização de figuras de animais desenhadas com açafrão."],
+        ok: 2, hab: "Currículo SAS",
+        exp: "Como grupo ribeirinho, os Juruna criam grafismos com formas onduladas que lembram as ondas da água, ligadas ao seu ambiente." },
+
+      { enun: `Durante o Classicismo, o piano tornou-se popular tanto em salas de concerto quanto no ambiente doméstico, com compositores como Mozart e Beethoven em destaque. As informações indicam que, nesse período, o piano se destacou porque`,
+        ops: ["substituiu todos os instrumentos de corda.", "foi valorizado em diferentes contextos (doméstico e de concerto).", "passou a ser tocado apenas por pessoas pobres.", "ganhou espaço somente em cerimônias religiosas."],
+        ok: 1, hab: "Currículo SAS",
+        exp: "O piano ganhou destaque em vários contextos — nas casas e nos concertos — o que explica sua valorização no período clássico." },
+
+      { enun: `A escultura renascentista «São Jorge», de Donatello (mármore, início do século XV), retrata a figura humana com atenção aos detalhes do corpo, das vestes e da expressão. Uma característica da escultura renascentista observada nesse tipo de obra é o(a)`,
+        ops: ["uso de formas abstratas e traços exagerados.", "retrato de figuras sem qualquer expressividade.", "escolha por temas mitológicos e pouco realistas.", "representação do corpo humano com detalhes e realismo."],
+        ok: 3, hab: "Currículo SAS",
+        exp: "O Renascimento retoma o realismo e a valorização do ser humano: o corpo é representado com detalhes e proporção, como em Donatello." }
+    ]
+  }
+];
+
+
+</script>
+<script>
+(function(){
+  var LETRAS=["A","B","C","D"];
+  var estado={}; // n -> {resp:idx}
+  var totalQ=0, gnum=0;
+  SUBJECTS.forEach(function(s){ s.questoes.forEach(function(q){ q._n=++gnum; totalQ++; }); });
+  var ativa=0;
+
+  var elAbas=document.getElementById("abas");
+  var elCont=document.getElementById("conteudo");
+  var root=document.documentElement;
+
+  function corMat(c){ root.style.setProperty("--mat", c); }
+
+  function stats(){
+    var resp=Object.keys(estado).length, ok=0;
+    Object.keys(estado).forEach(function(n){ if(estado[n].correta) ok++; });
+    document.getElementById("s-resp").textContent = resp+"/"+totalQ;
+    document.getElementById("s-ok").textContent = ok;
+    document.getElementById("s-pct").textContent = resp? Math.round(ok/resp*100)+"%" : "—";
+    document.getElementById("s-barra").style.width = (resp/totalQ*100)+"%";
+    document.getElementById("fim").classList.toggle("show", resp===totalQ);
+  }
+
+  function renderAbas(){
+    elAbas.innerHTML="";
+    SUBJECTS.forEach(function(s,i){
+      var respMat=s.questoes.filter(function(q){return estado[q._n];}).length;
+      var b=document.createElement("button");
+      b.className="aba"+(i===ativa?" on":"");
+      if(i===ativa) b.style.background=s.cor;
+      b.innerHTML=s.nome+'<span class="n">'+respMat+"/"+s.questoes.length+"</span>";
+      b.onclick=function(){ ativa=i; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+      elAbas.appendChild(b);
+    });
+  }
+
+  function render(){
+    var s=SUBJECTS[ativa];
+    corMat(s.cor);
+    renderAbas();
+    elCont.innerHTML="";
+    s.questoes.forEach(function(q){
+      var card=document.createElement("div");
+      card.className="q";
+      var html='<div class="q-head"><span class="q-num">Questão '+q._n+'</span><span class="q-hab">'+q.hab+'</span></div>';
+      html+='<div class="q-enun">'+q.enun+'</div><div class="opts"></div>';
+      html+='<div class="fb"><span class="v"></span><span class="txt"></span><div class="exp"></div></div>';
+      card.innerHTML=html;
+      var opts=card.querySelector(".opts");
+      q.ops.forEach(function(op,idx){
+        var b=document.createElement("button");
+        b.className="opt";
+        b.innerHTML='<span class="letra">'+LETRAS[idx]+'</span><span>'+op+'</span>';
+        b.onclick=function(){ responder(q,card,idx); };
+        opts.appendChild(b);
+      });
+      // reaplica estado se já respondida
+      var e=estado[q._n];
+      if(e) aplicar(q,card,e.resp,true);
+      elCont.appendChild(card);
+    });
+    // resumo da matéria
+    var resumo=document.createElement("div");
+    resumo.className="resumo";
+    resumo.id="resumo-mat";
+    elCont.appendChild(resumo);
+    atualizaResumo();
+  }
+
+  function responder(q,card,idx){
+    if(estado[q._n]) return;
+    estado[q._n]={resp:idx,correta:(idx===q.ok)};
+    aplicar(q,card,idx,false);
+    stats(); renderAbas(); atualizaResumo();
+  }
+
+  function aplicar(q,card,idx,jaFeito){
+    var botoes=card.querySelectorAll(".opt");
+    botoes.forEach(function(b,k){
+      b.disabled=true;
+      if(k===q.ok) b.classList.add("correta");
+      if(k===idx && idx!==q.ok) b.classList.add("errada");
+    });
+    var fb=card.querySelector(".fb");
+    var acertou=(idx===q.ok);
+    fb.classList.add("show", acertou?"g":"r");
+    fb.querySelector(".v").textContent = acertou? "Correto! " : "Não foi dessa vez. ";
+    fb.querySelector(".txt").textContent = acertou? "" : ("Resposta certa: "+LETRAS[q.ok]+". ");
+    fb.querySelector(".exp").textContent = q.exp;
+  }
+
+  function atualizaResumo(){
+    var s=SUBJECTS[ativa];
+    var r=document.getElementById("resumo-mat");
+    if(!r) return;
+    var respondidas=s.questoes.filter(function(q){return estado[q._n];});
+    if(respondidas.length===s.questoes.length){
+      var ac=respondidas.filter(function(q){return estado[q._n].correta;}).length;
+      r.classList.add("show");
+      r.innerHTML='<h3>Resumo — '+s.nome+'</h3><div class="placar">Você acertou <b>'+ac+'</b> de <b>'+s.questoes.length+'</b> questões desta matéria.</div>';
+    } else { r.classList.remove("show"); r.innerHTML=""; }
+  }
+
+  document.getElementById("recomecar").onclick=function(){
+    estado={}; ativa=0; stats(); render(); window.scrollTo({top:0,behavior:"smooth"});
+  };
+
+  render(); stats();
+})();
+</script>
+</body>
+</html>
