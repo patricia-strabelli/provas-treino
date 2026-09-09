@@ -442,6 +442,11 @@ const perTab=TABS.map(t=>({done:0,hit:0,n:t.questions.length}));
 TABS.forEach(t=>total+=t.questions.length);
 document.getElementById('total').textContent=total;
 
+/* embaralha as alternativas por questão (posição da resposta varia a cada sessão) */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function initOrder(){TABS.forEach(t=>t.questions.forEach(q=>{q._order=shuffle([0,1,2,3]);q._done=false;q._chosen=-1;}));}
+initOrder();
+
 const tabsEl=document.getElementById('tabs');
 const quizEl=document.getElementById('quiz');
 const sumEl=document.getElementById('summary');
@@ -467,9 +472,10 @@ function render(){
   tab.questions.forEach((q,qi)=>{
     const card=document.createElement('div');
     card.className='card'; card.style.borderLeftColor=col;
-    const optsHtml=q.opts.map((o,oi)=>{
+    const optsHtml=q._order.map((origIdx,pos)=>{
+      const o=q.opts[origIdx];
       const body = (typeof o==='object' && o.html) ? `<span class="svgopt">${o.html}</span>` : mf(o);
-      return `<button class="opt" data-oi="${oi}"><span class="lt" style="background:#f1f5f9">${LT[oi]}</span><span>${body}</span></button>`;
+      return `<button class="opt" data-orig="${origIdx}"><span class="lt">${LT[pos]}</span><span>${body}</span></button>`;
     }).join('');
     card.innerHTML=`
       <div class="qhead">
@@ -482,27 +488,34 @@ function render(){
       <div class="explain"></div>`;
     const optBtns=card.querySelectorAll('.opt');
     const exp=card.querySelector('.explain');
-    optBtns.forEach(btn=>{
-      btn.onclick=()=>{
-        if(card.dataset.done) return;
-        card.dataset.done='1';
-        const chosen=+btn.dataset.oi, correct=q.a;
-        optBtns.forEach((b,bi)=>{
-          b.disabled=true;
-          if(bi===correct) b.classList.add('correct');
-          else if(bi===chosen) b.classList.add('wrong');
-        });
-        const right = chosen===correct;
-        exp.classList.add('show', right?'r':'w');
-        exp.innerHTML=`<b>${right?'✓ Correto!':'✗ Não foi dessa vez.'}</b> ${mf(q.e)}`;
+    function reveal(chosenOrig,count){
+      const right=chosenOrig===q.a;
+      optBtns.forEach(b=>{
+        b.disabled=true;
+        const oi=+b.dataset.orig;
+        if(oi===q.a) b.classList.add('correct');
+        else if(oi===chosenOrig) b.classList.add('wrong');
+      });
+      exp.classList.add('show', right?'r':'w');
+      exp.innerHTML=`<b>${right?'✓ Correto!':'✗ Não foi dessa vez.'}</b> ${mf(q.e)}`;
+      if(count){
         answered++; if(right) hits++;
         perTab[current].done++; if(right) perTab[current].hit++;
         updateStats();
         if(perTab[current].done===perTab[current].n) showSummary();
+      }
+    }
+    if(q._done) reveal(q._chosen,false);
+    optBtns.forEach(btn=>{
+      btn.onclick=()=>{
+        if(q._done) return;
+        q._done=true; q._chosen=+btn.dataset.orig;
+        reveal(q._chosen,true);
       };
     });
     quizEl.appendChild(card);
   });
+  if(perTab[current].n>0 && perTab[current].done===perTab[current].n) showSummary();
 }
 
 function showSummary(){
@@ -527,6 +540,7 @@ function updateStats(){
 document.getElementById('restart').onclick=()=>{
   answered=0; hits=0; current=0;
   perTab.forEach(p=>{p.done=0;p.hit=0;});
+  initOrder();
   updateStats(); render();
   window.scrollTo({top:0,behavior:'smooth'});
 };
