@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2ª Prova Treino · 5º ano — Língua Portuguesa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pt:#d64545;          /* cor da disciplina: Língua Portuguesa */
+    --pt-soft:#fbeaea;
+    --ink:#1f2733;
+    --muted:#5c6672;
+    --line:#e7e9ee;
+    --bg:#f5f6f8;
+    --card:#ffffff;
+    --ok:#2e7d32; --ok-bg:#e7f4e9; --ok-line:#bfe0c5;
+    --no:#c62828; --no-bg:#fdecea; --no-line:#f4c7c2;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Public Sans",system-ui,Arial,sans-serif;
+    line-height:1.55;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:20px 16px 64px}
+  header.top{text-align:center;padding:22px 8px 8px}
+  .kicker{
+    display:inline-block;font-family:"Space Mono",monospace;font-size:12px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--pt);
+    background:var(--pt-soft);padding:4px 10px;border-radius:999px;margin-bottom:12px;
+  }
+  h1{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:clamp(26px,6vw,40px);margin:0;line-height:1.05;letter-spacing:-.01em;
+  }
+  .sub{color:var(--muted);margin-top:8px;font-size:15px}
+  .tabs{display:flex;justify-content:center;gap:8px;margin:18px 0 6px;flex-wrap:wrap}
+  .tab{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14px;
+    padding:8px 16px;border-radius:999px;border:2px solid var(--pt);
+    color:#fff;background:var(--pt);
+  }
+  .scorebar{
+    display:flex;gap:10px;justify-content:center;margin:14px 0 6px;flex-wrap:wrap;
+  }
+  .chip{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:8px 14px;font-size:13px;color:var(--muted);min-width:120px;text-align:center;
+  }
+  .chip b{
+    display:block;font-family:"Space Mono",monospace;font-size:20px;color:var(--ink);
+  }
+  .progress{height:8px;background:#e9ebf0;border-radius:999px;overflow:hidden;margin:14px 2px 22px}
+  .progress > i{display:block;height:100%;width:0;background:var(--pt);transition:width .25s ease}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:22px 20px;box-shadow:0 1px 2px rgba(20,30,50,.04);
+  }
+  .qhead{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+  .qnum{
+    font-family:"Space Mono",monospace;font-weight:700;font-size:22px;color:var(--pt);
+    background:var(--pt-soft);border-radius:10px;padding:2px 12px;flex:none;
+  }
+  .skill{
+    margin-left:auto;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);border:1px dashed var(--line);
+    padding:3px 8px;border-radius:8px;flex:none;
+  }
+  .contexto{
+    background:#fafbfc;border:1px solid var(--line);border-left:4px solid var(--pt);
+    border-radius:10px;padding:14px 16px;margin:6px 0 16px;font-size:15.5px;color:#26303c;
+  }
+  .contexto .titulo{font-weight:700;display:block;margin-bottom:6px}
+  .contexto .fonte{display:block;margin-top:10px;font-size:12px;color:var(--muted);font-style:italic}
+  pre.poema{
+    font-family:"Space Mono",monospace;font-size:16px;line-height:1.5;
+    background:#fff;border:1px dashed var(--line);border-radius:8px;
+    padding:14px;margin:8px 0;text-align:left;overflow-x:auto;white-space:pre;
+  }
+  table.tbl{border-collapse:collapse;width:100%;margin:8px 0;font-size:14.5px}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  table.tbl th{background:var(--pt-soft);color:#7a2a2a;font-family:"Bricolage Grotesque",sans-serif}
+  table.tbl tr:nth-child(even) td{background:#fafbfc}
+
+  .stem{font-size:17px;font-weight:600;margin:4px 0 14px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    display:flex;gap:12px;align-items:flex-start;text-align:left;
+    background:#fff;border:1.5px solid var(--line);border-radius:12px;
+    padding:12px 14px;font-size:16px;cursor:pointer;transition:border-color .15s,background .15s;
+    font-family:inherit;color:var(--ink);width:100%;
+  }
+  .opt:hover:not(:disabled){border-color:var(--pt)}
+  .opt .letter{
+    font-family:"Space Mono",monospace;font-weight:700;color:var(--muted);flex:none;
+    width:24px;height:24px;border-radius:7px;background:#f0f1f4;
+    display:grid;place-items:center;font-size:14px;
+  }
+  .opt.sel{border-color:var(--pt);background:var(--pt-soft)}
+  .opt.correct{border-color:var(--ok-line);background:var(--ok-bg)}
+  .opt.correct .letter{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--no-line);background:var(--no-bg)}
+  .opt.wrong .letter{background:var(--no);color:#fff}
+  .opt:disabled{cursor:default}
+
+  .fb{margin-top:16px;border-radius:12px;padding:14px 16px;font-size:15px;display:none}
+  .fb.show{display:block}
+  .fb.ok{background:var(--ok-bg);border:1px solid var(--ok-line)}
+  .fb.no{background:var(--no-bg);border:1px solid var(--no-line)}
+  .fb .verdict{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;margin-bottom:4px}
+  .fb.ok .verdict{color:var(--ok)}
+  .fb.no .verdict{color:var(--no)}
+
+  .actions{display:flex;gap:12px;justify-content:flex-end;margin-top:20px}
+  button.btn{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:15px;
+    border:none;border-radius:12px;padding:12px 22px;cursor:pointer;
+  }
+  .btn.primary{background:var(--pt);color:#fff}
+  .btn.primary:disabled{opacity:.4;cursor:not-allowed}
+  .btn.ghost{background:#eef0f3;color:var(--ink)}
+
+  .resumo{text-align:center;padding:28px 20px}
+  .resumo h2{font-family:"Bricolage Grotesque",sans-serif;font-size:28px;margin:0 0 6px}
+  .bigscore{font-family:"Space Mono",monospace;font-size:52px;font-weight:700;color:var(--pt);margin:10px 0}
+  .resumo p{color:var(--muted);margin:4px 0}
+  .footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="kicker">2ª Prova Treino · 5º ano</span>
+    <h1>Língua Portuguesa</h1>
+    <div class="sub">Modo prática · versão combinada · correção na hora, sem nota</div>
+    <div class="tabs"><span class="tab">Língua Portuguesa</span></div>
+  </header>
+
+  <div class="scorebar">
+    <div class="chip">Respondidas <b id="answered">0</b></div>
+    <div class="chip">Acertos <b id="hits">0</b></div>
+    <div class="chip">Questão <b id="counter">1/48</b></div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div id="quiz"></div>
+</div>
+
+<script>
+const QUESTIONS = [
+{
+  t:"<span class=\"titulo\">Leia a crônica e responda às questões 1 a 3.</span>\n     Dona Ceci entrou na padaria decidida a comprar só um pãozinho. Mas o cheiro do bolo de fubá que acabara de sair do forno mudou seus planos. \"Vou levar uma fatia\", pensou. Na fila, viu os sonhos recheados e concluiu que dois não fariam mal. Quando chegou ao caixa, o carrinho tinha bolo, sonhos, um pacote de café e um suco. O atendente sorriu: — A senhora não vinha comprar só um pão? — E vim! — respondeu Dona Ceci, muito séria. — O resto foi o pão que chamou os amigos.",
+  q:"De acordo com o texto, o que aconteceu com o plano inicial de Dona Ceci?",
+  o:["Ela comprou muito mais do que pretendia.","Ela comprou exatamente um pãozinho.","Ela trocou o pão por um bolo.","Ela desistiu de comprar qualquer coisa."],
+  a:0,
+  e:"O texto conta que ela entrou para comprar só um pão, mas acabou levando bolo, sonhos, café e suco — ou seja, comprou muito mais do que pretendia.",
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  t:"<span class=\"titulo\">Leia a crônica e responda às questões 1 a 3.</span>\n     Dona Ceci entrou na padaria decidida a comprar só um pãozinho. Mas o cheiro do bolo de fubá mudou seus planos... Quando chegou ao caixa, o carrinho estava cheio. O atendente sorriu: — A senhora não vinha comprar só um pão? — E vim! — respondeu Dona Ceci, muito séria. — O resto foi o pão que chamou os amigos.",
+  q:"O humor do texto está no fato de",
+  o:["o atendente errar o troco.","Dona Ceci culpar o pão pelas outras compras.","a padaria estar sem pão.","Dona Ceci brigar com o atendente."],
+  a:1,
+  e:"A graça está na resposta inesperada: em vez de assumir que se empolgou, Dona Ceci diz que 'o pão chamou os amigos', culpando o pão pelas demais compras.",
+  s:"Currículo SAS · Efeito de humor"
+},
+{
+  t:"Releia o trecho: \"O resto foi o pão que chamou os amigos.\"",
+  q:"Nesse contexto, a expressão \"o pão que chamou os amigos\" significa que",
+  o:["o atendente era amigo de Dona Ceci.","o pão realmente falou com outros pães.","uma compra acabou levando a várias outras.","Dona Ceci encontrou amigos na padaria."],
+  a:2,
+  e:"É uma expressão figurada: começou com um item e, um puxando o outro, ela acabou comprando vários. O 'pão' teria 'chamado' as demais compras.",
+  s:"Currículo SAS · Sentido de expressão no contexto"
+},
+{
+  t:"<span class=\"titulo\">Leia a crônica e responda às questões 4 a 6.</span>\n     Depois de anos morando longe, Rafael voltou à rua da sua infância para rever a casa da avó. O coração batia forte quando ele bateu no portão azul. Uma senhora abriu, e ele quase chorou de emoção: — A senhora ainda mora aqui! Sou o Rafael, neto da Dona Alzira! A mulher franziu a testa: — Alzira? Aqui é a casa da família Nogueira. E a rua da sua avó não é esta; é a próxima, depois da esquina. Rafael ficou parado, atônito, sem saber o que dizer. Tinha batido no portão errado.",
+  q:"Qual foi a reação de Rafael ao bater no portão?",
+  o:["Ele ficou com raiva da senhora.","Ele reconheceu a família Nogueira.","Ele desistiu de procurar a casa.","Ele se emocionou, pensando que reencontrava a casa da avó."],
+  a:3,
+  e:"O texto diz que ele 'quase chorou de emoção', acreditando ter voltado à casa da avó — por isso a reação é de emoção.",
+  s:"Currículo SAS · Localizar/inferir informação"
+},
+{
+  t:"Releia: Rafael achou que estava na casa da avó, mas a senhora explicou que ali era a casa da família Nogueira e que a rua certa era a próxima.",
+  q:"Qual é o fato inesperado que dá um tom de humor à história?",
+  o:["Rafael bateu na casa errada, na rua errada.","A senhora era parente de Rafael.","Rafael esqueceu o nome da avó.","A avó de Rafael tinha se mudado."],
+  a:0,
+  e:"A surpresa está no engano: emocionado, ele bateu no lugar errado. Descobrir isso de repente é o que gera o efeito cômico.",
+  s:"Currículo SAS · Efeito de humor"
+},
+{
+  t:"Releia o trecho: \"Rafael ficou parado, atônito, sem saber o que dizer.\"",
+  q:"A palavra destacada indica que o personagem estava",
+  o:["alegre e satisfeito.","espantado e sem reação.","com raiva da senhora.","com pressa de ir embora."],
+  a:1,
+  e:"\"Atônito\" significa muito espantado, surpreso a ponto de não saber reagir — combina com \"parado\" e \"sem saber o que dizer\".",
+  s:"Currículo SAS · Sentido de palavra no contexto"
+},
+{
+  t:"<span class=\"titulo\">Leia o poema e responda às questões 7 e 8.</span>\n     <pre class=\"poema\">p\n i\n  n\n   g\n    a\np\n i\n  n\n   g\n    a\n p o ç a</pre>",
+  q:"O texto acima é um exemplo de poema visual porque",
+  o:["traz um diálogo entre personagens.","conta uma história com começo, meio e fim.","usa a disposição das letras para formar uma imagem.","apresenta rimas e ritmo musical."],
+  a:2,
+  e:"No poema visual (ou concreto), a forma como as palavras são dispostas na página cria uma imagem que também constrói o sentido.",
+  s:"Currículo SAS · Característica do gênero"
+},
+{
+  t:"<pre class=\"poema\">p\n i\n  n\n   g\n    a\np\n i\n  n\n   g\n    a\n p o ç a</pre>",
+  q:"A forma como as palavras estão dispostas ajuda a",
+  o:["indicar o preço da água.","ensinar a economizar água.","descrever o som do trovão.","mostrar o movimento das gotas caindo até formar uma poça."],
+  a:3,
+  e:"As letras de \"pinga\" descem em diagonal, imitando as gotas caindo, e terminam em \"poça\", sugerindo a água acumulada embaixo.",
+  s:"Currículo SAS · Relação forma e sentido"
+},
+{
+  t:"<span class=\"titulo\">Leia o poema e responda às questões 9 e 10.</span>\n     <pre class=\"poema\">          o\n        ã\n      l\n    a\n  b</pre>",
+  q:"Por que o texto é considerado um poema visual?",
+  o:["Porque a imagem formada pelas letras completa o sentido.","Porque conta uma notícia real.","Porque tem muitos personagens.","Porque explica um assunto científico."],
+  a:0,
+  e:"É um poema visual porque a própria disposição das letras forma uma imagem que participa do sentido do texto.",
+  s:"Currículo SAS · Característica do gênero"
+},
+{
+  t:"<pre class=\"poema\">          o\n        ã\n      l\n    a\n  b</pre>",
+  q:"A disposição das letras da palavra \"balão\" sugere",
+  o:["o balão murchando no chão.","o balão subindo pelo ar.","o barulho do balão estourando.","a cor do balão."],
+  a:1,
+  e:"As letras sobem da esquerda para a direita, imitando o movimento do balão subindo — a forma reforça a ideia de \"subir\".",
+  s:"Currículo SAS · Relação forma e sentido"
+},
+{
+  t:"Leia o texto e observe o verbo em destaque. \"A jubarte é uma baleia enorme. Ela <b>vive</b> nos oceanos e migra milhares de quilômetros todos os anos.\"",
+  q:"No trecho, o verbo destacado concorda com qual termo?",
+  o:["Com \"anos\", que representa a 2ª pessoa do singular.","Com \"baleia\", que representa a 3ª pessoa do plural.","Com \"Ela\", que representa a 3ª pessoa do singular.","Com \"oceanos\", que representa a 1ª pessoa do plural."],
+  a:2,
+  e:"O verbo \"vive\" está na 3ª pessoa do singular porque concorda com o sujeito \"Ela\" (a jubarte). Se fosse plural, seria \"vivem\".",
+  s:"Currículo SAS · Concordância verbal"
+},
+{
+  t:"Leia a frase: \"Você não vai à festa <b>por quê</b>?\"",
+  q:"A expressão \"por quê\" foi escrita separada e com acento porque",
+  o:["introduz uma explicação.","inicia uma nova pergunta.","funciona como um substantivo.","está no final de uma frase interrogativa."],
+  a:3,
+  e:"Usa-se \"por quê\" (separado e com acento) no final de frases interrogativas. No começo da pergunta, seria \"Por que\" sem acento.",
+  s:"Currículo SAS · Emprego dos porquês"
+},
+{
+  t:"Leia a frase: \"Os jogadores não <b>deixam</b> a bola cair.\"",
+  q:"A forma verbal \"deixam\" está no plural porque concorda com",
+  o:["o sujeito \"Os jogadores\".","o advérbio \"não\".","o substantivo \"bola\".","o verbo \"cair\"."],
+  a:0,
+  e:"O verbo concorda com o sujeito. Como \"Os jogadores\" está no plural, o verbo também fica no plural: \"deixam\".",
+  s:"Currículo SAS · Concordância verbal"
+},
+{
+  t:"Leia a frase: \"Cheguei atrasado <b>porque</b> perdi o ônibus.\"",
+  q:"Nesse trecho, \"porque\" foi escrito junto e sem acento porque",
+  o:["forma uma pergunta.","introduz uma explicação em frase afirmativa.","está no final da frase.","é usado como substantivo."],
+  a:1,
+  e:"\"Porque\" (junto e sem acento) introduz uma explicação ou motivo em frases afirmativas: cheguei atrasado — o motivo foi ter perdido o ônibus.",
+  s:"Currículo SAS · Emprego dos porquês"
+},
+{
+  t:"<span class=\"titulo\">Leia a notícia e responda às questões 15 a 17.</span>\n     Durante uma caminhada em família, um grupo encontrou uma pedra diferente no meio da trilha. A pedra parecia comum, mas escondia um tesouro científico. Curiosos, tiraram uma foto e a enviaram a um cientista. Depois de visitar o local, ele confirmou: era o fóssil de um grande réptil que viveu há milhões de anos. Como o animal ainda era jovem quando morreu, os pesquisadores o apelidaram de \"Filhote de Pedra\".",
+  q:"Qual é o principal fato noticiado no texto?",
+  o:["A construção de uma trilha nova.","A perda de uma pedra preciosa.","A descoberta de um fóssil durante um passeio.","A venda de um brinquedo antigo."],
+  a:2,
+  e:"O texto todo gira em torno da descoberta de um fóssil por uma família durante uma caminhada — esse é o fato principal.",
+  s:"Currículo SAS · Tema/assunto principal"
+},
+{
+  t:"Releia: \"Como o animal ainda era jovem quando morreu, os pesquisadores o apelidaram de 'Filhote de Pedra'.\"",
+  q:"Segundo o texto, por que o fóssil recebeu o apelido de \"Filhote de Pedra\"?",
+  o:["Porque a pedra era muito pequena.","Porque foi encontrado numa loja.","Porque foi achado por crianças.","Porque o animal era jovem quando morreu."],
+  a:3,
+  e:"O próprio texto explica: o apelido vem do fato de o réptil ainda ser jovem (um 'filhote') na época em que morreu.",
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  t:"Releia: \"A pedra parecia comum, <b>mas</b> escondia um tesouro científico.\"",
+  q:"Qual é o sentido do termo \"mas\" no trecho?",
+  o:["Oposição.","Afirmação.","Adição.","Dúvida."],
+  a:0,
+  e:"\"Mas\" liga duas ideias contrárias: parecia comum X escondia um tesouro. Ele indica oposição entre as duas partes.",
+  s:"Currículo SAS · Sentido de conectivo"
+},
+{
+  t:"<span class=\"titulo\">Leia a notícia e responda às questões 18 a 20.</span>\n     Cientistas de uma universidade criaram, por acaso, um material muito resistente. Eles trabalhavam em um projeto para produzir colas fortes a partir de uma proteína encontrada na seda de um pequeno inseto. Ao limpar um recipiente, notaram que a substância virava um fio grudento, capaz de segurar objetos pesados. O material lembrava <b>mais</b> as teias dos quadrinhos do que as teias de verdade.",
+  q:"Segundo o texto, o novo material foi feito a partir de",
+  o:["uma cola comprada em loja.","uma proteína presente na seda de um inseto.","um metal muito resistente.","um fio de teia de aranha comum."],
+  a:1,
+  e:"O texto informa que o material surgiu de uma proteína encontrada na seda de um pequeno inseto, usada no projeto das colas.",
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  t:"Releia: \"Eles trabalhavam em um projeto para produzir colas fortes... Ao limpar um recipiente, notaram que a substância virava um fio grudento.\"",
+  q:"Qual era o objetivo inicial do projeto dos cientistas?",
+  o:["Limpar recipientes de vidro.","Estudar os quadrinhos.","Produzir colas fortes.","Criar um novo inseto."],
+  a:2,
+  e:"A descoberta foi por acaso: o objetivo inicial do projeto era criar colas fortes. O material resistente apareceu durante esse trabalho.",
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  t:"Releia: \"O material lembrava <b>mais</b> as teias dos quadrinhos do que as teias de verdade.\"",
+  q:"Na frase, o termo destacado \"mais\" indica",
+  o:["causa do acontecimento.","dúvida de alguém.","oposição de ideias.","intensidade de algo."],
+  a:3,
+  e:"Aqui \"mais\" reforça a intensidade da comparação: o material se parecia bem mais com as teias dos quadrinhos do que com as reais.",
+  s:"Currículo SAS · Sentido de palavra"
+},
+{
+  t:"<span class=\"titulo\">Leia a notícia e responda às questões 21 e 22.</span>\n     Na última semana, um grupo de moradores se organizou para levar comida e roupas às famílias atingidas pelas chuvas na cidade. Segundo os organizadores, toda ajuda é bem-vinda em momentos como esse. Muitos voluntários, que <b>não</b> gostam de ficar parados diante do sofrimento alheio, doaram parte do seu tempo.",
+  q:"Qual característica do gênero notícia está presente no texto?",
+  o:["O relato de um fato real de interesse público.","A defesa de uma opinião pessoal do autor.","O uso de linguagem figurada.","A apresentação de uma história fantasiosa."],
+  a:0,
+  e:"A notícia relata um fato verdadeiro e de interesse da comunidade (a ajuda às vítimas das chuvas) — essa é uma marca do gênero.",
+  s:"Currículo SAS · Características do gênero"
+},
+{
+  t:"Releia: \"Muitos voluntários, que <b>não</b> gostam de ficar parados...\"",
+  q:"No trecho, o advérbio \"não\" tem sentido de",
+  o:["lugar.","negação.","tempo.","modo."],
+  a:1,
+  e:"O advérbio \"não\" nega a ação: os voluntários NÃO gostam de ficar parados. Ele expressa negação.",
+  s:"Currículo SAS · Sentido de advérbio"
+},
+{
+  t:"<span class=\"titulo\">Leia a notícia e responda às questões 23 e 24.</span>\n     Um estudo reuniu instituições de vários países para acompanhar as tartarugas marinhas. Os dados foram comparados com informações de anos atrás. <b>Hoje</b>, uma parte maior desses grupos é considerada pouco ameaçada. Mesmo assim, os pesquisadores lembram que ainda é preciso ter cuidado com esses animais.",
+  q:"O texto pertence ao gênero notícia porque",
+  o:["expressa apenas a opinião do autor.","apresenta um enredo inventado.","informa um fato importante para a sociedade.","conta uma piada."],
+  a:2,
+  e:"A notícia informa um fato real e relevante (o resultado de um estudo sobre as tartarugas marinhas), característica típica desse gênero.",
+  s:"Currículo SAS · Características do gênero"
+},
+{
+  t:"Releia: \"<b>Hoje</b>, uma parte maior desses grupos é considerada pouco ameaçada.\"",
+  q:"No trecho, a palavra \"Hoje\" é um advérbio que indica",
+  o:["intensidade, apresentando a força da ameaça.","modo, revelando como os grupos são observados.","lugar, mostrando onde os dados foram coletados.","tempo, demonstrando que a informação é atual."],
+  a:3,
+  e:"\"Hoje\" é um advérbio de tempo: mostra que aquela informação se refere ao momento atual, em comparação com os anos anteriores.",
+  s:"Currículo SAS · Sentido de advérbio"
+},
+{
+  t:"Leia as manchetes.<br><b>Manchete 1:</b> \"Motorista deixa a mochila no banco de <b>trás</b> do carro.\"<br><b>Manchete 2:</b> \"Nova biblioteca <b>traz</b> mais livros para a escola.\"",
+  q:"Sobre o uso das palavras \"trás\" e \"traz\", marque a opção correta.",
+  o:["\"Trás\", na manchete 1, indica lugar (a parte de atrás).","\"Trás\", na manchete 1, indica a ação de conduzir.","\"Traz\", na manchete 2, indica um lugar.","\"Traz\", na manchete 2, tem o sentido de \"atrás\"."],
+  a:0,
+  e:"\"Trás\" indica lugar (o banco de trás). \"Traz\" é o verbo trazer (a biblioteca traz livros). Por isso, a correta é a que associa \"trás\" a lugar e reconhece \"traz\" como verbo.",
+  s:"Currículo SAS · Homófonos trás/traz"
+},
+{
+  t:"Leia o título de uma notícia e observe a palavra destacada.<br><b>\"Prefeitura <u>traz</u> show gratuito para a praça\"</b>",
+  q:"No título, a palavra \"traz\" foi usada, em vez de \"trás\", para",
+  o:["mostrar uma direção.","indicar a ação de conduzir ou oferecer algo.","indicar um lugar específico.","ter o mesmo sentido de \"após\"."],
+  a:1,
+  e:"\"Traz\" é forma do verbo trazer: a prefeitura conduz/oferece o show à cidade. \"Trás\" (com s) só indicaria lugar, o que não é o caso.",
+  s:"Currículo SAS · Homófonos trás/traz"
+},
+{
+  t:"<span class=\"titulo\">Leia o texto e responda às questões 27 a 29.</span>\n     <b>Tudo está conectado</b><br>Na natureza, nenhum ser vivo vive sozinho. Plantas, animais e até os pequenos organismos do solo dependem uns dos outros. Por isso, quando uma floresta é destruída, não é apenas uma espécie que sofre: muitas outras, ligadas a ela, também são prejudicadas. Preservar o meio ambiente, portanto, é proteger a vida de todos, inclusive a nossa.",
+  q:"Qual é a principal função desse texto?",
+  o:["Ensinar a plantar uma árvore.","Divertir o leitor com uma história.","Informar sobre a importância de preservar o meio ambiente.","Convencer o leitor a criar animais em casa."],
+  a:2,
+  e:"O texto é informativo: explica por que a natureza é interligada e por que preservar o meio ambiente é importante para todos.",
+  s:"Currículo SAS · Função social do texto"
+},
+{
+  t:"Releia: \"quando uma floresta é destruída, não é apenas uma espécie que sofre: muitas outras, ligadas a ela, também são prejudicadas.\"",
+  q:"De acordo com o texto, quando uma floresta é destruída,",
+  o:["nenhum ser vivo é afetado.","só os seres humanos sofrem.","apenas uma espécie é prejudicada.","muitas espécies ligadas a ela são prejudicadas."],
+  a:3,
+  e:"O texto afirma que não é só uma espécie que sofre: por causa das ligações da natureza, muitas outras também são prejudicadas.",
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  t:"Releia: \"Plantas, animais e até os pequenos organismos do solo dependem uns dos outros.\"",
+  q:"Segundo o texto, por que os impactos no meio ambiente afetam muitas espécies?",
+  o:["Porque os seres vivos dependem uns dos outros.","Porque as florestas são pequenas.","Porque os animais não têm alimento.","Porque as plantas são frágeis."],
+  a:0,
+  e:"A explicação está no texto: como os seres vivos são interligados e dependem uns dos outros, um impacto acaba atingindo várias espécies.",
+  s:"Currículo SAS · Inferência/relação de causa"
+},
+{
+  t:"<span class=\"titulo\">Leia o texto e responda às questões 30 a 32.</span>\n     <b>A Amazônia é mesmo o \"pulmão do mundo\"?</b><br>Muita gente repete que a Floresta Amazônica produz o oxigênio que respiramos. Cientistas explicam que isso não é bem assim: a floresta produz oxigênio, mas quase todo ele é usado por ela mesma. Ainda assim, a Amazônia é muito importante, pois ajuda a equilibrar o clima e influencia as chuvas em grande parte do país.",
+  q:"Um dos objetivos desse texto é",
+  o:["ensinar a plantar árvores.","informar e corrigir uma ideia comum sobre a Amazônia.","convencer o leitor a visitar a floresta.","contar uma história divertida."],
+  a:1,
+  e:"O texto informa e ao mesmo tempo corrige a ideia popular de que a Amazônia é o \"pulmão do mundo\", explicando o que os cientistas dizem.",
+  s:"Currículo SAS · Objetivo do texto"
+},
+{
+  t:"Releia: \"a Amazônia... ajuda a equilibrar o clima e influencia as chuvas em grande parte do país.\"",
+  q:"De acordo com o texto, a Amazônia é responsável por",
+  o:["aumentar o calor do país.","fornecer todo o oxigênio do planeta.","ajudar a equilibrar o clima e influenciar as chuvas.","produzir energia elétrica."],
+  a:2,
+  e:"Mesmo não sendo o 'pulmão do mundo', o texto destaca que a Amazônia ajuda a equilibrar o clima e influencia o regime de chuvas.",
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  q:"Qual trecho ajuda a rebater a ideia de que a Amazônia é o \"pulmão do mundo\"?",
+  o:["\"a Amazônia é muito importante\".","\"influencia as chuvas em grande parte do país\".","\"ajuda a equilibrar o clima\".","\"a floresta produz oxigênio, mas quase todo ele é usado por ela mesma\"."],
+  a:3,
+  e:"Para rebater a ideia, é preciso mostrar que a floresta não fornece o oxigênio que se imaginava: ela produz, mas usa quase tudo para si.",
+  s:"Currículo SAS · Localizar argumento"
+},
+{
+  t:"<span class=\"titulo\">Leia o texto e responda às questões 33 a 35.</span>\n     Além das frutas e verduras conhecidas, existem plantas menos comuns que também podem ser aproveitadas na alimentação. Elas são chamadas de PANC, sigla para Plantas Alimentícias Não Convencionais. Se uma planta é ou não PANC depende da região <b>onde</b> ela cresce e dos costumes das pessoas do lugar. Veja alguns exemplos:\n     <table class=\"tbl\"><thead><tr><th>Região</th><th>Exemplo de PANC</th></tr></thead>\n     <tbody>\n     <tr><td>Norte</td><td>Bertalha</td></tr>\n     <tr><td>Nordeste</td><td>Vinagreira</td></tr>\n     <tr><td>Centro-Oeste</td><td>Dente-de-leão</td></tr>\n     <tr><td>Sudeste</td><td>Ora-pro-nóbis</td></tr>\n     <tr><td>Sul</td><td>Azedinha</td></tr>\n     </tbody></table>",
+  q:"De acordo com o texto, o que são as PANC?",
+  o:["Plantas pouco conhecidas que podem ser comidas.","Plantas que não servem para alimentação.","Partes estragadas das plantas.","Frutas comuns vendidas no mercado."],
+  a:0,
+  e:"O texto define PANC como Plantas Alimentícias Não Convencionais: plantas menos conhecidas que também podem ser aproveitadas na alimentação.",
+  s:"Currículo SAS · Compreensão de conceito"
+},
+{
+  t:"<table class=\"tbl\"><thead><tr><th>Região</th><th>Exemplo de PANC</th></tr></thead>\n     <tbody>\n     <tr><td>Norte</td><td>Bertalha</td></tr>\n     <tr><td>Nordeste</td><td>Vinagreira</td></tr>\n     <tr><td>Centro-Oeste</td><td>Dente-de-leão</td></tr>\n     <tr><td>Sudeste</td><td>Ora-pro-nóbis</td></tr>\n     <tr><td>Sul</td><td>Azedinha</td></tr>\n     </tbody></table>",
+  q:"Segundo a tabela, a vinagreira é indicada como PANC de qual região?",
+  o:["Norte.","Nordeste.","Sudeste.","Sul."],
+  a:1,
+  e:"Na tabela, a vinagreira aparece na linha da região Nordeste.",
+  s:"Currículo SAS · Localizar informação em tabela"
+},
+{
+  t:"Releia: \"depende da região <b>onde</b> ela cresce e dos costumes das pessoas do lugar.\"",
+  q:"No trecho, a palavra \"onde\" indica",
+  o:["uma direção a ser seguida.","uma noção de tamanho da área.","uma localização fixa (o lugar).","uma ideia de movimento."],
+  a:2,
+  e:"A palavra \"onde\" se refere ao lugar em que a planta cresce — indica localização, um ponto fixo, e não movimento ou direção.",
+  s:"Currículo SAS · Sentido de \"onde\""
+},
+{
+  t:"<span class=\"titulo\">Leia o texto e responda às questões 36 a 38.</span>\n     Uma pesquisa mostrou que o número de leitores no país caiu nos últimos anos. Os dados indicam que muitas pessoas passaram a ler menos livros, impressos ou digitais. A tabela abaixo mostra a média de livros lidos em três meses, por tipo de leitura:\n     <table class=\"tbl\"><thead><tr><th>Tipo de leitura</th><th>Média</th></tr></thead>\n     <tbody>\n     <tr><td>Livros inteiros</td><td>0,82</td></tr>\n     <tr><td>Livros indicados pela escola</td><td>0,43</td></tr>\n     <tr><td>Livros lidos por vontade própria</td><td>1,34</td></tr>\n     <tr><td>Leitura de literatura por vontade própria</td><td>0,69</td></tr>\n     </tbody></table>",
+  q:"De acordo com o texto, o hábito de leitura no Brasil",
+  o:["melhorou entre os estudantes.","continuou exatamente igual.","aumentou muito nos últimos anos.","diminuiu, com queda no interesse por livros."],
+  a:3,
+  e:"O texto afirma que o número de leitores caiu e que as pessoas passaram a ler menos — ou seja, o hábito de leitura diminuiu.",
+  s:"Currículo SAS · Compreensão global"
+},
+{
+  t:"<table class=\"tbl\"><thead><tr><th>Tipo de leitura</th><th>Média</th></tr></thead>\n     <tbody>\n     <tr><td>Livros inteiros</td><td>0,82</td></tr>\n     <tr><td>Livros indicados pela escola</td><td>0,43</td></tr>\n     <tr><td>Livros lidos por vontade própria</td><td>1,34</td></tr>\n     <tr><td>Leitura de literatura por vontade própria</td><td>0,69</td></tr>\n     </tbody></table>",
+  q:"Segundo a tabela, o tipo de leitura com a maior média foi",
+  o:["\"Livros lidos por vontade própria\".","\"Leitura de literatura por vontade própria\".","\"Livros inteiros\".","\"Livros indicados pela escola\"."],
+  a:0,
+  e:"Comparando os números, 1,34 é o maior valor da tabela — corresponde a \"Livros lidos por vontade própria\".",
+  s:"Currículo SAS · Localizar informação em tabela"
+},
+{
+  t:"Releia: \"A maioria dos entrevistados cita a própria casa como o lugar <b>onde</b> costuma ler.\"",
+  q:"Nesse trecho, a palavra destacada foi usada para",
+  o:["mostrar um caminho percorrido.","indicar um local fixo.","dar a ideia de movimento.","apresentar uma explicação."],
+  a:1,
+  e:"\"Onde\" aponta o lugar em que as pessoas costumam ler (a própria casa) — indica um local fixo, sem ideia de deslocamento.",
+  s:"Currículo SAS · Sentido de \"onde\""
+},
+{
+  t:"<span class=\"titulo\">Leia a descrição de um cartum.</span>\n     Uma tartaruga marinha aparece nadando cercada de sacolas e garrafas plásticas no fundo do mar. Ela diz: \"Cada dia tem mais 'comida' estranha por aqui!\"",
+  q:"Qual comportamento está sendo criticado no cartum?",
+  o:["O excesso de peixes no oceano.","O desperdício de comida em festas.","O descarte inadequado de lixo no mar.","A caça de tartarugas."],
+  a:2,
+  e:"O cartum critica o lixo jogado no mar: ao chamar o plástico de 'comida', mostra o perigo que o descarte incorreto causa aos animais.",
+  s:"Currículo SAS · Compreensão de cartum"
+},
+{
+  t:"Releia a descrição: a tartaruga, cercada de plástico, confunde o lixo com comida no fundo do mar.",
+  q:"Esse cartum tem o objetivo de",
+  o:["ensinar receitas de comida do mar.","apenas divertir com a fala da tartaruga.","informar sobre as espécies de tartarugas.","conscientizar sobre os danos da poluição aos animais."],
+  a:3,
+  e:"Mais do que fazer rir, o cartum quer conscientizar o leitor sobre como a poluição da água prejudica os animais marinhos.",
+  s:"Currículo SAS · Finalidade do texto"
+},
+{
+  t:"Nos cartuns, os recursos visuais ajudam a mostrar a crítica. No cartum da tartaruga cercada de lixo:",
+  q:"Qual recurso visual reforça a crítica feita?",
+  o:["O desenho de garrafas e sacolas plásticas no fundo do mar.","A representação de um oceano totalmente limpo.","O contorno de peixes coloridos.","A ausência de qualquer objeto na água."],
+  a:0,
+  e:"A imagem do plástico espalhado no fundo do mar é o recurso visual que deixa clara a crítica à poluição.",
+  s:"Currículo SAS · Recurso visual"
+},
+{
+  t:"<span class=\"titulo\">Leia a descrição de outro cartum.</span>\n     Um mosquito, pousado sobre um monte de pneus velhos e garrafas com água parada, comenta: \"Que lugar perfeito para morar!\"",
+  q:"Esse cartum faz uma crítica",
+  o:["à quantidade de casas nas cidades.","ao acúmulo de água parada, que ajuda o mosquito da dengue.","ao tratamento dado aos insetos.","à chegada do verão nas cidades."],
+  a:1,
+  e:"O mosquito 'gosta' do lixo com água parada porque é onde ele se reproduz. O cartum critica esse acúmulo, que favorece a dengue.",
+  s:"Currículo SAS · Compreensão de cartum"
+},
+{
+  t:"<span class=\"titulo\">Leia a descrição de uma tirinha.</span>\n     Um menino estende a mão e pede ao seu cachorro: \"Dá a pata!\". No quadrinho seguinte, o cachorro aparece segurando a pata (o pé) de uma galinha e a entrega ao menino.",
+  q:"O humor da tirinha acontece por causa",
+  o:["da rapidez do cachorro em obedecer.","da recusa do cachorro em obedecer.","dos dois sentidos da palavra \"pata\".","do jeito como o menino faz o pedido."],
+  a:2,
+  e:"A graça está na palavra \"pata\", que tem dois sentidos: a pata do próprio cachorro e a pata (pé) de outro animal, a galinha.",
+  s:"Currículo SAS · Humor e polissemia"
+},
+{
+  t:"<span class=\"titulo\">Leia a descrição de um cartum.</span>\n     Dois amigos observam um robô jogando um papel no chão. Um deles comenta: \"Os robôs já ficaram tão inteligentes quanto a gente!\"",
+  q:"Por que esse texto é considerado um cartum?",
+  o:["Porque traz dados reais sobre robôs.","Porque tem um narrador que também é personagem.","Porque conta uma história longa com muitos personagens.","Porque apresenta uma crítica de forma engraçada."],
+  a:3,
+  e:"O cartum é um texto curto que faz uma crítica com humor. Aqui, brinca-se com o hábito humano de jogar lixo no chão.",
+  s:"Currículo SAS · Características do gênero"
+},
+{
+  t:"Releia: o robô joga lixo no chão e um amigo diz que os robôs ficaram \"tão inteligentes quanto a gente\".",
+  q:"O cartum apresenta a ideia de que o robô",
+  o:["imita uma atitude humana inadequada (jogar lixo no chão).","está limpando o ambiente.","age de forma totalmente diferente dos humanos.","é mais educado que as pessoas."],
+  a:0,
+  e:"A ironia é que o robô 'ficou inteligente' justamente ao copiar um mau hábito das pessoas: jogar lixo no chão.",
+  s:"Currículo SAS · Compreensão de cartum"
+},
+{
+  t:"<span class=\"titulo\">Leia a descrição de outro cartum.</span>\n     Um homem pergunta a uma pessoa toda suja e coberta de restos de lixo: \"Você veio do lixão?\". A pessoa responde, tranquila: \"Não! Vim da praia!\" — e, ao fundo, aparece uma praia cheia de garrafas e latas.",
+  q:"O efeito de humor desse cartum é reforçado por qual recurso visual?",
+  o:["A ausência de objetos na areia.","A representação da pessoa coberta de lixo, apesar de dizer que veio da praia.","O desenho detalhado do céu ao fundo.","O tamanho exagerado das nuvens."],
+  a:1,
+  e:"O humor (e a crítica) vem do contraste visual: a praia deveria ser limpa, mas está tão cheia de lixo que parece um lixão.",
+  s:"Currículo SAS · Recurso visual"
+},
+{
+  t:"<span class=\"titulo\">Leia a descrição de um cartum.</span>\n     Dois peixes nadam entre sacolas plásticas que boiam na água. Um diz ao outro: \"Você também está vendo essas coisas estranhas por toda parte?\"",
+  q:"Esse cartum apresenta uma crítica relacionada",
+  o:["à falta de comida no oceano.","à elevação do nível do mar.","à poluição dos mares.","ao consumo de peixes."],
+  a:2,
+  e:"As sacolas plásticas boiando por toda parte mostram que a crítica é à poluição dos mares, que invade o ambiente dos peixes.",
+  s:"Currículo SAS · Compreensão de cartum"
+},
+{
+  t:"<span class=\"titulo\">Leia a descrição de uma tirinha.</span>\n     Um autor diz, empolgado, que vai fazer o \"lançamento\" do seu livro. No último quadrinho, em vez de apresentar a obra numa festa, ele simplesmente joga (lança) o livro para o alto.",
+  q:"O que causa o humor da tirinha?",
+  o:["A briga entre os personagens.","O exagero na fala do autor.","O assunto que o autor escolheu para o livro.","Os dois sentidos da palavra \"lançamento\"."],
+  a:3,
+  e:"A graça está na palavra \"lançamento\": pode significar apresentar uma obra ao público ou, literalmente, atirar/lançar algo. A tirinha brinca com esses dois sentidos.",
+  s:"Currículo SAS · Humor e polissemia"
+}
+];
+
+/* ---------- estado ---------- */
+let idx = 0, answered = 0, hits = 0;
+const answeredMap = {};
+const orders = {};
+
+/* embaralha a ordem de exibição das alternativas de cada questão */
+function shuffleOrders(){
+  QUESTIONS.forEach((q,qi)=>{
+    const a=[0,1,2,3];
+    for(let k=a.length-1;k>0;k--){
+      const j=Math.floor(Math.random()*(k+1));
+      [a[k],a[j]]=[a[j],a[k]];
+    }
+    orders[qi]=a;
+  });
+}
+shuffleOrders();
+
+const quiz = document.getElementById('quiz');
+const elAnswered = document.getElementById('answered');
+const elHits = document.getElementById('hits');
+const elCounter = document.getElementById('counter');
+const elBar = document.getElementById('bar');
+const LETTERS = ['A','B','C','D'];
+
+function render(){
+  const q = QUESTIONS[idx];
+  const done = answeredMap[idx] !== undefined;
+  const chosen = done ? answeredMap[idx] : null;
+
+  let opts = '';
+  const order = orders[idx] || [0,1,2,3];
+  order.forEach((orig,pos)=>{
+    let cls = 'opt';
+    if(done){
+      if(orig===q.a) cls+=' correct';
+      else if(orig===chosen) cls+=' wrong';
+    }
+    opts += `<button class="${cls}" data-i="${orig}" ${done?'disabled':''}>
+      <span class="letter">${LETTERS[pos]}</span><span>${q.o[orig]}</span></button>`;
+  });
+
+  let fb = '';
+  if(done){
+    const ok = chosen===q.a;
+    fb = `<div class="fb ${ok?'ok':'no'} show">
+      <div class="verdict">${ok?'Isso mesmo!':'Ainda não é essa.'}</div>
+      <div>${q.e}</div></div>`;
+  }
+
+  const last = idx===QUESTIONS.length-1;
+  quiz.innerHTML = `
+    <div class="card">
+      <div class="qhead">
+        <span class="qnum">${idx+1}</span>
+        <span class="skill">${q.s}</span>
+      </div>
+      ${q.t?`<div class="contexto">${q.t}</div>`:''}
+      <div class="stem">${q.q}</div>
+      <div class="opts">${opts}</div>
+      ${fb}
+      <div class="actions">
+        <button class="btn ghost" id="prev" ${idx===0?'disabled':''}>Anterior</button>
+        <button class="btn primary" id="next" ${done?'':'disabled'}>${last?'Ver resumo':'Próxima'}</button>
+      </div>
+    </div>`;
+
+  quiz.querySelectorAll('.opt').forEach(b=>{
+    b.addEventListener('click',()=>choose(parseInt(b.dataset.i,10)));
+  });
+  const prev = document.getElementById('prev');
+  if(prev) prev.addEventListener('click',()=>{ if(idx>0){idx--;render();} });
+  document.getElementById('next').addEventListener('click',()=>{
+    if(last){ showResumo(); } else { idx++; render(); }
+  });
+
+  elCounter.textContent = `${idx+1}/${QUESTIONS.length}`;
+  updateBar();
+}
+
+function choose(i){
+  if(answeredMap[idx]!==undefined) return;
+  answeredMap[idx]=i;
+  answered++;
+  if(i===QUESTIONS[idx].a) hits++;
+  elAnswered.textContent=answered;
+  elHits.textContent=hits;
+  render();
+}
+
+function updateBar(){
+  elBar.style.width = (answered/QUESTIONS.length*100)+'%';
+}
+
+function showResumo(){
+  const total = QUESTIONS.length;
+  const pct = Math.round(hits/total*100);
+  let msg;
+  if(pct>=80) msg='Excelente! Você domina bem as habilidades desta prova.';
+  else if(pct>=60) msg='Bom trabalho! Revise os pontos que errou e siga em frente.';
+  else if(pct>=40) msg='Você está no caminho. Vale reler os textos com calma e treinar de novo.';
+  else msg='Sem problema — a prática é para isso. Tente de novo com atenção aos textos.';
+
+  quiz.innerHTML = `
+    <div class="card resumo">
+      <span class="kicker">Resumo</span>
+      <h2>Prova concluída!</h2>
+      <div class="bigscore">${hits}/${total}</div>
+      <p>Você acertou <b>${pct}%</b> das questões.</p>
+      <p>Respondidas: ${answered} de ${total}</p>
+      <p style="margin-top:14px">${msg}</p>
+      <div class="actions" style="justify-content:center;margin-top:22px">
+        <button class="btn primary" id="restart">Recomeçar</button>
+      </div>
+    </div>`;
+  document.getElementById('restart').addEventListener('click',restart);
+  elBar.style.width='100%';
+}
+
+function restart(){
+  idx=0; answered=0; hits=0;
+  for(const k in answeredMap) delete answeredMap[k];
+  shuffleOrders();
+  elAnswered.textContent='0';
+  elHits.textContent='0';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
