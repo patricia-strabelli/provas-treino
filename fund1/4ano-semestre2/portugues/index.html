@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2ª Prova Treino · 4º ano — Língua Portuguesa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pt:#d64545;          /* cor da disciplina: Língua Portuguesa */
+    --pt-soft:#fbeaea;
+    --ink:#1f2733;
+    --muted:#5c6672;
+    --line:#e7e9ee;
+    --bg:#f5f6f8;
+    --card:#ffffff;
+    --ok:#2e7d32; --ok-bg:#e7f4e9; --ok-line:#bfe0c5;
+    --no:#c62828; --no-bg:#fdecea; --no-line:#f4c7c2;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Public Sans",system-ui,Arial,sans-serif;
+    line-height:1.55;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:20px 16px 64px}
+  header.top{text-align:center;padding:22px 8px 8px}
+  .kicker{
+    display:inline-block;font-family:"Space Mono",monospace;font-size:12px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--pt);
+    background:var(--pt-soft);padding:4px 10px;border-radius:999px;margin-bottom:12px;
+  }
+  h1{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+    font-size:clamp(26px,6vw,40px);margin:0;line-height:1.05;letter-spacing:-.01em;
+  }
+  .sub{color:var(--muted);margin-top:8px;font-size:15px}
+  .tabs{display:flex;justify-content:center;gap:8px;margin:18px 0 6px;flex-wrap:wrap}
+  .tab{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14px;
+    padding:8px 16px;border-radius:999px;border:2px solid var(--pt);
+    color:#fff;background:var(--pt);
+  }
+  .scorebar{
+    display:flex;gap:10px;justify-content:center;margin:14px 0 6px;flex-wrap:wrap;
+  }
+  .chip{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:8px 14px;font-size:13px;color:var(--muted);min-width:120px;text-align:center;
+  }
+  .chip b{
+    display:block;font-family:"Space Mono",monospace;font-size:20px;color:var(--ink);
+  }
+  .progress{height:8px;background:#e9ebf0;border-radius:999px;overflow:hidden;margin:14px 2px 22px}
+  .progress > i{display:block;height:100%;width:0;background:var(--pt);transition:width .25s ease}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:22px 20px;box-shadow:0 1px 2px rgba(20,30,50,.04);
+  }
+  .qhead{display:flex;align-items:baseline;gap:12px;margin-bottom:8px}
+  .qnum{
+    font-family:"Space Mono",monospace;font-weight:700;font-size:22px;color:var(--pt);
+    background:var(--pt-soft);border-radius:10px;padding:2px 12px;flex:none;
+  }
+  .skill{
+    margin-left:auto;font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted);border:1px dashed var(--line);
+    padding:3px 8px;border-radius:8px;flex:none;
+  }
+  .contexto{
+    background:#fafbfc;border:1px solid var(--line);border-left:4px solid var(--pt);
+    border-radius:10px;padding:14px 16px;margin:6px 0 16px;font-size:15.5px;color:#26303c;
+  }
+  .contexto .titulo{font-weight:700;display:block;margin-bottom:6px}
+  .contexto .fonte{display:block;margin-top:10px;font-size:12px;color:var(--muted);font-style:italic}
+  pre.poema{
+    font-family:"Space Mono",monospace;font-size:15px;line-height:1.6;
+    background:#fff;border:1px dashed var(--line);border-radius:8px;
+    padding:14px;margin:8px 0;text-align:left;overflow-x:auto;white-space:pre-wrap;
+  }
+  table.tbl{border-collapse:collapse;width:100%;margin:8px 0;font-size:14.5px}
+  table.tbl th,table.tbl td{border:1px solid var(--line);padding:8px 10px;text-align:left}
+  table.tbl th{background:var(--pt-soft);color:#7a2a2a;font-family:"Bricolage Grotesque",sans-serif}
+  table.tbl tr:nth-child(even) td{background:#fafbfc}
+
+  .stem{font-size:17px;font-weight:600;margin:4px 0 14px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{
+    display:flex;gap:12px;align-items:flex-start;text-align:left;
+    background:#fff;border:1.5px solid var(--line);border-radius:12px;
+    padding:12px 14px;font-size:16px;cursor:pointer;transition:border-color .15s,background .15s;
+    font-family:inherit;color:var(--ink);width:100%;
+  }
+  .opt:hover:not(:disabled){border-color:var(--pt)}
+  .opt .letter{
+    font-family:"Space Mono",monospace;font-weight:700;color:var(--muted);flex:none;
+    width:24px;height:24px;border-radius:7px;background:#f0f1f4;
+    display:grid;place-items:center;font-size:14px;
+  }
+  .opt.sel{border-color:var(--pt);background:var(--pt-soft)}
+  .opt.correct{border-color:var(--ok-line);background:var(--ok-bg)}
+  .opt.correct .letter{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--no-line);background:var(--no-bg)}
+  .opt.wrong .letter{background:var(--no);color:#fff}
+  .opt:disabled{cursor:default}
+
+  .fb{margin-top:16px;border-radius:12px;padding:14px 16px;font-size:15px;display:none}
+  .fb.show{display:block}
+  .fb.ok{background:var(--ok-bg);border:1px solid var(--ok-line)}
+  .fb.no{background:var(--no-bg);border:1px solid var(--no-line)}
+  .fb .verdict{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;margin-bottom:4px}
+  .fb.ok .verdict{color:var(--ok)}
+  .fb.no .verdict{color:var(--no)}
+
+  .actions{display:flex;gap:12px;justify-content:flex-end;margin-top:20px}
+  button.btn{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:15px;
+    border:none;border-radius:12px;padding:12px 22px;cursor:pointer;
+  }
+  .btn.primary{background:var(--pt);color:#fff}
+  .btn.primary:disabled{opacity:.4;cursor:not-allowed}
+  .btn.ghost{background:#eef0f3;color:var(--ink)}
+
+  .resumo{text-align:center;padding:28px 20px}
+  .resumo h2{font-family:"Bricolage Grotesque",sans-serif;font-size:28px;margin:0 0 6px}
+  .bigscore{font-family:"Space Mono",monospace;font-size:52px;font-weight:700;color:var(--pt);margin:10px 0}
+  .resumo p{color:var(--muted);margin:4px 0}
+  .footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <span class="kicker">2ª Prova Treino · 4º ano</span>
+    <h1>Língua Portuguesa</h1>
+    <div class="sub">Modo prática · versão combinada · correção na hora, sem nota</div>
+    <div class="tabs"><span class="tab">Língua Portuguesa</span></div>
+  </header>
+
+  <div class="scorebar">
+    <div class="chip">Respondidas <b id="answered">0</b></div>
+    <div class="chip">Acertos <b id="hits">0</b></div>
+    <div class="chip">Questão <b id="counter">1/48</b></div>
+  </div>
+  <div class="progress"><i id="bar"></i></div>
+
+  <div id="quiz"></div>
+
+  <div class="footer">Prova Treino · uso pedagógico · textos autorais que avaliam as mesmas habilidades da avaliação.</div>
+</div>
+
+<script>
+const QUESTIONS = [
+/* ===================== BLOCO 1 — Poema (edição A) ===================== */
+{
+  t:`<span class="titulo">Leia o poema e responda às questões 1 e 2.</span>
+     <b>O menino que queria voar</b>
+     <pre class="poema">Este menino,
+tão pequenino,
+quer ser aviador.
+
+Abre os bracinhos,
+corre baixinho
+e grita: — Sou voador!
+
+Sobe na janela,
+diz que vê o mar,
+que passa das nuvens
+e chega ao luar.
+
+Mas, quando anoitece,
+esquece o avião
+e dorme sossegado,
+de sonho no coração.</pre>`,
+  q:"O poema fala sobre um menino que quer ser aviador. De acordo com o poema, o menino",
+  o:["já sabe pilotar um avião de verdade.","brinca imaginando que voa como um aviador.","tem medo de altura e não quer voar.","desistiu de ser aviador."],
+  a:1,
+  e:"O poema mostra o menino de faz de conta: ele abre os bracinhos, corre e grita que é voador. Ou seja, ele brinca imaginando que voa.",
+  s:"Currículo SAS · Compreensão de poema"
+},
+{
+  t:`<pre class="poema">Sobe na janela,
+diz que vê o mar,
+que passa das nuvens
+e chega ao luar.</pre>`,
+  q:"As rimas dão ritmo ao poema. Um par de palavras que rimam nesse trecho é",
+  o:['"janela" e "nuvens".','"mar" e "luar".','"menino" e "avião".','"voar" e "sonho".'],
+  a:1,
+  e:'Rimam as palavras que terminam com o mesmo som. "Mar" e "luar" terminam com o som "-ar" — por isso rimam.',
+  s:"Currículo SAS · Rima em poema"
+},
+
+/* ===================== BLOCO 2 — Poema (edição B) ===================== */
+{
+  t:`<span class="titulo">Leia o poema e responda às questões 3 e 4.</span>
+     <b>O tamanho das coisas</b>
+     <pre class="poema">Para a joaninha, a folha
+é um imenso lençol.
+Para mim, a mesma folha
+some dentro do meu bolso.
+
+Para a criança pequena,
+a poça vira um mar.
+O tamanho de uma coisa
+depende de quem olhar.</pre>`,
+  q:"A principal mensagem do poema é:",
+  o:["as folhas são maiores do que parecem.","o tamanho das coisas depende de quem observa.","as joaninhas vivem sempre sobre as folhas.","as crianças gostam de nadar no mar."],
+  a:1,
+  e:'O poema compara olhares diferentes (joaninha, adulto, criança) e conclui: "o tamanho de uma coisa depende de quem olhar". Ou seja, depende do ponto de vista de quem observa.',
+  s:"Currículo SAS · Mensagem do poema"
+},
+{
+  q:"Qual característica comum em poemas pode ser observada no texto lido?",
+  o:["A ausência de rimas.","A presença de rimas.","A falta de versos.","A ausência de qualquer imagem."],
+  a:1,
+  e:'O texto está escrito em versos e apresenta rimas (por exemplo, "mar" e "olhar"). A presença de rimas é uma característica comum dos poemas.',
+  s:"Currículo SAS · Características do gênero"
+},
+
+/* ===================== BLOCO 3 — Texto informativo (edição A) ===================== */
+{
+  t:`<span class="titulo">Leia o texto e responda às questões 5 a 7.</span>
+     <b>Os pequenos gigantes do mar</b>
+     Quando pensamos no mar, logo imaginamos baleias, golfinhos e tubarões. Mas a maior parte da vida marinha é formada por seres tão pequenos que nem conseguimos ver a olho nu. Eles vivem entre os grãos de areia, dentro das conchas e no meio das algas. Para observá-los, os cientistas usam lentes de aumento e microscópios. Mesmo minúsculos, esses seres são muito importantes: servem de alimento para um peixe pequeno e ajudam a manter o equilíbrio dos oceanos. Entre eles também há filhotes de animais famosos, como a estrela-do-mar e o cavalo-marinho.`,
+  q:"De acordo com o texto, a maior parte da vida marinha é formada por",
+  o:["baleias e golfinhos.","seres muito pequenos, difíceis de ver.","tubarões e peixes grandes.","conchas e pedras."],
+  a:1,
+  e:"O texto afirma que a maior parte da vida marinha é feita de seres tão pequenos que não dá para ver a olho nu — por isso são difíceis de enxergar.",
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  t:`Releia o trecho: "servem de alimento para <b>um peixe</b> pequeno."`,
+  q:'Qual palavra pode substituir o termo "peixe" sem alterar o uso do artigo "um"?',
+  o:["Algas.","Caranguejo.","Baleias.","Conchas."],
+  a:1,
+  e:'O artigo "um" acompanha palavras masculinas no singular. "Caranguejo" é masculina e singular ("um caranguejo"). As demais são femininas ou plurais e pediriam "uma" ou "uns/umas".',
+  s:"Currículo SAS · Substantivo e artigo"
+},
+{
+  t:`Releia: "há filhotes de animais famosos, como a <b>estrela-do-mar</b> e o cavalo-marinho."`,
+  q:"Qual das palavras a seguir é um substantivo composto?",
+  o:['"microscópio".','"estrela-do-mar".','"oceano".','"areia".'],
+  a:1,
+  e:'Substantivo composto é formado por mais de uma palavra. "Estrela-do-mar" é formada por "estrela", "do" e "mar" — por isso é composta.',
+  s:"Currículo SAS · Substantivo composto"
+},
+
+/* ===================== BLOCO 4 — Texto informativo (edição B) ===================== */
+{
+  t:`<span class="titulo">Leia o texto e responda às questões 8 a 10.</span>
+     <b>A casa emprestada do ermitão</b>
+     O caranguejo-ermitão, também chamado de caranguejo-de-concha, é um animalzinho comum nas praias brasileiras. Diferente dos outros caranguejos, ele tem a parte de trás do corpo bem molinha, sem casca para proteger. Por isso, para não virar comida de outros bichos, ele procura as conchas vazias, deixadas por caramujos, e usa uma concha como se fosse a sua casa. Quando cresce, troca a concha velha por outra maior. É por viver sempre sozinho, escondido, que ele ganhou o nome de "ermitão".`,
+  q:"Qual é o principal assunto do texto lido?",
+  o:["A vida dos caramujos nas praias.","A apresentação de informações sobre o caranguejo-ermitão.","A forma de encontrar conchas na areia.","A explicação de por que o mar é salgado."],
+  a:1,
+  e:"O texto inteiro fala sobre o caranguejo-ermitão: como é o corpo dele, por que usa conchas e de onde vem seu nome. Esse é o assunto principal.",
+  s:"Currículo SAS · Assunto principal"
+},
+{
+  t:`Releia: "O <b>caranguejo-ermitão</b>, também chamado de <b>caranguejo-de-concha</b>..."`,
+  q:"Por que os substantivos destacados são chamados de compostos?",
+  o:["Porque são formados por mais de uma palavra.","Porque nomeiam pessoas famosas.","Porque são muito difíceis de ler.","Porque vêm sempre acompanhados de números."],
+  a:0,
+  e:'Um substantivo composto é formado pela junção de mais de uma palavra, geralmente ligadas por hífen — é o caso de "caranguejo-ermitão" e "caranguejo-de-concha".',
+  s:"Currículo SAS · Substantivo composto"
+},
+{
+  q:"As frases a seguir foram retiradas do texto. Em qual delas existe um artigo indefinido?",
+  o:['"ele procura as conchas vazias".','"O caranguejo-ermitão... é um animalzinho comum".','"troca a concha velha por outra".','"a parte de trás do corpo".'],
+  a:1,
+  e:'O artigo indefinido "um" aparece em "é um animalzinho comum". As demais frases usam artigos definidos ("as", "a", "o"), que indicam algo específico.',
+  s:"Currículo SAS · Artigo indefinido"
+},
+
+/* ===================== BLOCO 5 — Crônica (edição A) ===================== */
+{
+  t:`<span class="titulo">Leia a crônica e responda às questões 11 a 13.</span>
+     <b>Minha irmã e as formigas</b>
+     Minha irmã Bia fazia aniversário em maio. Quando era pequena, ela adorava observar as formigas no quintal. Passava horas agachada, seguindo a fila delas até o formigueiro, e dava nome a cada uma. Num dia muito quente, apareceu uma formiga carregando uma migalha enorme, três vezes o tamanho dela. Eu, impaciente, queria empurrar a migalha só pra ver o que acontecia. Mas a Bia, com a calma de sempre, dizia: — Deixa ela trabalhar. E continuava ali, feliz da vida, torcendo pela formiguinha.`,
+  q:"O texto acima é uma crônica que trata de acontecimentos do cotidiano. Nele, o autor narra",
+  o:["uma memória de infância sobre a irmã.","uma viagem que fez sozinho.","uma briga entre formigas.","as regras de um jogo."],
+  a:0,
+  e:"O autor relembra como a irmã, quando pequena, gostava de observar as formigas. É uma lembrança da infância — uma memória sobre a irmã.",
+  s:"Currículo SAS · Gênero crônica"
+},
+{
+  t:`Releia: "Num dia muito <b>quente</b>, apareceu uma formiga carregando uma migalha."`,
+  q:'O termo "quente", em destaque, é um adjetivo que concorda com a palavra',
+  o:["formiga.","migalha.","dia.","irmã."],
+  a:2,
+  e:'O adjetivo "quente" caracteriza o "dia" — "um dia muito quente". Por isso concorda com a palavra "dia".',
+  s:"Currículo SAS · Adjetivo e concordância"
+},
+{
+  q:"As palavras a seguir foram retiradas do texto. No contexto da crônica, qual delas é um adjetivo?",
+  o:["formiga.","impaciente.","quintal.","aniversário."],
+  a:1,
+  e:'Adjetivo é a palavra que indica uma qualidade ou característica. "Impaciente" descreve como o narrador estava — por isso é um adjetivo. As outras são substantivos.',
+  s:"Currículo SAS · Classe de palavras"
+},
+
+/* ===================== BLOCO 6 — Crônica (edição B) ===================== */
+{
+  t:`<span class="titulo">Leia a crônica e responda às questões 14 a 16.</span>
+     <b>A ponte de corda</b>
+     No acampamento havia uma velha ponte de corda sobre o riacho. O Téo atravessou-a devagar, agarrado às cordas, de olhos quase fechados. Chegou do outro lado meio zonzo e respirou fundo. A monitora perguntou: — Você teve medo? E o Téo respondeu: — Não, eu fui muito corajoso! — Então por que atravessou de olhos fechados? Ele pensou um pouquinho e falou: — É que ser corajoso não é não ter medo. É atravessar a ponte mesmo com medo.`,
+  q:"O trecho faz parte de uma crônica. Qual é a principal mensagem desse trecho?",
+  o:["Quem é corajoso nunca sente medo.","Enfrentar o próprio medo é um ato de coragem.","É melhor não atravessar pontes.","O medo impede qualquer pessoa de agir."],
+  a:1,
+  e:"O Téo conclui que ser corajoso não é deixar de sentir medo, mas atravessar a ponte mesmo assim. Ou seja, enfrentar o próprio medo é um ato de coragem.",
+  s:"Currículo SAS · Mensagem da crônica"
+},
+{
+  t:`Releia: "havia uma <b>velha</b> ponte de corda sobre o riacho."`,
+  q:"No trecho, a palavra em destaque serve para caracterizar",
+  o:["a ponte, ajudando a descrever como ela era.","o riacho, indicando sua profundidade.","o Téo, explicando seu modo de ser.","a monitora, mostrando sua idade."],
+  a:0,
+  e:'O adjetivo "velha" descreve a ponte — "uma velha ponte de corda". Ele ajuda a caracterizar o objeto ponte.',
+  s:"Currículo SAS · Adjetivo — função"
+},
+{
+  t:`Releia: "Chegou do outro lado meio <b>zonzo</b> e respirou fundo."`,
+  q:'A palavra em destaque indica que o Téo estava',
+  o:["muito bravo.","meio tonto, atordoado.","com muita fome.","com pressa de voltar."],
+  a:1,
+  e:'"Zonzo" significa tonto, meio atordoado — combina com quem acabou de atravessar a ponte de olhos fechados e precisou respirar fundo.',
+  s:"Currículo SAS · Sentido de palavra no contexto"
+},
+
+/* ===================== BLOCO 7 — Ortografia -eza (edição A) ===================== */
+{
+  t:`Leia a frase: "A <b>beleza</b> daquele lugar encantava todos os visitantes."`,
+  q:'A palavra "beleza" é escrita com Z. Qual alternativa explica esse uso?',
+  o:["Porque começa com uma consoante.","Porque é um substantivo formado a partir de um adjetivo (belo).","Porque tem a última sílaba mais forte.","Porque veio de um verbo."],
+  a:1,
+  e:'"Beleza" é um substantivo formado a partir do adjetivo "belo", com o acréscimo de "-eza". Substantivos formados assim (belo → beleza, certo → certeza) são grafados com Z.',
+  s:"Currículo SAS · Ortografia -eza"
+},
+
+/* ===================== BLOCO 8 — Ortografia -oso / -eza (edição B) ===================== */
+{
+  t:`Releia a frase: "— Não, eu fui muito <b>corajoso</b>!"`,
+  q:'Por que a palavra em destaque é escrita com S?',
+  o:['Porque tem a sílaba "jo" como tônica.','Porque é um adjetivo formado a partir de um substantivo (coragem) e termina em "-oso".','Porque veio de um verbo.','Porque é um substantivo composto.'],
+  a:1,
+  e:'"Corajoso" vem do substantivo "coragem" e termina em "-oso". Adjetivos formados a partir de substantivos com essa terminação são escritos com S (coragem → corajoso, medo → medroso).',
+  s:"Currículo SAS · Ortografia -oso"
+},
+{
+  t:`A palavra "certeza" foi formada a partir do adjetivo "certo".`,
+  q:'Qual dos adjetivos a seguir também dá origem a um substantivo terminado em "-eza"?',
+  o:["Alto.","Rápido.","Redondo.","Simpático."],
+  a:2,
+  e:'De "redondo" forma-se "redondeza", terminada em "-eza", assim como "certo → certeza". "Alto" gera "altura" e "rápido" gera "rapidez", que têm outras terminações.',
+  s:"Currículo SAS · Formação de palavras"
+},
+
+/* ===================== BLOCO 9 — Teatro (edição A) ===================== */
+{
+  t:`<span class="titulo">Leia a cena de teatro e responda às questões 19 a 21.</span>
+     <b>A turma do quintal — Cena 2</b>
+     NARRADOR: Era fim de tarde no quintal. De repente, alguém chega saltitando.
+     <i>(Música alegre. Entra o Sapo Tomás.)</i>
+     SAPO TOMÁS: Alguém viu a Dona Tartaruga? Ela vive se atrasando...
+     NARRADOR: Esse é o Tomás, o sapo mais apressado da lagoa.
+     <i>(Passos bem lentos se aproximam.)</i>
+     TARTARUGA: Cheguei... cheguei... Estou quase lá.
+     NARRADOR: E essa é a Dona Cléo, a tartaruga. Ela é bem devagar, mas está sempre de bom humor.
+     <i>(Um assobio corta o ar. Entra o Grilo.)</i>
+     NARRADOR: E esse é o Grilo Zeca, o mais falante do quintal.`,
+  q:"De acordo com o texto, a personagem descrita como aquela que está sempre de bom humor é",
+  o:["o Sapo Tomás.","o Grilo Zeca.","a Dona Cléo, a tartaruga.","o narrador."],
+  a:2,
+  e:'O narrador diz sobre a tartaruga: "Ela é bem devagar, mas está sempre de bom humor." Por isso a resposta é a Dona Cléo.',
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  q:'O que os trechos entre parênteses e em itálico, como "(Música alegre. Entra o Sapo Tomás.)", indicam no texto?',
+  o:["Os efeitos sonoros e o modo como os personagens entram em cena.","Os créditos do autor da peça.","As falas que o público deve repetir.","O momento de encerrar a história."],
+  a:0,
+  e:"Em textos de teatro, esses trechos são as rubricas: indicam efeitos sonoros (a música, o assobio) e como os personagens agem e entram em cena.",
+  s:"Currículo SAS · Rubricas teatrais"
+},
+{
+  q:'No texto, os trechos iniciados por nomes de personagens (como "SAPO TOMÁS:") indicam',
+  o:["o que cada personagem deve falar.","o local em que cada cena ocorre.","o controle da iluminação.","o momento de encerrar a peça."],
+  a:0,
+  e:"No texto teatral, o nome do personagem seguido de dois-pontos mostra quem fala e o que aquela personagem deve dizer.",
+  s:"Currículo SAS · Estrutura do texto teatral"
+},
+
+/* ===================== BLOCO 10 — Teatro (edição B) ===================== */
+{
+  t:`<span class="titulo">Leia a cena de teatro e responda às questões 22 a 24.</span>
+     <b>A avó e o caderno — Cena 3</b>
+     <i>(Uma senhora entra, trazendo um caderno novo.)</i>
+     AVÓ: Lia, cheguei! Trouxe um presente pra você. Quer que eu te ensine a desenhar as letras?
+     <i>(A avó abre o caderno sobre a mesa.)</i>
+     LIA: <i>(curiosa, chegando perto)</i> Letras, vovó? Pra quê?
+     AVÓ: Ora, quando você aprender a escrever, vai poder ler. E, quando ler, vai poder viajar sem sair do lugar.
+     LIA: Viajar? Como assim, vovó? De trem?
+     AVÓ: Não, minha netinha. Viajar pela imaginação, dentro das histórias.`,
+  q:"Nessa cena de um texto teatral, a avó demonstra o desejo de que a neta",
+  o:["aprenda a ler e a escrever.","viaje de trem.","ganhe um caderno novo.","durma mais cedo."],
+  a:0,
+  e:"A avó quer ensinar a neta a desenhar as letras e diz que, sabendo escrever, ela vai poder ler. O desejo dela é que a neta aprenda a ler e a escrever.",
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  t:`Releia o seguinte trecho do texto: "<i>(Uma senhora entra, trazendo um caderno novo.)</i>"`,
+  q:"Qual é a função desse tipo de trecho em textos teatrais?",
+  o:["Apresentar as falas dos personagens.","Indicar como os atores devem agir em cena.","Dizer quem é o autor da peça.","Orientar o público a aplaudir."],
+  a:1,
+  e:"Esse tipo de trecho é uma rubrica: serve para indicar como os atores devem agir em cena — aqui, uma senhora entra trazendo um caderno.",
+  s:"Currículo SAS · Rubricas teatrais"
+},
+{
+  t:`Releia: "quando ler, vai poder <b>viajar sem sair do lugar</b>."`,
+  q:'Nesse trecho, "viajar sem sair do lugar" significa',
+  o:["usar a imaginação ao ler histórias.","andar de trem pela cidade.","dormir e sonhar à noite.","mudar de casa."],
+  a:0,
+  e:"A própria avó explica em seguida: viajar pela imaginação, dentro das histórias. Ou seja, é usar a imaginação ao ler.",
+  s:"Currículo SAS · Sentido figurado"
+},
+
+/* ===================== BLOCO 11 — Notícia (edição A) ===================== */
+{
+  t:`<span class="titulo">Leia a notícia e responda às questões 25 a 27.</span>
+     <b>Biblioteca da cidade abrirá sala de leitura infantil</b>
+     A Biblioteca Municipal vai inaugurar, na próxima sexta-feira, uma sala especial só para o público infantil. O novo espaço <b>será</b> cheio de livros coloridos, almofadas e jogos, para que as crianças leiam com conforto. Segundo a prefeitura, a ideia é aproximar os pequenos leitores dos livros desde cedo.`,
+  q:"A partir da notícia, é possível compreender que a biblioteca vai",
+  o:["fechar suas portas.","abrir um espaço de leitura para crianças.","vender seus livros antigos.","proibir a entrada de crianças."],
+  a:1,
+  e:"A notícia informa que a biblioteca vai inaugurar uma sala especial para o público infantil — ou seja, abrir um espaço de leitura para crianças.",
+  s:"Currículo SAS · Compreensão de notícia"
+},
+{
+  q:"O texto lido é uma notícia e foi escrito para",
+  o:["informar sobre a inauguração de um novo espaço.","contar uma história inventada.","ensinar a construir uma biblioteca.","dar uma opinião sobre livros."],
+  a:0,
+  e:"A notícia serve para informar um fato real de interesse da comunidade: neste caso, a inauguração da nova sala de leitura infantil.",
+  s:"Currículo SAS · Finalidade da notícia"
+},
+{
+  t:`Releia: "O novo espaço <b>será</b> cheio de livros coloridos."`,
+  q:"Na frase lida, o verbo em destaque foi usado",
+  o:["no passado e no plural.","no presente e no plural.","no futuro e no singular.","no futuro e no plural."],
+  a:2,
+  e:'"Será" indica que algo vai acontecer depois (futuro) e se refere a "o espaço", que está no singular. Por isso: futuro e singular.',
+  s:"Currículo SAS · Tempo verbal"
+},
+
+/* ===================== BLOCO 12 — Notícia (edição B) ===================== */
+{
+  t:`<span class="titulo">Leia a notícia e responda às questões 28 a 30.</span>
+     <b>Bairro Novo Horizonte ganhará praça com parquinho</b>
+     A prefeitura anunciou a construção de uma nova praça no bairro Novo Horizonte. A inauguração <b>acontecerá</b> no próximo mês e marcará o início de um programa que prevê dez praças em diferentes pontos da cidade. O objetivo é oferecer mais lugares seguros para as famílias e as crianças brincarem.`,
+  q:"Qual é o principal fato noticiado no texto?",
+  o:["A construção de uma nova praça com parquinho.","A lista de todos os bairros da cidade.","O fechamento de uma praça antiga.","O aniversário da prefeitura."],
+  a:0,
+  e:"A notícia gira em torno do anúncio da construção de uma nova praça com parquinho no bairro Novo Horizonte — esse é o fato principal.",
+  s:"Currículo SAS · Fato principal"
+},
+{
+  q:"Qual é o principal objetivo do texto lido?",
+  o:["Informar a população sobre um acontecimento importante.","Ensinar a plantar árvores em praças.","Convencer as pessoas a mudar de bairro.","Contar uma piada sobre a cidade."],
+  a:0,
+  e:"Como toda notícia, o texto foi escrito para informar a população sobre um fato importante: a construção da nova praça.",
+  s:"Currículo SAS · Objetivo do texto"
+},
+{
+  t:`Releia: "A inauguração <b>acontecerá</b> no próximo mês."`,
+  q:"Em relação ao momento em que a notícia foi publicada, o verbo em destaque indica que o evento",
+  o:["vai ocorrer em um momento futuro.","está ocorrendo no momento presente.","ocorreu em um passado distante.","nunca vai ocorrer."],
+  a:0,
+  e:'"Acontecerá" está no futuro: o evento ainda vai ocorrer, no próximo mês, depois do momento em que a notícia foi escrita.',
+  s:"Currículo SAS · Tempo verbal"
+},
+
+/* ===================== BLOCO 13 — Notícia (edição A2) ===================== */
+{
+  t:`<span class="titulo">Leia a notícia e responda às questões 31 a 33.</span>
+     <b>Escritora lança seu primeiro livro para crianças</b>
+     Depois de escrever muitos livros para adultos, a escritora Marina Costa publicou seu primeiro livro infantil. A história foi inspirada no seu gato, o Fumaça, que um dia enfrentou um cachorro bem maior e não fugiu. "As pessoas tiraram fotos e <b>fizeram</b> vídeos do Fumaça. Agora ele é famoso no bairro", contou a autora. No livro, o gatinho tem dois poderes que as crianças também podem ter: o de ser amado e o de saber se defender.`,
+  q:"Qual é o principal fato noticiado no texto?",
+  o:["A briga entre o gato e o cachorro.","O lançamento do primeiro livro infantil da escritora.","A idade da escritora Marina Costa.","A fama do bairro onde ela mora."],
+  a:1,
+  e:"O texto noticia que a escritora, que só escrevia para adultos, lançou seu primeiro livro para crianças. Esse é o principal fato.",
+  s:"Currículo SAS · Fato principal"
+},
+{
+  q:'De acordo com o texto, o livro da escritora conta uma história que',
+  o:["tem inspiração no gato de verdade da escritora.","explica como criar gatos em casa.","é destinada apenas a adultos.","fala sobre a vida dos cachorros."],
+  a:0,
+  e:'O texto diz que a história "foi inspirada no seu gato, o Fumaça" — ou seja, na cachorro... no gato real da escritora.',
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  t:`Releia: "as pessoas tiraram fotos e <b>fizeram</b> vídeos do Fumaça."`,
+  q:"O verbo em destaque foi utilizado para indicar uma ação que",
+  o:["aconteceu no passado.","está acontecendo agora.","acontecerá em breve.","talvez aconteça ou não."],
+  a:0,
+  e:'"Fizeram" indica uma ação já concluída: as pessoas tiraram fotos e fizeram vídeos. É uma ação que aconteceu no passado.',
+  s:"Currículo SAS · Tempo verbal"
+},
+
+/* ===================== BLOCO 14 — Notícia (edição B2) ===================== */
+{
+  t:`<span class="titulo">Leia a notícia e responda às questões 34 a 36.</span>
+     <b>Escola constrói horta usando garrafas recicladas</b>
+     Os alunos de uma escola no interior construíram uma horta inteira usando apenas garrafas plásticas recicladas. O trabalho foi organizado pelos próprios estudantes, com a ajuda dos professores. Todo o esforço, incluindo lavar as garrafas e plantar as sementes, <b>aconteceu</b> em uma única tarde. Agora, a escola já colhe temperos e verduras para a merenda.`,
+  q:"Segundo a notícia, quem construiu a horta?",
+  o:["Os moradores do bairro.","Os alunos da escola, com a ajuda dos professores.","A prefeitura da cidade.","Uma empresa de reciclagem."],
+  a:1,
+  e:'O texto diz que a horta foi construída pelos alunos e que "o trabalho foi organizado pelos próprios estudantes, com a ajuda dos professores".',
+  s:"Currículo SAS · Localizar informação"
+},
+{
+  q:"Por que o fato noticiado pode ser considerado importante para a sociedade?",
+  o:["Porque mostra um bom uso da reciclagem no dia a dia.","Porque ensina a construir uma escola nova.","Porque conta uma história de terror.","Porque critica o trabalho dos professores."],
+  a:0,
+  e:"A notícia é importante porque mostra um exemplo positivo de reciclagem: garrafas plásticas viraram uma horta que dá alimento para a merenda.",
+  s:"Currículo SAS · Inferência"
+},
+{
+  t:`Releia: "Todo o esforço, incluindo lavar as garrafas e plantar as sementes, <b>aconteceu</b> em uma única tarde."`,
+  q:"O verbo destacado está no singular porque concorda com a expressão",
+  o:['"as garrafas".','"as sementes".','"Todo o esforço".','"os professores".'],
+  a:2,
+  e:'O sujeito da frase é "Todo o esforço", que está no singular. Por isso o verbo também fica no singular: "aconteceu".',
+  s:"Currículo SAS · Concordância verbal"
+},
+
+/* ===================== BLOCO 15 — Tirinha (edição A) ===================== */
+{
+  t:`<span class="titulo">Leia a descrição de uma tirinha e responda às questões 37 a 39.</span>
+     Em um jardim, um gato observa um bichinho todo peludo e redondo e diz: — Isso não é um arbusto, é um cachorro! O bichinho começa a latir sem parar: "Au! Au! Au! Au! Au!". Ainda assim, o gato cruza os braços e insiste: — Pra mim continua parecendo um arbusto. No último quadrinho, o gato aponta e diz: — Cachorro late, tem rabo e quatro patas. Esse aí só está quietinho parado!`,
+  q:"Na tirinha, há uma discussão sobre o bichinho do meio ser ou não um cachorro. Qual é a opinião do gato?",
+  o:["O gato acredita que o bichinho é um cachorro.","O gato acha que o bichinho parece um arbusto.","O gato pensa que é um gato disfarçado.","O gato acha que é um passarinho."],
+  a:1,
+  e:'Mesmo com o bichinho latindo, o gato insiste: "Pra mim continua parecendo um arbusto." Essa é a opinião dele.',
+  s:"Currículo SAS · Inferir posição do personagem"
+},
+{
+  q:'Na tirinha, a palavra "Au!" é repetida várias vezes para representar um som. Que som essa palavra representa?',
+  o:["Miados.","Latidos.","Risadas.","Assobios."],
+  a:1,
+  e:'"Au! Au!" é a forma de escrever o som que o cachorro faz: os latidos. É uma onomatopeia.',
+  s:"Currículo SAS · Onomatopeia"
+},
+{
+  q:"No último quadrinho, para comprovar seu argumento, o gato",
+  o:["lista características que ele associa aos cachorros.","apresenta uma definição científica de arbusto.","chama outro gato para ajudar.","desiste da discussão."],
+  a:0,
+  e:'O gato diz que "cachorro late, tem rabo e quatro patas" — ele lista características que associa aos cães para defender sua ideia.',
+  s:"Currículo SAS · Compreensão do argumento"
+},
+
+/* ===================== BLOCO 16 — Tirinha (edição B) ===================== */
+{
+  t:`<span class="titulo">Leia a descrição de uma tirinha e responda às questões 40 a 42.</span>
+     Um homem de roupa de ginástica corre por um parque enquanto um cachorro late atrás dele: "Au! Au! Au!". Nos primeiros quadrinhos, o homem corre com o rosto tenso e apressado. No último quadrinho, ele para ao lado de um amigo e diz, aliviado: — Amanhã vamos aumentar o ritmo do treino! O amigo responde: — Valeu, treinador!`,
+  q:"Ao final da tirinha, entende-se o motivo de o homem estar correndo. Qual é esse motivo?",
+  o:["O homem estava fazendo um treino de corrida.","O homem tinha medo do cachorro.","O homem estava atrasado para o trabalho.","O homem queria pegar o cachorro."],
+  a:0,
+  e:'No fim, o homem fala em "aumentar o ritmo do treino" e é chamado de "treinador". Entende-se que ele corria porque estava treinando.',
+  s:"Currículo SAS · Inferência global"
+},
+{
+  q:'Na tirinha, a palavra "Au", usada de forma repetida, serve para',
+  o:["representar os sons do cachorro.","mostrar os pensamentos do homem.","indicar o nome do parque.","expressar a fala do amigo."],
+  a:0,
+  e:'"Au" repetido representa os latidos, ou seja, os sons do cachorro que corre atrás do homem.',
+  s:"Currículo SAS · Onomatopeia"
+},
+{
+  q:"Nos primeiros quadrinhos, a expressão do rosto do homem indica que ele parece estar",
+  o:["tenso e apressado.","muito alegre.","com sono.","entediado."],
+  a:0,
+  e:"A descrição diz que o homem corre com o rosto tenso e apressado — a expressão facial mostra tensão, e não alegria ou tédio.",
+  s:"Currículo SAS · Inferir emoção pela imagem"
+},
+
+/* ===================== BLOCO 17 — Tirinha e polissemia (edição A) ===================== */
+{
+  t:`<span class="titulo">Leia a descrição de uma tirinha e responda às questões 43 e 44.</span>
+     Do sofá, um menino chamado Nino leva um copo de suco à boca. De longe, o pai avisa: — Está tomando cuidado, filho? E o Nino responde, todo animado: — Estou! Suco de uva!`,
+  q:"Com base na tirinha, entende-se que o pai de Nino está preocupado com o fato de que",
+  o:["o Nino pode derramar o suco no sofá.","o Nino pode ter escolhido o suco errado.","o Nino pode cair do sofá.","o Nino pode não gostar do suco."],
+  a:0,
+  e:'Ao pedir "cuidado" com o menino tomando suco no sofá, o pai teme que o Nino derrame o suco e suje o sofá.',
+  s:"Currículo SAS · Inferência"
+},
+{
+  q:'Pela resposta de Nino, com que sentido ele entendeu a palavra "tomando", dita pelo pai?',
+  o:["ter cuidado.","beber algo.","pegar algo.","invadir algo."],
+  a:1,
+  e:'O pai quis dizer "ter cuidado". Mas o Nino entendeu "tomando" como beber, por isso respondeu que estava tomando suco de uva. Aí está o humor.',
+  s:"Currículo SAS · Polissemia"
+},
+
+/* ===================== BLOCO 18 — Tirinha e polissemia (edição B) ===================== */
+{
+  t:`<span class="titulo">Leia a descrição de uma tirinha e responda à questão 45.</span>
+     Um menino segura uma placa em que está escrito "VENDO PÔR DO SOL". Um homem se aproxima e pergunta: — Quanto você quer pelo pôr do sol? O menino responde: — Não está à venda! Eu estou é vendo o pôr do sol! E completa: — Aproveite pra ver também!`,
+  q:"A história da tirinha tem como principal foco uma palavra que possui mais de um significado. Que palavra é essa?",
+  o:['"Pôr", que pode significar "colocar" ou "desaparecer".','"Vendo", que pode significar "vender" ou "ver".','"Quanto", que pode significar "quantidade" ou "preço".','"Aproveite", que pode significar "usar" ou "gostar".'],
+  a:1,
+  e:'A graça está na palavra "vendo": o homem entende "vendo" de "vender", mas o menino queria dizer "vendo" de "ver" (estava observando o pôr do sol).',
+  s:"Currículo SAS · Polissemia"
+},
+{
+  t:`<span class="titulo">Leia a descrição de outra tirinha e responda às questões 46 e 47.</span>
+     Um homem chama várias vezes o seu gato: — Miau! Miau! Miau! O gato continua deitado, sem se mexer, e pensa: "As pesquisas dizem que os gatos reconhecem o próprio nome...". No último quadrinho, o homem grita bem alto, com o rosto vermelho, e o gato completa o pensamento: "...e que eles simplesmente ignoram".`,
+  q:"Na tirinha, por que o gato não está respondendo ao homem?",
+  o:["Porque o gato está dormindo profundamente.","Porque o gato decide ignorar o homem.","Porque o gato não escuta o chamado.","Porque o gato está com medo."],
+  a:1,
+  e:'O próprio gato pensa que reconhece o chamado, "mas simplesmente ignora". Ou seja, ele escolhe ignorar o homem.',
+  s:"Currículo SAS · Inferência"
+},
+{
+  q:"No último quadrinho da tirinha, percebe-se que o homem está",
+  o:["irritado com a atitude do gato.","triste por algo que vai acontecer.","com medo do gato.","esperançoso para resolver o problema."],
+  a:0,
+  e:"O homem grita bem alto e está com o rosto vermelho — sinais de que ele está irritado com o gato, que o ignora.",
+  s:"Currículo SAS · Inferir emoção pela imagem"
+}
+];
+
+/* ---------- estado ---------- */
+let idx = 0, answered = 0, hits = 0;
+const answeredMap = {};
+
+const quiz = document.getElementById('quiz');
+const elAnswered = document.getElementById('answered');
+const elHits = document.getElementById('hits');
+const elCounter = document.getElementById('counter');
+const elBar = document.getElementById('bar');
+const LETTERS = ['A','B','C','D'];
+
+/* embaralha as alternativas a cada abertura/recomeço, mantendo o registro da correta */
+function shuffleAll(){
+  QUESTIONS.forEach(q=>{
+    const order = [...Array(q.o.length).keys()];
+    for(let i=order.length-1;i>0;i--){
+      const j = Math.floor(Math.random()*(i+1));
+      [order[i],order[j]] = [order[j],order[i]];
+    }
+    q._o = order.map(i=>q.o[i]);
+    q._a = order.indexOf(q.a);
+  });
+}
+
+function render(){
+  const q = QUESTIONS[idx];
+  const done = answeredMap[idx] !== undefined;
+  const chosen = done ? answeredMap[idx] : null;
+
+  let opts = '';
+  q._o.forEach((txt,i)=>{
+    let cls = 'opt';
+    if(done){
+      if(i===q._a) cls+=' correct';
+      else if(i===chosen) cls+=' wrong';
+    }
+    opts += `<button class="${cls}" data-i="${i}" ${done?'disabled':''}>
+      <span class="letter">${LETTERS[i]}</span><span>${txt}</span></button>`;
+  });
+
+  let fb = '';
+  if(done){
+    const ok = chosen===q._a;
+    fb = `<div class="fb ${ok?'ok':'no'} show">
+      <div class="verdict">${ok?'Isso mesmo!':'Ainda não é essa.'}</div>
+      <div>${q.e}</div></div>`;
+  }
+
+  const last = idx===QUESTIONS.length-1;
+  quiz.innerHTML = `
+    <div class="card">
+      <div class="qhead">
+        <span class="qnum">${idx+1}</span>
+        <span class="skill">${q.s}</span>
+      </div>
+      ${q.t?`<div class="contexto">${q.t}</div>`:''}
+      <div class="stem">${q.q}</div>
+      <div class="opts">${opts}</div>
+      ${fb}
+      <div class="actions">
+        <button class="btn ghost" id="prev" ${idx===0?'disabled':''}>Anterior</button>
+        <button class="btn primary" id="next" ${done?'':'disabled'}>${last?'Ver resumo':'Próxima'}</button>
+      </div>
+    </div>`;
+
+  quiz.querySelectorAll('.opt').forEach(b=>{
+    b.addEventListener('click',()=>choose(parseInt(b.dataset.i,10)));
+  });
+  const prev = document.getElementById('prev');
+  if(prev) prev.addEventListener('click',()=>{ if(idx>0){idx--;render();} });
+  document.getElementById('next').addEventListener('click',()=>{
+    if(last){ showResumo(); } else { idx++; render(); }
+  });
+
+  elCounter.textContent = `${idx+1}/${QUESTIONS.length}`;
+  updateBar();
+}
+
+function choose(i){
+  if(answeredMap[idx]!==undefined) return;
+  answeredMap[idx]=i;
+  answered++;
+  if(i===QUESTIONS[idx]._a) hits++;
+  elAnswered.textContent=answered;
+  elHits.textContent=hits;
+  render();
+}
+
+function updateBar(){
+  elBar.style.width = (answered/QUESTIONS.length*100)+'%';
+}
+
+function showResumo(){
+  const total = QUESTIONS.length;
+  const pct = Math.round(hits/total*100);
+  let msg;
+  if(pct>=80) msg='Excelente! Você domina bem as habilidades desta prova.';
+  else if(pct>=60) msg='Bom trabalho! Revise os pontos que errou e siga em frente.';
+  else if(pct>=40) msg='Você está no caminho. Vale reler os textos com calma e treinar de novo.';
+  else msg='Sem problema — a prática é para isso. Tente de novo com atenção aos textos.';
+
+  quiz.innerHTML = `
+    <div class="card resumo">
+      <span class="kicker">Resumo</span>
+      <h2>Prova concluída!</h2>
+      <div class="bigscore">${hits}/${total}</div>
+      <p>Você acertou <b>${pct}%</b> das questões.</p>
+      <p>Respondidas: ${answered} de ${total}</p>
+      <p style="margin-top:14px">${msg}</p>
+      <div class="actions" style="justify-content:center;margin-top:22px">
+        <button class="btn primary" id="restart">Recomeçar</button>
+      </div>
+    </div>`;
+  document.getElementById('restart').addEventListener('click',restart);
+  elBar.style.width='100%';
+}
+
+function restart(){
+  idx=0; answered=0; hits=0;
+  for(const k in answeredMap) delete answeredMap[k];
+  elAnswered.textContent='0';
+  elHits.textContent='0';
+  shuffleAll();
+  render();
+}
+
+shuffleAll();
+render();
+</script>
+</body>
+</html>
