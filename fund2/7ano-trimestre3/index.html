@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3ª Prova Treino · 7º ano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F6F3; --card:#FFFFFF; --ink:#20242B; --muted:#6A7078;
+    --line:#E4E2DC; --good:#1E8449; --good-bg:#E7F4EC; --bad:#C0392B; --bad-bg:#FBEAE8;
+    --accent:#2471A3;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;line-height:1.55;font-size:17px}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px 64px}
+  code,.mono{font-family:"Space Mono",monospace}
+
+  header.top{padding:30px 0 18px;border-bottom:2px solid var(--ink)}
+  .kicker{font-family:"Space Mono",monospace;font-size:12.5px;letter-spacing:.14em;color:var(--muted);margin:0 0 8px}
+  h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(30px,7vw,44px);line-height:1.02;margin:0;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:8px 0 0;font-size:15.5px}
+
+  .scorebar{position:sticky;top:0;z-index:20;background:var(--bg);padding:12px 0 10px;margin-top:2px;border-bottom:1px solid var(--line)}
+  .scores{display:flex;gap:22px;align-items:baseline;flex-wrap:wrap}
+  .scores .item{display:flex;gap:7px;align-items:baseline}
+  .scores .num{font-family:"Space Mono",monospace;font-weight:700;font-size:21px;color:var(--ink)}
+  .scores .lab{font-size:12.5px;color:var(--muted)}
+  .scores .hit .num{color:var(--good)}
+  .progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+  .progress > i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .35s ease}
+
+  nav.tabs{display:flex;gap:8px;overflow-x:auto;padding:14px 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--muted);
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14.5px;
+    padding:8px 14px;border-radius:99px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px;transition:.15s}
+  .tab .dot{width:9px;height:9px;border-radius:50%;background:var(--c)}
+  .tab .cnt{font-family:"Space Mono",monospace;font-size:11.5px;color:var(--muted)}
+  .tab:hover{border-color:var(--c)}
+  .tab.active{color:#fff;background:var(--c);border-color:var(--c)}
+  .tab.active .cnt{color:rgba(255,255,255,.85)}
+  .tab.active .dot{background:#fff}
+  .tab.done::after{content:"\2713";font-family:"Public Sans";font-weight:700;margin-left:2px}
+
+  .mathead{display:flex;align-items:center;gap:10px;margin:26px 0 4px}
+  .mathead h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:24px;margin:0;color:var(--accent)}
+  .mathead .bar{height:3px;flex:1;background:var(--accent);opacity:.25;border-radius:2px}
+
+  .q{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);
+     border-radius:14px;padding:18px 18px 16px;margin:14px 0}
+  .q .meta{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+  .q .qn{font-family:"Space Mono",monospace;font-weight:700;font-size:13px;color:#fff;background:var(--accent);
+     border-radius:7px;padding:2px 8px}
+  .pill{font-family:"Space Mono",monospace;font-size:11px;color:var(--muted);border:1px solid var(--line);
+     border-radius:99px;padding:2px 8px;background:#fbfaf8}
+  .pill.yr{color:var(--accent);border-color:var(--accent)}
+  .q .stem{font-size:16.5px;margin:2px 0 14px}
+  .q .stem em{color:var(--ink)}
+  .fig{margin:12px 0;overflow-x:auto;color:var(--accent)}
+  .fig svg{max-width:100%;height:auto;display:block}
+  table.nut{border-collapse:collapse;font-family:"Space Mono",monospace;font-size:14px;min-width:230px;background:#fff}
+  table.nut td{border:1px solid var(--line);padding:5px 12px}
+  table.nut td:last-child{text-align:right;font-weight:700}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+     border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:12px 13px;cursor:pointer;
+     font:inherit;color:var(--ink);transition:.12s}
+  .opt:hover:not(:disabled){border-color:var(--accent);background:#fbfcfd}
+  .opt:disabled{cursor:default}
+  .opt .letter{font-family:"Space Mono",monospace;font-weight:700;font-size:14px;color:var(--muted);
+     border:1.5px solid var(--line);border-radius:7px;min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .opt .txt{padding-top:1px}
+  .opt.correct{border-color:var(--good);background:var(--good-bg)}
+  .opt.correct .letter{background:var(--good);border-color:var(--good);color:#fff}
+  .opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+  .opt.wrong .letter{background:var(--bad);border-color:var(--bad);color:#fff}
+  .opt.correct .mark,.opt.wrong .mark{margin-left:auto;font-weight:700;align-self:center}
+  .opt.correct .mark{color:var(--good)} .opt.wrong .mark{color:var(--bad)}
+
+  .exp{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:15px;display:none}
+  .exp.show{display:block}
+  .exp.ok{background:var(--good-bg);color:#15613a}
+  .exp.no{background:var(--bad-bg);color:#8f2419}
+  .exp b{font-weight:700}
+
+  .summary{display:none;background:var(--accent);color:#fff;border-radius:16px;padding:22px;margin:20px 0 6px}
+  .summary.show{display:block}
+  .summary h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:22px;margin:0 0 6px}
+  .summary .big{font-family:"Space Mono",monospace;font-weight:700;font-size:40px;line-height:1;margin:6px 0}
+  .summary p{margin:6px 0 0;opacity:.92;font-size:15px}
+  .summary .next{margin-top:16px;background:#fff;color:var(--accent);border:none;border-radius:10px;
+     font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:15px;padding:11px 18px;cursor:pointer}
+
+  footer.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .restart{border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:10px;
+     font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14.5px;padding:10px 18px;cursor:pointer}
+  .restart:hover{background:var(--ink);color:#fff}
+  .foot .note{font-size:12.5px;color:var(--muted)}
+  @media (max-width:520px){ body{font-size:16px} .q{padding:15px 14px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="kicker">PROVA TREINO</p>
+    <h1>3ª Prova Treino · 7º ano</h1>
+    <p class="sub">Ensino Fundamental · 100 questões (2024 + 2025) · responda e veja a correção na hora</p>
+  </header>
+
+  <div class="scorebar">
+    <div class="scores">
+      <div class="item"><span class="num" id="answered">0</span><span class="lab">de 100 respondidas</span></div>
+      <div class="item hit"><span class="num" id="hits">0</span><span class="lab">acertos</span></div>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+  </div>
+
+  <nav class="tabs" id="tabs"></nav>
+  <main id="main"></main>
+
+  <footer class="foot">
+    <button class="restart" id="restart">Recomeçar</button>
+    <span class="note">Modo prática — sem nota. Bons estudos!</span>
+  </footer>
+</div>
+
+<script type="application/json" id="DATA">
+{
+"subjects": [
+  {"key":"port","name":"Língua Portuguesa","color":"#C0392B"},
+  {"key":"mat","name":"Matemática","color":"#2471A3"},
+  {"key":"ing","name":"Inglês","color":"#7D3C98"},
+  {"key":"cie","name":"Ciências","color":"#1E8449"},
+  {"key":"geo","name":"Geografia","color":"#CA6F1E"},
+  {"key":"his","name":"História","color":"#B9770E"},
+  {"key":"fil","name":"Filosofia","color":"#117A65"},
+  {"key":"art","name":"Arte","color":"#C2185B"}
+],
+"questions": [
+  {"id":1,"subj":"port","year":"2024","skill":"EF69LP46","q":"Leia um trecho de roteiro de animação.<br><em>Cena 1: Bia entra na sala segurando um caderno.<br>Bia: Consegui! Terminei minha invenção! (fala pulando de alegria)<br>Téo: O que é isso? (olha desconfiado, coçando a cabeça)</em><br>Além das falas, o roteiro traz trechos entre parênteses e em itálico. Esses trechos apresentam","opts":["indicações sobre a ordem das cenas do roteiro.","correções da fala das personagens.","descrições do local onde a história acontece.","instruções sobre o comportamento das personagens."],"ans":3,"exp":"Assim como as rubricas do teatro, esses trechos orientam como as personagens devem agir ao dizer as falas — são instruções de comportamento para quem vai animar a cena."},
+  {"id":2,"subj":"port","year":"2024","skill":"EF07LP10","q":"Releia o trecho: “Téo: O que é isso, Bia?”. Nesse trecho, a vírgula foi usada para","opts":["marcar o deslocamento de um adjunto adverbial.","indicar a repetição de palavras.","separar o predicativo do sujeito.","isolar o vocativo."],"ans":3,"exp":"“Bia” é um vocativo — o termo usado para chamar ou se dirigir a alguém. O vocativo é sempre isolado por vírgula."},
+  {"id":3,"subj":"port","year":"2024","skill":"EF69LP42","q":"Leia o texto.<br><em>Não se deve dar leite de vaca a bebês com menos de um ano. Esse leite tem mais proteínas que o leite humano, e o sistema digestório do bebê ainda não está maduro. Assim, fragmentos dessas proteínas podem passar para o sangue e alertar o sistema imunológico — o que ajuda a explicar as alergias.</em><br>Nesse artigo de divulgação científica, as informações são apresentadas com o objetivo de","opts":["explicar como ocorre a alergia ao leite.","desaconselhar os adultos a tomarem leite.","mostrar como a digestão é um processo complexo.","demonstrar que as crianças devem ingerir proteínas."],"ans":0,"exp":"O texto leva informação científica ao público geral, explicando por que a alergia ao leite de vaca é comum em bebês."},
+  {"id":4,"subj":"port","year":"2024","skill":"EF67LP05","q":"Leia o texto.<br><em>Cuidar do meio ambiente dá resultados que demoram a aparecer. Por isso, a educação ambiental precisa ser prioridade: sem conscientizar as novas gerações sobre a importância da natureza, não há como falar sério em sustentabilidade.</em><br>Nesse artigo de opinião, defende-se que","opts":["as fontes de energia usadas hoje são limpas.","a educação ambiental deve ser levada às novas gerações.","o cenário atual resulta de ações dos últimos anos.","o estilo de vida das pessoas tem pouco impacto no meio ambiente."],"ans":1,"exp":"O autor defende que conscientizar as novas gerações (educação ambiental) é prioridade para um futuro sustentável."},
+  {"id":5,"subj":"port","year":"2024","skill":"EF07LP11","q":"Releia: “o estudante adquire conhecimentos novos <strong>e</strong>, ao mesmo tempo, contribui para um meio mais sustentável.” A conjunção “e” une duas orações estabelecendo ideia de","opts":["conclusão, expressando o motivo da ação anterior.","alternância, indicando uma ação que exclui a anterior.","oposição, iniciando uma afirmação contrária à anterior.","soma, acrescentando uma informação à da oração anterior."],"ans":3,"exp":"A conjunção “e” é aditiva: soma uma ação à outra (adquirir conhecimentos e contribuir para o meio ambiente)."},
+  {"id":6,"subj":"port","year":"2024","skill":"EF69LP45","q":"Leia o trecho de uma resenha crítica.<br><em>Lançado em 2015, esse filme de animação venceu dezenas de prêmios. A história se passa na mente de uma menina de 11 anos, onde cinco emoções ganham vida e se expressam.</em><br>Além de destacar as premiações, esse trecho contém","opts":["indicações de que o leitor não deve assistir à obra.","informações sobre os atores e o diretor do filme.","comentários breves sobre o enredo do filme.","propostas para novos filmes sobre o tema."],"ans":2,"exp":"A resenha comenta brevemente o enredo (a história na mente da menina), característica típica desse gênero."},
+  {"id":7,"subj":"port","year":"2024","skill":"EF07LP10","q":"Considere a frase: “A emoção Nojinho garante que a menina não <strong>seja</strong> contaminada.” Passando o verbo “garantir” para o pretérito perfeito do indicativo, a reescrita correta é","opts":["“garantiu que a menina não era contaminada”.","“garantiu que a menina não fosse contaminada”.","“garantiria que a menina não será contaminada”.","“garantiria que a menina não seria contaminada”."],"ans":1,"exp":"O pretérito perfeito do indicativo (“garantiu”) combina com o pretérito imperfeito do subjuntivo (“fosse”): “garantiu que… não fosse contaminada”."},
+  {"id":8,"subj":"port","year":"2024","skill":"EF69LP20","q":"Leia o trecho.<br><em>“Art. 1º Esta Lei dispõe sobre a proteção integral à criança e ao adolescente.”</em> (Estatuto da Criança e do Adolescente)<br>Esse trecho caracteriza-se como texto","opts":["injuntivo, pois dá instruções às crianças.","expositivo, pois descreve a infância.","normativo, pois regulamenta direitos de grupos sociais.","dissertativo, pois expõe a opinião do autor."],"ans":2,"exp":"O Estatuto é um texto normativo: reúne regras que regulamentam direitos e deveres de determinados grupos — aqui, crianças e adolescentes."},
+  {"id":9,"subj":"port","year":"2024","skill":"EF67LP15","q":"Ainda sobre o Estatuto da Criança e do Adolescente, o trecho “gozam de todos os direitos fundamentais inerentes à pessoa humana… assegurando-se-lhes todas as oportunidades” expressa que a criança e o adolescente","opts":["precisam cumprir seus deveres.","devem ter proteção integral.","buscam exigir seus direitos.","podem ser punidos pela lei."],"ans":1,"exp":"O texto garante direitos fundamentais e todas as oportunidades — ou seja, assegura a proteção integral desses grupos."},
+  {"id":10,"subj":"port","year":"2024","skill":"EF07LP10","q":"Leia a fala de uma personagem: “<strong>Me chame</strong> quando o jogo começar!”. Segundo a norma-padrão, quando o verbo inicia a oração, o pronome deve vir depois dele. A forma adequada seria","opts":["“Chame-me quando o jogo começar!”, com ênclise.","“Me chamarei quando o jogo começar!”, com mesóclise.","“Chamar-me-ei quando o jogo começar!”, com próclise.","“Me chame quando o jogo começar!”, sem alteração."],"ans":0,"exp":"Como o verbo inicia a oração, a norma-padrão pede ênclise (pronome depois do verbo): “Chame-me”. Em conversas informais, a próclise (“Me chame”) é comum."},
+
+  {"id":11,"subj":"port","year":"2025","skill":"EF67LP05","q":"Leia o texto.<br><em>Na publicidade, o “briefing” é um resumo que reúne as informações essenciais de uma campanha. Nele aparecem, por exemplo, o objetivo, o tom de voz e frases como: “Queremos uma campanha jovem” e “Nosso público são mulheres acima de 25 anos, preocupadas com bem-estar”.</em><br>O texto indica que o briefing apresenta, entre outros elementos,","opts":["avaliações recebidas após as vendas de um produto.","dúvidas dos clientes sobre os diferenciais da marca.","informações sobre a mensagem e o público-alvo de uma campanha.","peças publicitárias já finalizadas e prontas para divulgação."],"ans":2,"exp":"O briefing resume as informações da campanha, definindo a mensagem que se quer passar e o público-alvo."},
+  {"id":12,"subj":"port","year":"2025","skill":"EF07LP10","q":"Leia o comunicado.<br><em>“Estudantes, a entrega dos trabalhos foi adiada para sexta-feira. Fiquem atentos ao mural.”</em><br>No comunicado, o termo “Estudantes”, separado por vírgula, serve para","opts":["indicar a quem se dirige o aviso.","revelar quem está dando o recado.","mostrar quem deu atenção ao aviso.","convocar os alunos a dar um recado."],"ans":0,"exp":"“Estudantes” é um vocativo: chama diretamente as pessoas a quem o aviso se dirige."},
+  {"id":13,"subj":"port","year":"2025","skill":"EF07LP10","q":"Leia a frase de um cartaz.<br><em>“A cidade inaugurou 150 novas escolas, 119 delas profissionalizantes.”</em><br>O trecho “119 delas profissionalizantes” funciona como um aposto porque","opts":["indica um modo como os objetivos devem ser alcançados.","explica algo sobre um termo mencionado antes.","sugere uma meta a ser alcançada pelos governantes.","resume dados apresentados no início da frase."],"ans":1,"exp":"O aposto explica ou esclarece um termo anterior. Aqui, detalha que, das novas escolas, 119 são profissionalizantes."},
+  {"id":14,"subj":"port","year":"2025","skill":"EF69LP20","q":"Leia o trecho de um regulamento.<br><em>“Art. 3º Os Jogos da Juventude têm por objetivos: fomentar a prática do esporte com fins educativos; identificar jovens com potencial esportivo; desenvolver o intercâmbio entre os participantes.”</em><br>Esse trecho tem por finalidade","opts":["ensinar as regras de modalidades esportivas específicas.","justificar por que o esporte é uma prática saudável.","apresentar os princípios que orientam a realização do evento.","promover uma imagem positiva dos jovens atletas."],"ans":2,"exp":"O regulamento é um texto normativo: apresenta os objetivos e princípios que orientam a organização do evento."},
+  {"id":15,"subj":"port","year":"2025","skill":"EF07LP11","q":"Leia o trecho.<br><em>“Os Jogos da Juventude 2025 serão realizados na cidade de Brasília, de 10 a 25 de setembro.”</em><br>Esse trecho é um período classificado como","opts":["composto, pois há independência entre orações.","composto, pois há uma oração coordenada à principal.","simples, pois expressa uma relação de subordinação.","simples, pois contém uma única oração."],"ans":3,"exp":"Há apenas uma locução verbal (“serão realizados”), logo uma única oração — período simples."},
+  {"id":16,"subj":"port","year":"2025","skill":"EF67LP18","q":"Leia o trecho de uma carta aberta.<br><em>“Nós, integrantes da Comissão para o Desenvolvimento Sustentável, nos dirigimos à sociedade brasileira: juntos podemos combater as desigualdades e construir um Brasil sustentável, hoje. Conclamamos toda a sociedade a firmar esse pacto.”</em><br>O objetivo principal do texto é","opts":["fornecer informações de interesse geral.","convocar a população a se unir por uma causa.","divulgar a eficácia de uma ação já realizada.","solicitar que as pessoas cobrem ações das autoridades."],"ans":1,"exp":"A carta aberta conclama (convoca) a sociedade a se unir em torno de uma causa: o desenvolvimento sustentável."},
+  {"id":17,"subj":"port","year":"2025","skill":"EF07LP11","q":"Releia: “juntos podemos fortalecer nossa democracia, combater nossas desigualdades <strong>e</strong> construir um Brasil sustentável.” A conjunção “e” introduz uma oração coordenada sindética","opts":["aditiva.","alternativa.","explicativa.","adversativa."],"ans":0,"exp":"A conjunção “e” acrescenta uma ação às anteriores — é uma coordenada sindética aditiva."},
+  {"id":18,"subj":"port","year":"2025","skill":"EF07LP11","q":"Releia: “Múltiplas crises afligem todas as pessoas, <strong>mas</strong> impactam mais alguns grupos.” A vírgula antes de “mas” separa uma oração coordenada","opts":["assindética.","sindética aditiva.","sindética conclusiva.","sindética adversativa."],"ans":3,"exp":"“Mas” exprime oposição: introduz uma coordenada sindética adversativa, que leva vírgula antes da conjunção."},
+  {"id":19,"subj":"port","year":"2025","skill":"EF67LP05","q":"Leia o texto.<br><em>O uso do “correntão” — correntes arrastadas entre tratores — derruba vastas áreas de mata nativa, chegando a desmatar dez campos de futebol por dia e matando árvores e animais. Diante disso, organizações se uniram para exigir seu banimento.</em><br>O primeiro trecho (sobre os danos do correntão) apresenta o(a)","opts":["justificativa para a mobilização solicitada.","resultado de uma consulta pública realizada.","promoção de uma organização sem fins lucrativos.","apelo à participação de entidades governamentais."],"ans":0,"exp":"Ao descrever os danos do correntão, o texto justifica por que a mobilização (o banimento) é necessária."},
+  {"id":20,"subj":"port","year":"2025","skill":"EF07LP08","q":"Leia a manchete.<br><em>“Azeites proibidos: veja como identificar fraudes. Desde 2024, vários lotes foram proibidos pelo governo.”</em><br>Nas duas ocorrências, o adjetivo “proibido(s)” está no plural porque","opts":["atua como substantivo nas frases.","tem como referentes sujeitos com determinante.","concorda com os substantivos “azeites” e “lotes”.","aparece perto das palavras “fraudes” e “marcas”."],"ans":2,"exp":"O adjetivo concorda em número e gênero com o substantivo a que se refere: “azeites” e “lotes” (masculino plural) → “proibidos”."},
+
+  {"id":21,"subj":"mat","year":"2024","skill":"Currículo SAS","q":"Um dos ângulos de uma figura geométrica mede 68°. Qual é a medida do suplemento desse ângulo?","opts":["112°","158°","202°","292°"],"ans":0,"exp":"O suplemento é o que falta para 180°: 180° − 68° = 112°."},
+  {"id":22,"subj":"mat","year":"2024","skill":"EF07MA23","q":"Na figura, as retas a e b são paralelas, e a reta t é transversal a elas. Os ângulos assinalados são alternos internos.<div class='fig'><svg viewBox='0 0 460 240' role='img' aria-label='Duas retas paralelas cortadas por uma transversal, com ângulos 5x menos 60 graus e 3x mais 8 graus'><line x1='40' y1='70' x2='420' y2='70' stroke='currentColor' stroke-width='2'/><line x1='40' y1='170' x2='420' y2='170' stroke='currentColor' stroke-width='2'/><line x1='130' y1='20' x2='330' y2='220' stroke='currentColor' stroke-width='2'/><g font-family='Space Mono, monospace' font-size='13' fill='currentColor'><text x='398' y='66'>a</text><text x='398' y='166'>b</text><text x='210' y='100'>5x − 60°</text><text x='196' y='150'>3x + 8°</text></g></svg></div>Qual é o valor de x na figura?","opts":["19°","34°","64°","68°"],"ans":1,"exp":"Ângulos alternos internos são congruentes: 5x − 60° = 3x + 8° → 2x = 68° → x = 34°."},
+  {"id":23,"subj":"mat","year":"2024","skill":"EF07MA24","q":"Em um triângulo, dois lados medem 12 cm e 16 cm. Qual é a maior medida inteira possível, em centímetros, para o terceiro lado?","opts":["4","5","27","28"],"ans":2,"exp":"Pela desigualdade triangular, o terceiro lado é menor que a soma dos outros dois: 12 + 16 = 28. O maior inteiro menor que 28 é 27."},
+  {"id":24,"subj":"mat","year":"2024","skill":"EF07MA27","q":"Um mosaico é formado por dodecágonos regulares (polígonos de 12 lados). Qual é a medida de cada ângulo interno desse polígono?","opts":["120°","144°","150°","180°"],"ans":2,"exp":"Ângulo interno = (n − 2) · 180° ÷ n = (12 − 2) · 180° ÷ 12 = 1 800° ÷ 12 = 150°."},
+  {"id":25,"subj":"mat","year":"2024","skill":"EF07MA24","q":"A base triangular de uma poltrona tem dois ângulos iguais, cada um medindo 55°. Qual é a medida do terceiro ângulo (x)?","opts":["20°","70°","110°","125°"],"ans":1,"exp":"A soma dos ângulos internos de um triângulo é 180°: 55° + 55° + x = 180° → x = 70°."},
+  {"id":26,"subj":"mat","year":"2024","skill":"EF07MA17","q":"Uma sorveteria vendeu 70 sorvetes em embalagens descartáveis ou casquinhas, na razão de 3 para 2 (descartáveis para casquinhas). Quantos sorvetes foram vendidos em casquinhas?","opts":["14","28","35","42"],"ans":1,"exp":"A razão 3 : 2 forma 5 partes. Casquinhas = 2/5 do total: (70 ÷ 5) × 2 = 14 × 2 = 28."},
+  {"id":27,"subj":"mat","year":"2024","skill":"Currículo SAS","q":"Um ciclista percorreu 6 300 metros em 7 minutos. Qual foi a sua velocidade média, em metros por segundo?","opts":["7","9","13","15"],"ans":3,"exp":"7 min = 420 s. Velocidade = distância ÷ tempo = 6 300 ÷ 420 = 15 m/s."},
+  {"id":28,"subj":"mat","year":"2024","skill":"EF07MA17","q":"Um prêmio de R$ 1 800,00 foi dividido entre Felipe, Carlos e Lucas em partes diretamente proporcionais a 4, 3 e 2, nessa ordem. Quanto recebeu Carlos?","opts":["R$ 200,00","R$ 400,00","R$ 600,00","R$ 800,00"],"ans":2,"exp":"As partes somam 4 + 3 + 2 = 9. Cada parte vale 1 800 ÷ 9 = 200. Carlos (3 partes): 3 × 200 = R$ 600,00."},
+  {"id":29,"subj":"mat","year":"2024","skill":"EF07MA17","q":"Três máquinas iguais fazem 4 800 encadernações por dia. Mantendo a mesma capacidade, quantas encadernações farão 4 máquinas por dia?","opts":["1 600","3 600","6 400","8 000"],"ans":2,"exp":"Grandezas diretamente proporcionais: cada máquina faz 4 800 ÷ 3 = 1 600. Com 4 máquinas: 4 × 1 600 = 6 400."},
+  {"id":30,"subj":"mat","year":"2024","skill":"EF07MA17","q":"Quatro irrigadores iguais regam uma plantação em 6 horas. Com apenas 3 deles funcionando, quanto tempo será necessário para regar a mesma área?","opts":["3 horas","5 horas","8 horas","9 horas"],"ans":2,"exp":"Grandezas inversamente proporcionais: 4 × 6 = 3 × t → t = 24 ÷ 3 = 8 horas."},
+
+  {"id":31,"subj":"mat","year":"2025","skill":"Currículo SAS","q":"Observe a figura: a partir do ponto O, um raio forma 45° com o lado direito da reta e o ângulo y com o lado esquerdo.<div class='fig'><svg viewBox='0 0 420 150' role='img' aria-label='Reta horizontal com um raio formando 45 graus e o ângulo y'><line x1='40' y1='110' x2='380' y2='110' stroke='currentColor' stroke-width='2'/><line x1='210' y1='110' x2='300' y2='30' stroke='currentColor' stroke-width='2'/><circle cx='210' cy='110' r='4' fill='currentColor'/><g font-family='Space Mono, monospace' font-size='14' fill='currentColor'><text x='262' y='98'>45°</text><text x='150' y='86'>y</text><text x='196' y='128'>O</text></g></svg></div>O suplemento do ângulo de 45° é o ângulo de medida (o ângulo x, não representado, é o complemento de 45°):","opts":["x = 45°","x = 55°","y = 135°","y = 145°"],"ans":2,"exp":"Ângulos suplementares somam 180°: 45° + y = 180° → y = 135°. (O ângulo x seria o complemento: 45° + x = 90°.)"},
+  {"id":32,"subj":"mat","year":"2025","skill":"EF07MA23","q":"A figura mostra duas ruas paralelas cortadas por uma transversal. Os ângulos assinalados são colaterais externos (somam 180°).<div class='fig'><svg viewBox='0 0 460 240' role='img' aria-label='Duas ruas paralelas cortadas por uma transversal, com ângulos 30 graus e 2x menos 10 graus'><line x1='40' y1='70' x2='420' y2='70' stroke='currentColor' stroke-width='2'/><line x1='40' y1='170' x2='420' y2='170' stroke='currentColor' stroke-width='2'/><line x1='130' y1='20' x2='330' y2='220' stroke='currentColor' stroke-width='2'/><g font-family='Space Mono, monospace' font-size='13' fill='currentColor'><text x='205' y='52'>30°</text><text x='250' y='196'>2x − 10°</text></g></svg></div>Com base na figura, qual é o valor de x?","opts":["70°","80°","100°","150°"],"ans":1,"exp":"Colaterais externos somam 180°: 30° + (2x − 10°) = 180° → 2x + 20° = 180° → 2x = 160° → x = 80°."},
+  {"id":33,"subj":"mat","year":"2025","skill":"EF07MA24","q":"Renato fará uma horta triangular. Duas das três cercas já medem 2 m e 2,5 m. Qual é o maior comprimento inteiro possível, em metros, para a terceira cerca?","opts":["2 m","3 m","4 m","5 m"],"ans":2,"exp":"O terceiro lado é menor que a soma (2 + 2,5 = 4,5) e maior que a diferença (2,5 − 2 = 0,5). O maior inteiro menor que 4,5 é 4."},
+  {"id":34,"subj":"mat","year":"2025","skill":"EF07MA24","q":"Em um triângulo retângulo, um dos ângulos agudos mede o dobro do outro. Qual é a medida do menor ângulo?","opts":["30°","45°","60°","90°"],"ans":0,"exp":"Um ângulo é 90° (reto). Os agudos x e 2x somam 90°: x + 2x = 90° → 3x = 90° → x = 30°."},
+  {"id":35,"subj":"mat","year":"2025","skill":"EF07MA27","q":"Tânia usará 20 palitos iguais para montar um polígono regular (cada palito é um lado). Quanto mede cada ângulo interno desse polígono?","opts":["200°","198°","171°","162°"],"ans":3,"exp":"Soma dos ângulos internos = (20 − 2) · 180° = 3 240°. Como o polígono é regular: 3 240° ÷ 20 = 162°."},
+  {"id":36,"subj":"mat","year":"2025","skill":"Currículo SAS","q":"Um piloto de Fórmula 1 completou os 5 793 metros de um circuito em 78 segundos. Qual foi, aproximadamente, a sua velocidade média?","opts":["47 m/s","58 m/s","74 m/s","85 m/s"],"ans":2,"exp":"Velocidade = distância ÷ tempo = 5 793 ÷ 78 ≈ 74 m/s."},
+  {"id":37,"subj":"mat","year":"2025","skill":"EF07MA17","q":"Um suco concentrado deve ser diluído na razão de 2 para 5 (concentrado para água). Tati obteve 1 400 mL de suco diluído. Quantos mililitros de concentrado ela utilizou?","opts":["400","560","840","930"],"ans":0,"exp":"O concentrado é 2 de um total de 2 + 5 = 7 partes: (2/7) × 1 400 = 400 mL."},
+  {"id":38,"subj":"mat","year":"2025","skill":"EF07MA17","q":"Considere que 5 pessoas consomem 3 litros de refrigerante. Para 40 pessoas, quantos litros deverão ser comprados?","opts":["12","24","30","32"],"ans":1,"exp":"Diretamente proporcional: 40 ÷ 5 = 8 grupos; 8 × 3 = 24 litros."},
+  {"id":39,"subj":"mat","year":"2025","skill":"EF07MA17","q":"Um processador de 2 GHz leva 10 minutos para realizar uma tarefa. Quanto tempo levaria um processador de 5 GHz na mesma tarefa (grandezas inversamente proporcionais)?","opts":["1 min","4 min","20 min","25 min"],"ans":1,"exp":"Inversamente proporcional: 2 × 10 = 5 × t → t = 20 ÷ 5 = 4 min."},
+  {"id":40,"subj":"mat","year":"2025","skill":"EF07MA17","q":"Um investimento de R$ 120 000,00 será dividido entre três setores, de forma diretamente proporcional ao número de funcionários:<div class='fig'><table class='nut'><tr><td>Desenvolvimento</td><td>5</td></tr><tr><td>Marketing</td><td>3</td></tr><tr><td>Suporte</td><td>2</td></tr></table></div>Quanto receberá o setor com o maior número de funcionários?","opts":["R$ 24 000,00","R$ 36 000,00","R$ 60 000,00","R$ 80 000,00"],"ans":2,"exp":"As partes somam 5 + 3 + 2 = 10; cada parte = 120 000 ÷ 10 = 12 000. O maior setor (5): 5 × 12 000 = R$ 60 000,00."},
+
+  {"id":41,"subj":"ing","year":"2024","skill":"EF07LI18","q":"Read the text.<br><em>“I took a bus tour this morning. Honestly, I didn't enjoy it as much, because I felt rushed from place to place and couldn't explore on my own.”</em><br>In this text, the negative form of the Past Simple appears in","opts":["“I didn't enjoy it as much”.","“I took a bus tour this morning”.","“I felt rushed from place to place”.","“couldn't explore on my own”."],"ans":0,"exp":"A negativa do Past Simple usa “didn't” + verbo no infinitivo: “I didn't enjoy”."},
+  {"id":42,"subj":"ing","year":"2024","skill":"EF07LI07","q":"Read the text.<br><em>“People who eat too many unhealthy foods are at greater risk of obesity, heart disease and type 2 diabetes. Choosing healthy foods helps reduce the risk of these chronic diseases.”</em><br>According to the text, having a healthy diet","opts":["reduces the risk of developing diseases.","increases the diagnosis of heart disease.","makes people need less physical exercise.","prevents people from having financial problems."],"ans":0,"exp":"O texto afirma que uma alimentação saudável ajuda a reduzir o risco de doenças crônicas."},
+  {"id":43,"subj":"ing","year":"2024","skill":"EF07LI18","q":"Read the text.<br><em>“There was a time when toothbrushes did not exist, and people used to brush their teeth with rough cloth or twigs.”</em><br>The sentence “people used to brush their teeth” refers to something that","opts":["people didn't do.","happens until today.","happened just once.","was a habit in the past."],"ans":3,"exp":"“Used to” indica um hábito do passado que não ocorre mais: as pessoas costumavam escovar os dentes com panos ou gravetos."},
+  {"id":44,"subj":"ing","year":"2024","skill":"EF07LI18","q":"Read the sentence written on the board: “Where did you come from?”<br>It is correct to say that this sentence","opts":["ends with a question word.","begins with a question word.","has the word “from” as subject.","uses the auxiliary in the present."],"ans":1,"exp":"É uma WH-question no Past Simple, que começa com a palavra interrogativa “Where”, seguida do auxiliar “did”."},
+  {"id":45,"subj":"ing","year":"2024","skill":"EF07LI18","q":"Read the sentence.<br><em>“Mom was folding my laundry while watching a TV show when I got home.”</em><br>Here, “while” is used with the verb forms to indicate","opts":["actions that are still happening today.","an action that will happen in the future.","actions that happened at the same time in the past.","actions happening together at the present moment."],"ans":2,"exp":"“While” liga duas ações que aconteciam ao mesmo tempo no passado: dobrar a roupa e assistir à TV."},
+
+  {"id":46,"subj":"ing","year":"2025","skill":"EF07LI18","q":"Read the text.<br><em>“I made my first mistake in Japan very early. I was traveling alone, so it was my problem. Holding up the line at immigration because I didn't write down my hotel address correctly? My shame alone.”</em><br>The sentence “I didn't write down my hotel address correctly” shows that the author","opts":["had no idea where the hotel was.","forgot the money to pay for the hotel.","wrote the hotel address in the wrong way.","decided not to stay in any hotel."],"ans":2,"exp":"A negativa “didn't write down… correctly” mostra que a autora anotou o endereço do hotel de forma errada."},
+  {"id":47,"subj":"ing","year":"2025","skill":"EF07LI18","q":"Read the dialogue.<br>— Do you love me, dad?<br>— Of course I do.<br>— Would you still love me if I did something really, really bad?<br>— <strong>What did you do?!</strong><br>The father's last question uses the auxiliary “did” to","opts":["guess what the child is planning to do.","offer a solution to the child's question.","explain what the child should not do.","ask for specific information about a past action."],"ans":3,"exp":"“What did you do?” é uma WH-question no Past Simple: pergunta sobre uma ação específica que já aconteceu."},
+  {"id":48,"subj":"ing","year":"2025","skill":"EF07LI18","q":"Read the text.<br><em>“The old king remembered better days. He used to rule the whole country, and people used to obey his every word. Now he lives alone in a small house.”</em><br>The expression “used to” shows that the king","opts":["wants to rule the country again soon.","thinks he will rule again in the future.","does the same things every day now.","talks about something that was common in the past."],"ans":3,"exp":"“Used to” fala de algo que era comum no passado e não acontece mais: o rei costumava governar, mas agora vive sozinho."},
+  {"id":49,"subj":"ing","year":"2025","skill":"EF07LI07","q":"Read the text.<br><em>“On a farm near Box Hill, young people help herd cows and build pens. They spend time there to boost their mental health. The coordinator says people are sleeping better, eating better and wanting to get out of the house.”</em><br>The text shows that working on the farm helps young people because","opts":["they want to become farmers.","it improves their mental health.","it teaches them how to build houses.","they enjoy making money from animals."],"ans":1,"exp":"O texto diz que os jovens passam tempo na fazenda para melhorar a saúde mental (dormem e se alimentam melhor)."},
+  {"id":50,"subj":"ing","year":"2025","skill":"EF07LI18","q":"Read the text.<br><em>“There was an arrogant hare who said she was the fastest. One day, the hare and the turtle were talking when the turtle decided to make a strange bet.”</em><br>The phrase “were talking when the turtle decided” expresses that","opts":["something was happening when it was interrupted by another action.","two things will happen at the same time in the future.","something started in the past and is still happening now.","two actions happen every day and will keep happening."],"ans":0,"exp":"“Were talking” (Past Continuous) indica uma ação em andamento que foi interrompida por outra no passado (“decided”)."},
+
+  {"id":51,"subj":"cie","year":"2024","skill":"EF07CI08","q":"Leia o texto.<br><em>O estoque global de peixes está diminuindo. Governos negociam um acordo para conter a atividade humana que esvazia os oceanos, mas, na prática, ainda financiam essa atividade que dizima a vida marinha.</em><br>O problema citado é causado principalmente pela","opts":["pesca predatória nos oceanos.","desvio dos cursos-d'água para irrigação.","introdução de peixes exóticos nos oceanos.","escoamento de nutrientes nos rios."],"ans":0,"exp":"A pesca predatória (exploração desenfreada) reduz as populações de peixes e impacta todo o ecossistema marinho."},
+  {"id":52,"subj":"cie","year":"2024","skill":"EF07CI09","q":"A leptospirose é transmitida pelo contato com a urina de ratos infectados pela bactéria Leptospira, e as inundações favorecem sua disseminação. Uma forma eficaz de prevenir surtos dessa doença é a","opts":["vacinação da população contra a doença.","implementação de serviços de saneamento básico.","eliminação de criadouros do inseto transmissor.","adoção de medidas contra larvas na água."],"ans":1,"exp":"O saneamento básico evita o acúmulo de água contaminada e o contato com a urina dos ratos, prevenindo surtos de leptospirose."},
+  {"id":53,"subj":"cie","year":"2024","skill":"EF07CI10","q":"Para fabricar uma vacina contra um vírus, os cientistas o inativam ou o quebram em pedaços, de modo que não cause a doença. Dentro do corpo, essa vacina age ao","opts":["conter o patógeno enfraquecido, que produz anticorpos sozinho.","estimular as células de defesa a produzir anticorpos específicos contra o patógeno.","eliminar a doença por meio das células de memória.","fazer as células de defesa serem destruídas pelo patógeno."],"ans":1,"exp":"A vacina estimula as células de defesa a produzirem anticorpos específicos contra o patógeno — é a imunização ativa."},
+  {"id":54,"subj":"cie","year":"2024","skill":"EF07CI11","q":"O soro caseiro — solução de água tratada, açúcar e sal em medidas certas — pode ter salvado milhões de pessoas. Sua descoberta ajudou a aumentar a expectativa de vida porque","opts":["possibilitou tratar pessoas com diabetes.","evitou a proliferação de feridas infectadas.","intensificou a cura de doenças inflamatórias.","auxiliou no tratamento de casos graves de desidratação."],"ans":3,"exp":"O soro repõe água e sais minerais, tratando a desidratação causada por diarreia e vômito — grande causa de mortalidade infantil."},
+  {"id":55,"subj":"cie","year":"2024","skill":"EF07CI11","q":"Alimentos transgênicos são obtidos por técnicas modernas de melhoramento genético. A técnica usada para produzi-los está associada à","opts":["transmissão de embriões para indivíduos da mesma espécie.","preservação de sementes para posterior armazenamento.","inserção de genes de outra espécie na espécie cultivada.","seleção de indivíduos com características específicas."],"ans":2,"exp":"A transgenia insere genes de outra espécie no material genético da espécie cultivada, modificando suas características."},
+
+  {"id":56,"subj":"cie","year":"2025","skill":"EF07CI08","q":"No Semiárido, secas mais intensas, temperaturas altas e desmatamento agravam a desertificação. O impacto sobre a vegetação citado no texto deve-se à","opts":["delimitação da área desértica.","ampliação da biodiversidade local.","redução da capacidade produtiva do solo.","estagnação do índice de chuvas na região."],"ans":2,"exp":"A desertificação reduz a capacidade do solo de sustentar a vegetação, ameaçando microrganismos e plantas."},
+  {"id":57,"subj":"cie","year":"2025","skill":"EF07CI09","q":"A prática esportiva regular fortalece a autoestima. Quando fragilizada, a autoestima afeta relacionamentos, estudos e trabalho. A atividade física ajuda a tratar esses sentimentos porque contribui para a","opts":["melhora do bem-estar mental.","hidratação do organismo.","redução das reservas de energia do corpo.","baixa liberação de substâncias no cérebro."],"ans":0,"exp":"A atividade física estimula a liberação de substâncias no cérebro que elevam a autoestima e melhoram o bem-estar mental."},
+  {"id":58,"subj":"cie","year":"2025","skill":"EF07CI09","q":"A taxa de mortalidade infantil é o número de mortes de crianças menores de 1 ano a cada 1 000 nascidos vivos. Veja os dados de 2021:<div class='fig'><table class='nut'><tr><td>Finlândia</td><td>1,8</td></tr><tr><td>Suécia</td><td>2,4</td></tr><tr><td>Turquia</td><td>9,1</td></tr><tr><td>Colômbia</td><td>12,8</td></tr></table></div>Se o IDH dependesse apenas desse indicador, qual país teria tido o melhor IDH em 2021?","opts":["Suécia","Turquia","Colômbia","Finlândia"],"ans":3,"exp":"Quanto menor a mortalidade infantil, melhor o indicador de saúde. A Finlândia tem a menor taxa (1,8), então teria o melhor IDH."},
+  {"id":59,"subj":"cie","year":"2025","skill":"EF07CI10","q":"O médico Edward Jenner percebeu que quem havia contraído a varíola bovina não adoecia com a varíola humana. Ele aplicou uma pequena dose de varíola bovina em um menino, que depois ficou imune à varíola humana. A criança ficou imune porque a pequena dose estimulou a","opts":["multiplicação de antígenos que causam a doença.","produção de anticorpos específicos que combatem o patógeno.","doação de anticorpos que inativam o agente causador.","formação de barreiras físicas contra o patógeno."],"ans":1,"exp":"A dose de varíola bovina (patógeno enfraquecido) estimulou o corpo do menino a produzir anticorpos específicos, tornando-o imune."},
+  {"id":60,"subj":"cie","year":"2025","skill":"EF07CI11","q":"Em um experimento, camundongos infectados com a bactéria que causa pneumonia foram divididos: os tratados com penicilina se recuperaram; os não tratados morreram. Esse resultado indica que o(a)","opts":["contaminação bacteriana foi igual entre todos os camundongos.","aumento na produção de vacinas melhora a qualidade de vida.","administração de penicilina multiplica as bactérias.","uso de antibióticos aumenta a expectativa de vida dos camundongos."],"ans":3,"exp":"Os tratados com o antibiótico sobreviveram — mostrando que antibióticos combatem infecções e aumentam a expectativa de vida."},
+
+  {"id":61,"subj":"geo","year":"2024","skill":"EF07GE11","q":"No Sudeste do Brasil destaca-se o domínio morfoclimático dos “Mares de Morros”, o de maior ocupação humana. Assinale o tipo climático e o bioma predominantes nesse domínio.","opts":["Clima equatorial – Floresta Amazônica.","Clima tropical úmido – Mata Atlântica.","Clima subtropical – Pantanal.","Clima semiárido – Caatinga."],"ans":1,"exp":"Os Mares de Morros, típicos do Sudeste, têm clima tropical úmido (muitas chuvas) e o bioma Mata Atlântica."},
+  {"id":62,"subj":"geo","year":"2024","skill":"EF07GE02","q":"A construção de Brasília (inaugurada em 1960) foi acompanhada da abertura de estradas por grandes áreas de cerrado pouco povoadas. Um dos principais objetivos desse processo era","opts":["centralizar as atividades políticas no litoral.","transferir a produção agropecuária para a Amazônia.","conservar as paisagens naturais dos biomas tropicais.","estimular o povoamento e o desenvolvimento da região central do país."],"ans":3,"exp":"Brasília foi planejada para atrair população e promover o desenvolvimento do interior (Centro-Oeste), pouco integrado ao país."},
+  {"id":63,"subj":"geo","year":"2024","skill":"EF07GE11","q":"Um bioma ocupa grande parte do Centro-Oeste e apresenta árvores de troncos e galhos retorcidos, adaptadas a um solo pobre em nutrientes. Esse bioma é o","opts":["Cerrado, marcado por plantas de troncos retorcidos.","Amazônia, marcada por árvores de grande porte.","Mata Atlântica, marcada por espécies arbustivas.","Pantanal, marcado por vegetação adaptada à umidade."],"ans":0,"exp":"Troncos e galhos retorcidos, adaptados a solo pobre, são característicos da vegetação do Cerrado."},
+  {"id":64,"subj":"geo","year":"2024","skill":"EF07GE02","q":"Entre 1840 e 1910, a Amazônia recebeu muitos migrantes nordestinos e imigrantes, e sua população saltou de 137 mil para cerca de 1,2 milhão de habitantes. Esse povoamento da Região Norte esteve associado ao(à)","opts":["ampliação do território das capitais estaduais.","crescimento de uma atividade extrativista.","fortalecimento da economia pecuarista.","valorização da diversidade étnica."],"ans":1,"exp":"O ciclo da borracha (atividade extrativista) atraiu migrantes em busca de trabalho, impulsionando o povoamento do Norte."},
+  {"id":65,"subj":"geo","year":"2024","skill":"EF07GE06","q":"A Zona Franca de Manaus, transformada em 1967 em um centro industrial, comercial e agropecuário, foi um projeto governamental implantado no Norte com o objetivo de","opts":["incentivar o desenvolvimento econômico da região.","beneficiar exclusivamente as comunidades indígenas.","definir as fronteiras agropecuárias.","dificultar a exploração mineral."],"ans":0,"exp":"A Zona Franca de Manaus buscava atrair indústrias e investimentos, incentivando o desenvolvimento econômico do Norte."},
+
+  {"id":66,"subj":"geo","year":"2025","skill":"EF07GE11","q":"No Sudeste do Brasil destaca-se o domínio morfoclimático dos Mares de Morros. Quais são suas características?","opts":["Predominância de planícies e alternância entre estação chuvosa e seca.","Relevos arredondados com presença de vegetação da Mata Atlântica.","Relevos de depressões e baixo volume de chuvas.","Predomínio de chapadas e vegetação de Campos."],"ans":1,"exp":"Os Mares de Morros têm relevo arredondado (que lembra ondas do mar) e vegetação de Mata Atlântica."},
+  {"id":67,"subj":"geo","year":"2025","skill":"EF07GE02","q":"Brasília foi construída para garantir a soberania sobre territórios pouco povoados e interiorizar o desenvolvimento. De que forma o governo pretendia alcançar esses objetivos?","opts":["Aproximando a capital das regiões mais industrializadas.","Deslocando a produção agropecuária para a antiga capital.","Atraindo a população para trabalhar e desenvolver a região.","Estabelecendo o litoral como centro econômico nacional."],"ans":2,"exp":"Ao transferir a capital para o interior, o governo buscava atrair pessoas para trabalhar e desenvolver o Centro-Oeste."},
+  {"id":68,"subj":"geo","year":"2025","skill":"EF07GE11","q":"Um bioma é formado por árvores baixas e tortuosas e muitas gramíneas, além de abrigar as nascentes de oito das doze principais bacias hidrográficas do país. Esse bioma é o(a)","opts":["Cerrado.","Caatinga.","Amazônia.","Mata Atlântica."],"ans":0,"exp":"Árvores baixas e tortuosas, gramíneas e a presença de muitas nascentes caracterizam o Cerrado."},
+  {"id":69,"subj":"geo","year":"2025","skill":"EF07GE02","q":"Entre o fim do século XIX e o início do XX, a exploração da borracha na Amazônia atraiu muitos trabalhadores nordestinos. Uma consequência direta disso para a Região Norte foi o","opts":["crescimento da população local.","aumento da produtividade agrícola.","encolhimento da atividade industrial.","desenvolvimento da atividade pecuária."],"ans":0,"exp":"A migração atraída pela borracha provocou o crescimento populacional do Norte, sobretudo perto de Manaus e Belém."},
+  {"id":70,"subj":"geo","year":"2025","skill":"EF07GE06","q":"Segundo o governo, a Zona Franca de Manaus é o maior plano de desenvolvimento regional da história do país, situado na Região Norte. Sua criação teve como finalidade","opts":["explorar reservas minerais na Amazônia.","atrair turistas para a Região Norte.","estabelecer um polo industrial integrado na região.","formalizar um acordo comercial com países vizinhos."],"ans":2,"exp":"A Zona Franca de Manaus foi criada para industrializar e integrar a região amazônica, formando um polo industrial."},
+
+  {"id":71,"subj":"his","year":"2024","skill":"EF07HI12","q":"Os tamoios, liderados por Cunhambebe, formaram uma confederação de tribos que, aliada aos franceses (1555–1565), ameaçou o povoamento português no litoral. A estratégia de resistência indígena apresentada é o(a)","opts":["proibição de trocas comerciais com estrangeiros.","transferência das comunidades para o interior.","adaptação de crenças do catolicismo europeu.","formação de alianças entre povos distintos."],"ans":3,"exp":"Os indígenas se aliaram entre si e aos franceses para resistir ao avanço colonial português — alianças entre povos distintos."},
+  {"id":72,"subj":"his","year":"2024","skill":"EF07HI13","q":"A Coroa portuguesa instituiu o Governo-Geral, colocando o governador-geral como “a cabeça que geria o poder”, responsável pela administração, fazenda, justiça e defesa. O objetivo dessa forma de governo era","opts":["melhorar a relação com a população nativa.","retomar o sistema de capitanias hereditárias.","centralizar o controle administrativo da colônia.","fundar as primeiras vilas do território."],"ans":2,"exp":"O Governo-Geral concentrava poderes em uma única autoridade, centralizando o controle administrativo da colônia."},
+  {"id":73,"subj":"his","year":"2024","skill":"EF07HI16","q":"No século XVI, as pessoas escravizadas trabalhavam de 12 a 16 horas por dia e viviam em senzalas sem ventilação nem janelas, onde dormiam e comiam. O texto indica que essas pessoas","opts":["conservavam plenamente suas tradições culturais.","trabalhavam nos espaços urbanos.","lutavam pelo direito à cidadania.","viviam sob condições precárias."],"ans":3,"exp":"Jornadas exaustivas e moradias insalubres evidenciam as condições de vida e trabalho extremamente precárias impostas aos escravizados."},
+  {"id":74,"subj":"his","year":"2024","skill":"EF07HI10","q":"Nos engenhos coloniais, a casa-grande era a residência do senhor de engenho, geralmente construída em área elevada da propriedade. No Período Colonial, esse tipo de edificação era","opts":["a moradia dos escravizados que fugiam dos engenhos.","o polo de concentração de ouro e metais preciosos.","um símbolo de poder dos senhores de engenho.","um ambiente de liberdade política e cultural."],"ans":2,"exp":"A casa-grande, morada do senhor de engenho, representava seu poder e status social — símbolo de autoridade na sociedade colonial."},
+  {"id":75,"subj":"his","year":"2024","skill":"EF07HI11","q":"A criação de gado avançou pelas margens do rio São Francisco, do litoral em direção ao sertão, formando currais e fazendas. Qual foi o impacto dessa atividade?","opts":["O fim das expedições dos bandeirantes no Centro-Oeste.","A consolidação do domínio português sobre o interior do Nordeste.","A criação de uma capital no atual Sudeste.","O fortalecimento da mineração no atual Norte."],"ans":1,"exp":"A pecuária levou a ocupação ao interior nordestino, fixando população e consolidando o domínio português sobre a região."},
+
+  {"id":76,"subj":"his","year":"2025","skill":"EF07HI12","q":"Com a chegada dos portugueses (1500), os indígenas foram escravizados para extrair pau-brasil e construir infraestrutura. Diante disso, os povos indígenas resistiram por meio de","opts":["confrontos e formação de alianças com outros povos.","requisições e acordos com as autoridades coloniais.","compreensão e adaptação dos costumes europeus.","dispersão e isolamento em regiões desabitadas."],"ans":0,"exp":"Os indígenas reagiram com rebeliões e confrontos diretos e formaram alianças com outros povos, inclusive europeus rivais dos portugueses."},
+  {"id":77,"subj":"his","year":"2025","skill":"EF07HI13","q":"Em 1548, para “dar favor e ajuda” aos donatários e centralizar a administração, o rei de Portugal criou o Governo-Geral. Essa mudança foi motivada pelo","opts":["sucesso da produção nos engenhos de cana.","enfraquecimento da colonização francesa.","fortalecimento da autonomia dos donatários.","fracasso da experiência das capitanias hereditárias."],"ans":3,"exp":"Muitas capitanias hereditárias foram abandonadas e não geraram lucro; o Governo-Geral surgiu para corrigir esse fracasso administrativo."},
+  {"id":78,"subj":"his","year":"2025","skill":"EF07HI16","q":"As pessoas escravizadas trabalhavam de 12 a 16 horas por dia, muitas vezes acorrentadas, e viviam em senzalas sem ventilação nem janelas. Esse contexto caracteriza uma rotina marcada pela","opts":["organização e autonomia dos trabalhadores.","convivência e adequação ao regime imposto.","ineficiência e distribuição de funções.","exploração e precarização das condições de vida."],"ans":3,"exp":"Jornadas intensas e moradias insalubres revelam a exploração da mão de obra e a precarização da vida no sistema escravista."},
+  {"id":79,"subj":"his","year":"2025","skill":"EF07HI10","q":"Na sociedade açucareira, o senhor de engenho tinha autoridade absoluta sobre a família, os trabalhadores e todos em suas terras, influenciando até as câmaras municipais. Assim, sua propriedade era","opts":["um espaço destinado à convivência de escravizados.","uma representação do poder da nobreza portuguesa.","um símbolo de autoridade da sociedade colonial.","uma localidade afastada da produção econômica."],"ans":2,"exp":"O poder do senhor de engenho ia além da produção: sua propriedade concentrava riqueza, prestígio e influência — símbolo de autoridade colonial."},
+  {"id":80,"subj":"his","year":"2025","skill":"EF07HI11","q":"A partir de 1554, entradas e bandeiras partiam de São Paulo de Piratininga em direção ao interior. Conforme avançavam, essas expedições contribuíram para o processo de","opts":["encerramento dos aldeamentos religiosos.","interiorização da colonização portuguesa.","fortalecimento das colônias hispânicas.","concentração das atividades no litoral."],"ans":1,"exp":"As expedições reconheceram e incorporaram novas terras ao domínio português, interiorizando a colonização."},
+
+  {"id":81,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>A conversa é um processo pelo qual duas pessoas se entendem: elas precisam ouvir uma à outra e se deixar conduzir pela conversa, de modo que algo novo surja entre elas.</em><br>Qual situação exemplifica o diálogo descrito no texto?","opts":["Duas pessoas dialogam para tomar uma decisão juntas.","Duas pessoas se recusam a ouvir os argumentos de outra.","Uma pessoa deixa de opinar para evitar discordâncias.","Uma pessoa exige que sua vontade seja feita por todos."],"ans":0,"exp":"O diálogo verdadeiro exige que as pessoas se ouçam e cheguem juntas a uma conclusão — como ao tomar uma decisão em conjunto."},
+  {"id":82,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Um texto defende que a amizade não vê cor nem lugar de origem, e que todos — de qualquer aparência — têm o direito de viver e sonhar. Essa ideia retoma a noção de respeito às diferenças ao destacar que","opts":["as diferenças culturais devem afastar as pessoas.","as pessoas devem ser tratadas de forma igualitária.","o caráter de uma pessoa define seus direitos.","o desrespeito é uma falha natural das pessoas."],"ans":1,"exp":"Respeitar as diferenças significa reconhecer que todas as pessoas têm os mesmos direitos — ou seja, tratamento igualitário."},
+  {"id":83,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Um jogador de futebol sofreu ataques racistas de parte da torcida e, mesmo após várias denúncias, ninguém foi responsabilizado na Justiça. Nesse caso, a justiça não foi aplicada de maneira completa porque","opts":["pessoas que cometeram crimes não foram punidas.","ações intolerantes foram defendidas pela mídia.","atletas precisaram abandonar o esporte.","leis que proíbem o racismo foram anuladas."],"ans":0,"exp":"Há falha na justiça quando pessoas cometem crimes (como o racismo) e não são responsabilizadas por seus atos."},
+  {"id":84,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Após enchentes no Rio Grande do Sul, voluntários e uma universidade restauraram fotografias danificadas, recuperando memórias de famílias que perderam quase tudo. Essa ação demonstra que","opts":["a ajuda financeira é a única forma de ajudar comunidades.","doar traz benefícios apenas para quem pratica a ação.","a solidariedade pode mudar a realidade de quem precisa de ajuda.","o governo deve resolver sozinho todos os problemas sociais."],"ans":2,"exp":"Mesmo sem repor bens materiais, os voluntários resgataram memórias importantes — mostrando como a solidariedade transforma a realidade de quem precisa."},
+  {"id":85,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"O Dia Internacional da Não Violência é celebrado em 2 de outubro, data de nascimento de Mahatma Gandhi. Por que a atuação desse líder indiano se tornou símbolo da não violência?","opts":["Porque protestava exclusivamente contra doutrinas religiosas.","Porque pressionava a sociedade a obedecer às leis locais.","Porque inspirava as pessoas a resistirem de forma pacífica.","Porque estava de acordo com a filosofia colonial."],"ans":2,"exp":"Gandhi liderou a luta pela independência da Índia inspirando o povo a resistir pacificamente, por meio de protestos e desobediência civil."},
+
+  {"id":86,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>“Ontem terminei uma antiga briga. Pedi desculpas, e ele também. Liguei para meu irmão, com quem eu não falava havia 15 anos. Ninguém percebeu, mas foi um passo em direção à paz.”</em><br>Nesse relato, o diálogo foi usado pela personagem para","opts":["respeitar um pedido de isolamento.","solucionar um conflito entre pessoas.","compreender a necessidade do outro.","evidenciar a dependência entre indivíduos."],"ans":1,"exp":"Por meio de uma conversa e de um pedido de desculpas, a personagem reconciliou-se com o irmão — o diálogo solucionou um conflito."},
+  {"id":87,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Um texto afirma que cada pessoa tem seu jeito singular de ser feliz e de enxergar o mundo, e que todos — de qualquer aparência — devem ter as mesmas oportunidades e direitos. Segundo essa ideia, as diferenças das pessoas devem ser","opts":["reduzidas, para manter a convivência entre todos.","respeitadas, para haver um tratamento igualitário.","disfarçadas, para que ninguém se sinta diferente.","superadas, para garantir que todos sejam iguais."],"ans":1,"exp":"As diferenças devem ser respeitadas: reconhecê-las é garantir a todas as pessoas os mesmos direitos e oportunidades (tratamento igualitário)."},
+  {"id":88,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Escolas promovem palestras e atividades diárias de conscientização para criar um ambiente livre de bullying, formando jovens que se respeitem e convivam bem. Esse tipo de projeto promove a cultura de paz ao","opts":["aplicar medidas que reduzem o tempo de convivência entre as crianças.","monitorar atitudes de desobediência às regras.","estabelecer limites que reforçam a disciplina.","desenvolver ações que valorizam o diálogo e a cooperação."],"ans":3,"exp":"Palestras e atividades de conscientização estimulam o respeito mútuo, o diálogo e a cooperação — bases de uma cultura de paz."},
+  {"id":89,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Uma criança de seis anos pediu aos pais que, em vez de comprar seu presente de aniversário, usassem o dinheiro para montar kits de cachorro-quente e distribuí-los a pessoas em situação de rua. Essa iniciativa mostra que uma ação solidária pode surgir do(a)","opts":["compromisso e da atitude de cada indivíduo.","comprometimento e da sensibilização da mídia.","costume e da repetição de ações da família.","apoio e da atuação de instituições governamentais."],"ans":0,"exp":"A decisão partiu da própria vontade da criança — a solidariedade pode nascer do compromisso e da iniciativa de cada indivíduo."},
+  {"id":90,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Dados do IBGE (2022) mostram que o rendimento médio das mulheres brancas foi bem maior que o das mulheres negras, que estão mais presentes em empregos informais e de baixa remuneração, enquanto as brancas ocupam mais cargos de liderança. Esses dados refletem um cenário injusto porque","opts":["demonstram a desvalorização dos empregos informais.","indicam uma condição de desigualdade de oportunidades.","revelam baixa adesão feminina a cargos de liderança.","simbolizam maior produtividade das mulheres no trabalho."],"ans":1,"exp":"A diferença de renda e de acesso a cargos revela desigualdade de oportunidades entre os grupos — um cenário de injustiça social."},
+
+  {"id":91,"subj":"art","year":"2024","skill":"EF69AR26","q":"Em um filme, os atores usam trajes que lembram armaduras tecnológicas, com detalhes complexos e metálicos, feitos para proteger o corpo. A partir desse figurino, infere-se que o ambiente da história é","opts":["atual e seguro.","medieval e pacífico.","futurístico e perigoso.","ultrapassado e acolhedor."],"ans":2,"exp":"O figurino ajuda a indicar o tempo e o espaço: armaduras tecnológicas sugerem um ambiente futurístico e perigoso."},
+  {"id":92,"subj":"art","year":"2024","skill":"EF69AR20","q":"Em uma história em quadrinhos, a onomatopeia “toc-toc” aparece três vezes, escrita em letras de tamanhos diferentes: pequenas, médias e grandes. Essa variação no tamanho das letras representa qual característica do som?","opts":["A altura, mostrando variação entre grave e agudo.","A intensidade, revelando que o som pode ser fraco, médio ou forte.","A duração, indicando o tempo de permanência das batidas.","A densidade, indicando o agrupamento de sons de fontes diferentes."],"ans":1,"exp":"Letras maiores sugerem som mais forte; menores, som mais fraco. A variação de tamanho representa a intensidade (volume) do som."},
+  {"id":93,"subj":"art","year":"2024","skill":"EF69AR20","q":"Um exercício de harmonia musical pede que o pianista toque, ao mesmo tempo, as notas fá, lá, dó e ré. Considerando o conceito de harmonia, espera-se que o pianista","opts":["toque as quatro notas ao mesmo tempo, produzindo um acorde.","pressione uma tecla de cada vez, produzindo uma série de sons.","cante cada nota em vez de tocá-la.","observe apenas o tempo de duração de cada som."],"ans":0,"exp":"Harmonia é a combinação simultânea de notas diferentes, formando acordes. No exercício, as notas devem soar juntas."},
+  {"id":94,"subj":"art","year":"2024","skill":"EF69AR34","q":"O tambor de crioula é uma manifestação em que grupos cantam e dançam ao som acelerado de tambores, com forte presença de afrodescendentes. Essa manifestação é caracterizada por","opts":["movimentos que relembram a prática dos trabalhadores rurais.","elementos ligados à musicalidade afro-brasileira.","gestos que representam lutas corporais indígenas.","cenários iluminados por fogueiras e tochas."],"ans":1,"exp":"O tambor de crioula, com seus tambores, cantos e danças de matriz africana, é uma expressão da musicalidade afro-brasileira."},
+  {"id":95,"subj":"art","year":"2024","skill":"EF69AR34","q":"Um projeto oferece oficinas gratuitas de jongo — dança de roda de origem afro-brasileira — para ensinar a dança e manter viva a memória dessa cultura. O projeto tem relevância sociocultural porque a","opts":["oficina gratuita garante empregos para artistas.","idealizadora expressa sua paixão pela dança.","roda de jongo é um movimento que desapareceu.","manifestação artística valoriza a identidade e a memória afro-brasileiras."],"ans":3,"exp":"Ao ensinar o jongo e preservar sua memória, o projeto fortalece a identidade e a memória da cultura afro-brasileira."},
+
+  {"id":96,"subj":"art","year":"2025","skill":"EF69AR26","q":"Em uma peça de teatro, os atores vestem trajes de época, como vestidos longos e ternos antigos. Esse figurino auxilia principalmente na","opts":["compreensão do tempo e do espaço da encenação.","movimentação dos atores durante as coreografias.","distinção entre atores principais e figurantes.","criação de efeitos sonoros para a trama."],"ans":0,"exp":"O figurino de época ajuda o público a situar em que tempo e lugar a história se passa."},
+  {"id":97,"subj":"art","year":"2025","skill":"EF69AR20","q":"Um texto define uma qualidade do som assim: é o que permite distinguir um som de outro, fazendo um violino soar diferente de uma flauta, mesmo tocando a mesma nota. Essa qualidade é o(a)","opts":["altura.","timbre.","duração.","intensidade."],"ans":1,"exp":"O timbre é a “cor” do som: permite diferenciar instrumentos e vozes, mesmo na mesma nota e no mesmo volume."},
+  {"id":98,"subj":"art","year":"2025","skill":"EF69AR20","q":"Um componente essencial da música é aquele que “cantamos junto” ou assobiamos: uma linha musical reconhecível, criada com notas em sequência. Esse componente é a melodia, que pode ser definida como uma","opts":["sequência de sons de diferentes alturas e durações.","variação da intensidade dos sons de uma peça.","combinação de vários instrumentos tocando juntos.","mistura de todas as notas tocadas ao mesmo tempo."],"ans":0,"exp":"A melodia é uma sequência de notas de diferentes alturas e durações, formando uma linha musical reconhecível."},
+  {"id":99,"subj":"art","year":"2025","skill":"EF69AR34","q":"Nas rodas de jongo, além do canto e da dança, as mulheres realizam todo o trabalho de organização e acolhimento das festas, transmitindo saberes ancestrais. Esse trabalho é importante para a","opts":["preservação da cultura afrodescendente.","transmissão de ensinamentos escolares.","expansão de danças contemporâneas.","criação de novas crenças religiosas."],"ans":0,"exp":"As mulheres garantem a continuidade do jongo e dos saberes ancestrais, preservando um pilar da cultura afrodescendente."},
+  {"id":100,"subj":"art","year":"2025","skill":"EF69AR34","q":"Uma artista instalou grandes painéis de mosaico em estações de metrô por onde passam cerca de 130 mil pessoas por dia, entre trabalhadores, estudantes e turistas. Com base nisso, essa obra representa a","opts":["redução da arte a uma função decorativa nas cidades.","busca dos artistas por vender suas obras em espaços públicos.","recuperação de uma arte que havia deixado de existir.","capacidade da arte de alcançar muitas pessoas em locais de uso diário."],"ans":3,"exp":"Instalada em local de grande circulação, a obra torna a arte acessível a milhares de pessoas todos os dias."}
+]
+}
+</script>
+<script>
+(function(){
+  var DB = JSON.parse(document.getElementById("DATA").textContent);
+  var SUBJECTS = DB.subjects, QUESTIONS = DB.questions;
+  var LETTERS = ["A","B","C","D"];
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function getOrder(q){ if(!(q.id in state.order)){ var base=[]; for(var i=0;i<q.opts.length;i++){ base.push(i); } state.order[q.id]=shuffle(base); } return state.order[q.id]; }
+  var state = { current: SUBJECTS[0].key, answers: {}, order: {} };
+
+  var tabsEl = document.getElementById("tabs");
+  var mainEl = document.getElementById("main");
+  var answeredEl = document.getElementById("answered");
+  var hitsEl = document.getElementById("hits");
+  var barEl = document.getElementById("bar");
+
+  function qOfSubject(k){ return QUESTIONS.filter(function(q){return q.subj===k;}); }
+  function subjMeta(k){ return SUBJECTS.find(function(s){return s.key===k;}); }
+
+  function totals(){
+    var ans=0, hit=0;
+    QUESTIONS.forEach(function(q){
+      if(q.id in state.answers){ ans++; if(state.answers[q.id]===q.ans) hit++; }
+    });
+    return {ans:ans,hit:hit};
+  }
+  function subjTotals(k){
+    var ans=0, hit=0, list=qOfSubject(k);
+    list.forEach(function(q){ if(q.id in state.answers){ans++; if(state.answers[q.id]===q.ans) hit++;} });
+    return {ans:ans,hit:hit,total:list.length};
+  }
+
+  function renderTabs(){
+    tabsEl.innerHTML="";
+    SUBJECTS.forEach(function(s){
+      var t=subjTotals(s.key);
+      var b=document.createElement("button");
+      b.className="tab"+(s.key===state.current?" active":"")+(t.ans===t.total?" done":"");
+      b.style.setProperty("--c", s.color);
+      b.innerHTML='<span class="dot"></span>'+s.name+'<span class="cnt">'+t.ans+'/'+t.total+'</span>';
+      b.onclick=function(){ state.current=s.key; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+      tabsEl.appendChild(b);
+    });
+  }
+
+  function renderScore(){
+    var t=totals();
+    answeredEl.textContent=t.ans; hitsEl.textContent=t.hit;
+    barEl.style.width=(t.ans/QUESTIONS.length*100)+"%";
+  }
+
+  function paintAnswered(card, q, chosen){
+    var opts=card.querySelectorAll(".opt");
+    opts.forEach(function(o){
+      var oi=parseInt(o.dataset.i,10);
+      o.disabled=true;
+      if(oi===q.ans){ o.classList.add("correct"); o.querySelector(".mark").textContent="\u2713"; }
+      if(oi===chosen && chosen!==q.ans){ o.classList.add("wrong"); o.querySelector(".mark").textContent="\u2717"; }
+    });
+    var exp=card.querySelector(".exp"); var ok=chosen===q.ans;
+    exp.classList.add("show", ok?"ok":"no");
+    exp.innerHTML=(ok?"<b>Correto!</b> ":"<b>N\u00e3o foi dessa vez.</b> ")+q.exp;
+  }
+
+  function choose(q, idx, card){
+    if(q.id in state.answers) return;
+    state.answers[q.id]=idx;
+    paintAnswered(card, q, idx);
+    renderScore(); renderTabs(); maybeSummary();
+  }
+
+  function maybeSummary(){
+    var k=state.current, t=subjTotals(k);
+    var sum=document.getElementById("summary-"+k);
+    if(!sum) return;
+    if(t.ans===t.total){
+      var meta=subjMeta(k);
+      sum.querySelector(".big").textContent=t.hit+"/"+t.total;
+      var pct=t.hit/t.total, msg;
+      if(pct===1) msg="Gabaritou "+meta.name+"! Mandou muito bem.";
+      else if(pct>=0.7) msg="Bom desempenho em "+meta.name+". Revise o que escapou e siga em frente.";
+      else if(pct>=0.5) msg="Voc\u00ea concluiu "+meta.name+". Vale revisar as explica\u00e7\u00f5es das quest\u00f5es erradas.";
+      else msg="Concluiu "+meta.name+". Releia as explica\u00e7\u00f5es com calma \u2014 d\u00e1 para melhorar bastante.";
+      sum.querySelector("p").textContent=msg;
+      sum.classList.add("show");
+    } else {
+      sum.classList.remove("show");
+    }
+  }
+
+  function render(){
+    var k=state.current, meta=subjMeta(k);
+    document.documentElement.style.setProperty("--accent", meta.color);
+    renderTabs(); renderScore();
+    var list=qOfSubject(k);
+    mainEl.innerHTML='<div class="mathead"><h2>'+meta.name+'</h2><span class="bar"></span></div>';
+    list.forEach(function(q){
+      var card=document.createElement("div");
+      card.className="q";
+      var opts="";
+      var ord=getOrder(q);
+      for(var i=0;i<ord.length;i++){
+        var oi=ord[i];
+        opts+='<button class="opt" data-i="'+oi+'"><span class="letter">'+LETTERS[i]+'</span><span class="txt">'+q.opts[oi]+'</span><span class="mark"></span></button>';
+      }
+      card.innerHTML='<div class="meta"><span class="qn">'+q.id+'</span><span class="pill yr">'+q.year+'</span><span class="pill">'+q.skill+'</span></div>'+
+        '<div class="stem">'+q.q+'</div><div class="opts">'+opts+'</div><div class="exp"></div>';
+      card.querySelectorAll(".opt").forEach(function(btn){
+        btn.addEventListener("click",function(){ choose(q, parseInt(btn.dataset.i,10), card); });
+      });
+      if(q.id in state.answers){ paintAnswered(card, q, state.answers[q.id]); }
+      mainEl.appendChild(card);
+    });
+    var sum=document.createElement("div");
+    sum.className="summary"; sum.id="summary-"+k;
+    sum.innerHTML='<h3>Resumo de '+meta.name+'</h3><div class="big">0/0</div><p></p><button class="next">Pr\u00f3xima</button>';
+    mainEl.appendChild(sum);
+    var idx=-1; for(var j=0;j<SUBJECTS.length;j++){ if(SUBJECTS[j].key===k){idx=j;break;} }
+    var nextBtn=sum.querySelector(".next");
+    if(idx<SUBJECTS.length-1){
+      nextBtn.textContent="Ir para "+SUBJECTS[idx+1].name+" \u2192";
+      nextBtn.onclick=function(){ state.current=SUBJECTS[idx+1].key; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+    } else {
+      nextBtn.textContent="Voltar ao in\u00edcio \u2191";
+      nextBtn.onclick=function(){ window.scrollTo({top:0,behavior:"smooth"}); };
+    }
+    maybeSummary();
+  }
+
+  document.getElementById("restart").addEventListener("click",function(){
+    if(Object.keys(state.answers).length && !confirm("Recome\u00e7ar a prova? Suas respostas ser\u00e3o apagadas.")) return;
+    state.answers={}; state.order={}; state.current=SUBJECTS[0].key; render(); window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
