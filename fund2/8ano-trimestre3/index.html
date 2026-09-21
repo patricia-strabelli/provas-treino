@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3ª Prova Treino · 8º ano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F6F3; --card:#FFFFFF; --ink:#20242B; --muted:#6A7078;
+    --line:#E4E2DC; --good:#1E8449; --good-bg:#E7F4EC; --bad:#C0392B; --bad-bg:#FBEAE8;
+    --accent:#2471A3;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;line-height:1.55;font-size:17px}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px 64px}
+  code,.mono{font-family:"Space Mono",monospace}
+
+  header.top{padding:30px 0 18px;border-bottom:2px solid var(--ink)}
+  .kicker{font-family:"Space Mono",monospace;font-size:12.5px;letter-spacing:.14em;color:var(--muted);margin:0 0 8px}
+  h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(30px,7vw,44px);line-height:1.02;margin:0;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:8px 0 0;font-size:15.5px}
+
+  .scorebar{position:sticky;top:0;z-index:20;background:var(--bg);padding:12px 0 10px;margin-top:2px;border-bottom:1px solid var(--line)}
+  .scores{display:flex;gap:22px;align-items:baseline;flex-wrap:wrap}
+  .scores .item{display:flex;gap:7px;align-items:baseline}
+  .scores .num{font-family:"Space Mono",monospace;font-weight:700;font-size:21px;color:var(--ink)}
+  .scores .lab{font-size:12.5px;color:var(--muted)}
+  .scores .hit .num{color:var(--good)}
+  .progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+  .progress > i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .35s ease}
+
+  nav.tabs{display:flex;gap:8px;overflow-x:auto;padding:14px 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--muted);
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14.5px;
+    padding:8px 14px;border-radius:99px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px;transition:.15s}
+  .tab .dot{width:9px;height:9px;border-radius:50%;background:var(--c)}
+  .tab .cnt{font-family:"Space Mono",monospace;font-size:11.5px;color:var(--muted)}
+  .tab:hover{border-color:var(--c)}
+  .tab.active{color:#fff;background:var(--c);border-color:var(--c)}
+  .tab.active .cnt{color:rgba(255,255,255,.85)}
+  .tab.active .dot{background:#fff}
+  .tab.done::after{content:"\2713";font-family:"Public Sans";font-weight:700;margin-left:2px}
+
+  .mathead{display:flex;align-items:center;gap:10px;margin:26px 0 4px}
+  .mathead h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:24px;margin:0;color:var(--accent)}
+  .mathead .bar{height:3px;flex:1;background:var(--accent);opacity:.25;border-radius:2px}
+
+  .q{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);
+     border-radius:14px;padding:18px 18px 16px;margin:14px 0}
+  .q .meta{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+  .q .qn{font-family:"Space Mono",monospace;font-weight:700;font-size:13px;color:#fff;background:var(--accent);
+     border-radius:7px;padding:2px 8px}
+  .pill{font-family:"Space Mono",monospace;font-size:11px;color:var(--muted);border:1px solid var(--line);
+     border-radius:99px;padding:2px 8px;background:#fbfaf8}
+  .pill.yr{color:var(--accent);border-color:var(--accent)}
+  .q .stem{font-size:16.5px;margin:2px 0 14px}
+  .q .stem em{color:var(--ink)}
+  .fig{margin:12px 0;overflow-x:auto;color:var(--accent)}
+  .fig svg{max-width:100%;height:auto;display:block}
+  table.nut{border-collapse:collapse;font-family:"Space Mono",monospace;font-size:14px;min-width:230px;background:#fff}
+  table.nut td{border:1px solid var(--line);padding:5px 12px}
+  table.nut td:last-child{text-align:right;font-weight:700}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+     border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:12px 13px;cursor:pointer;
+     font:inherit;color:var(--ink);transition:.12s}
+  .opt:hover:not(:disabled){border-color:var(--accent);background:#fbfcfd}
+  .opt:disabled{cursor:default}
+  .opt .letter{font-family:"Space Mono",monospace;font-weight:700;font-size:14px;color:var(--muted);
+     border:1.5px solid var(--line);border-radius:7px;min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .opt .txt{padding-top:1px}
+  .opt.correct{border-color:var(--good);background:var(--good-bg)}
+  .opt.correct .letter{background:var(--good);border-color:var(--good);color:#fff}
+  .opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+  .opt.wrong .letter{background:var(--bad);border-color:var(--bad);color:#fff}
+  .opt.correct .mark,.opt.wrong .mark{margin-left:auto;font-weight:700;align-self:center}
+  .opt.correct .mark{color:var(--good)} .opt.wrong .mark{color:var(--bad)}
+
+  .exp{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:15px;display:none}
+  .exp.show{display:block}
+  .exp.ok{background:var(--good-bg);color:#15613a}
+  .exp.no{background:var(--bad-bg);color:#8f2419}
+  .exp b{font-weight:700}
+
+  .summary{display:none;background:var(--accent);color:#fff;border-radius:16px;padding:22px;margin:20px 0 6px}
+  .summary.show{display:block}
+  .summary h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:22px;margin:0 0 6px}
+  .summary .big{font-family:"Space Mono",monospace;font-weight:700;font-size:40px;line-height:1;margin:6px 0}
+  .summary p{margin:6px 0 0;opacity:.92;font-size:15px}
+  .summary .next{margin-top:16px;background:#fff;color:var(--accent);border:none;border-radius:10px;
+     font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:15px;padding:11px 18px;cursor:pointer}
+
+  footer.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .restart{border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:10px;
+     font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14.5px;padding:10px 18px;cursor:pointer}
+  .restart:hover{background:var(--ink);color:#fff}
+  .foot .note{font-size:12.5px;color:var(--muted)}
+  @media (max-width:520px){ body{font-size:16px} .q{padding:15px 14px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="kicker">PROVA TREINO</p>
+    <h1>3ª Prova Treino · 8º ano</h1>
+    <p class="sub">Ensino Fundamental · 100 questões (2024 + 2025) · responda e veja a correção na hora</p>
+  </header>
+
+  <div class="scorebar">
+    <div class="scores">
+      <div class="item"><span class="num" id="answered">0</span><span class="lab">de 100 respondidas</span></div>
+      <div class="item hit"><span class="num" id="hits">0</span><span class="lab">acertos</span></div>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+  </div>
+
+  <nav class="tabs" id="tabs"></nav>
+  <main id="main"></main>
+
+  <footer class="foot">
+    <button class="restart" id="restart">Recomeçar</button>
+    <span class="note">Modo prática — sem nota. Bons estudos!</span>
+  </footer>
+</div>
+
+<script type="application/json" id="DATA">
+{
+"subjects": [
+  {"key":"port","name":"Língua Portuguesa","color":"#C0392B"},
+  {"key":"mat","name":"Matemática","color":"#2471A3"},
+  {"key":"ing","name":"Inglês","color":"#7D3C98"},
+  {"key":"cie","name":"Ciências","color":"#1E8449"},
+  {"key":"geo","name":"Geografia","color":"#CA6F1E"},
+  {"key":"his","name":"História","color":"#B9770E"},
+  {"key":"fil","name":"Filosofia","color":"#117A65"},
+  {"key":"art","name":"Arte","color":"#C2185B"}
+],
+"questions": [
+  {"id":1,"subj":"port","year":"2024","skill":"EF69LP44","q":"Leia o texto.<br><em>Contam os antigos contadores de histórias de uma aldeia africana que, há muito tempo, o gato e o rato viviam juntos e eram grandes amigos. Um dia, resolveram guardar leite para a estação seca, do jeito que aprenderam com os mais velhos.</em><br>Uma característica comum aos contos populares evidenciada nesse texto é o(a)","opts":["ambientação específica em uma aldeia africana.","descrição detalhada do preparo de um alimento.","fato de a história ser transmitida oralmente por contadores.","enredo que trata da amizade entre dois personagens."],"ans":2,"exp":"A transmissão oral, feita por contadores de histórias de geração em geração, é uma das marcas centrais dos contos populares."},
+  {"id":2,"subj":"port","year":"2024","skill":"EF08LP12","q":"Releia o trecho.<br><em>“Eu aprendi como as mulheres preparam a manteiga.”</em><br>A oração destacada “como as mulheres preparam a manteiga” é uma oração subordinada substantiva que, em relação à oração principal, desempenha a função de","opts":["sujeito.","objeto indireto.","predicativo do sujeito.","objeto direto."],"ans":3,"exp":"A oração completa o sentido do verbo “aprender” (aprender algo), sem preposição — é uma subordinada substantiva objetiva direta."},
+  {"id":3,"subj":"port","year":"2024","skill":"EF08LP15","q":"Leia o trecho de outro conto popular.<br><em>O porco e o milhafre eram inseparáveis amigos. O porco pediu ao amigo umas asas e, com a ajuda do amigo, chegou a voar; mas as penas se soltaram, e o amigo nada pôde fazer.</em><br>Além de ser um mecanismo de coesão, a repetição do termo “amigo(s)” serve para","opts":["reforçar a ligação entre as personagens.","demarcar a passagem do tempo na história.","indicar a mudança de sentimentos das personagens.","demonstrar a fragilidade da relação entre eles."],"ans":0,"exp":"Desde o início eles são “inseparáveis amigos”; a repetição de “amigo(s)” é um recurso de coesão que enfatiza essa amizade."},
+  {"id":4,"subj":"port","year":"2024","skill":"EF69LP45","q":"Leia o texto.<br><em>Com um salto no tempo, a protagonista chega à adolescência. Na “sala de controle” da sua mente, as emoções já conhecidas precisam se adaptar à chegada de novas emoções.</em><br>Esse texto é uma sinopse porque","opts":["apresenta brevemente informações do enredo do filme.","divulga opiniões de críticos e espectadores.","fornece uma análise crítica detalhada da obra.","traz uma descrição técnica de como o filme foi produzido."],"ans":0,"exp":"A sinopse resume o enredo para apresentar a obra e despertar o interesse do público, sem opiniões nem dados técnicos."},
+  {"id":5,"subj":"port","year":"2024","skill":"EF08LP12","q":"Releia o período.<br><em>“As emoções não têm certeza de como se sentir quando novos inquilinos chegam.”</em><br>A oração destacada “de como se sentir” classifica-se como subordinada substantiva","opts":["apositiva, pois é um aposto da palavra anterior.","predicativa, pois é predicativo do sujeito.","objetiva indireta, pois é objeto indireto de um verbo.","completiva nominal, pois completa o sentido de um substantivo."],"ans":3,"exp":"A oração completa o sentido do substantivo “certeza” (certeza de algo) — é uma subordinada substantiva completiva nominal."},
+  {"id":6,"subj":"port","year":"2024","skill":"EF69LP20","q":"Leia o trecho.<br><em>“Art. 7º A criança e o adolescente têm direito à proteção à vida e à saúde, mediante políticas públicas que permitam o desenvolvimento sadio, em condições dignas de existência.”</em> (Estatuto da Criança e do Adolescente)<br>Nesse trecho do ECA, constam","opts":["objetivos do governo para o desenvolvimento de estudantes.","direitos assegurados a grupos específicos da população.","medidas para a melhoria da saúde em cidades específicas.","deveres das crianças em relação à própria saúde."],"ans":1,"exp":"O ECA é uma lei que garante direitos fundamentais a grupos específicos: as crianças e os adolescentes. O trecho trata do direito à saúde."},
+  {"id":7,"subj":"port","year":"2024","skill":"EF08LP04","q":"Releia: “É assegurado <strong>acesso</strong> integral às linhas de cuidado voltadas à saúde da criança e do adolescente.” O verbo “ser” está no singular porque concorda com o","opts":["núcleo do sujeito — “acesso”.","predicativo do sujeito — “cuidado”.","substantivo “saúde”.","adjetivo “integral”."],"ans":0,"exp":"Na ordem direta, “Acesso integral… é assegurado”. O verbo concorda com o núcleo do sujeito, “acesso” (singular)."},
+  {"id":8,"subj":"port","year":"2024","skill":"EF69LP03","q":"Leia o texto.<br><em>Um vídeo, uma foto, um meme, uma notícia: os conteúdos vão se intercalando na tela. O hábito de deslizar o dedo pela tela do celular ocupa boa parte do dia de muita gente. Mas o que acontece no cérebro quando rolamos a tela, e por que isso é tão viciante?</em><br>O assunto principal dessa reportagem é a(o)","opts":["relação entre o tempo no celular e a qualidade do sono.","apresentação de dados estatísticos de uma pesquisa.","variedade de conteúdos das plataformas digitais.","hábito da rolagem de tela do celular."],"ans":3,"exp":"A reportagem investiga o hábito de rolar a tela do celular — por que ele acontece e por que pode viciar."},
+  {"id":9,"subj":"port","year":"2024","skill":"EF08LP04","q":"Releia: “O <strong>hábito de</strong> deslizar o dedo pela tela faz parte do dia a dia de muita gente.” Sobre a regência nominal nessa frase, é correto afirmar que","opts":["“de” poderia ser trocado por “com” sem mudar o sentido.","“de” poderia ser trocado por “para” sem mudar o sentido.","o substantivo “hábito” rege um complemento com a preposição “de”.","o substantivo “hábito” rege um complemento com a preposição “por”."],"ans":2,"exp":"“Hábito” é um nome que exige complemento com a preposição “de” (hábito de algo): “hábito de deslizar o dedo pela tela”."},
+  {"id":10,"subj":"port","year":"2024","skill":"EF89LP04","q":"Leia o texto.<br><em>O sangue realmente salva vidas, e as equipes médicas dependem das doações. Sem uma cultura de doação incorporada às práticas de saúde de todos os estados, fica difícil contar só com a solidariedade de poucos.</em><br>Nesse artigo de opinião, identifica-se um posicionamento","opts":["satisfeito com as políticas públicas de doação de sangue.","resistente à adoção de uma cultura de doação de sangue.","contrário às campanhas dos bancos de sangue.","favorável em relação à doação de sangue."],"ans":3,"exp":"O texto valoriza a doação (“salva vidas”) e defende uma cultura de doação — posicionamento favorável."},
+
+  {"id":11,"subj":"port","year":"2025","skill":"EF69LP44","q":"Leia o texto.<br><em>Um compadre rico, para pregar uma peça, deu ao compadre pobre a pior terra que tinha. Mais tarde, com raiva, atirou uma casa de marimbondos dentro da casa do pobre. Mas os marimbondos, ao bater no chão, viraram moedas de ouro, e o pobre ficou rico.</em><br>O desfecho desse conto popular é inesperado porque o(a)","opts":["personagem rico consegue pregar uma peça no outro.","motivo de sofrimento se transforma em prosperidade.","cumbuca de ouro encontrada tinha aparência exagerada.","amizade dos personagens supera as desavenças."],"ans":1,"exp":"O que seria uma maldade (a casa de marimbondos) transforma-se em riqueza para o pobre: o sofrimento vira prosperidade."},
+  {"id":12,"subj":"port","year":"2025","skill":"EF08LP12","q":"Releia: “O rico não <strong>quis</strong> que o compadre trabalhasse mais nas suas terras.” A oração subordinada destacada “que o compadre trabalhasse mais nas suas terras” exerce a função de","opts":["sujeito da ação verbal.","objeto direto do verbo “quis”.","adjunto adverbial do núcleo verbal.","complemento nominal do nome “agitado”."],"ans":1,"exp":"A oração completa o sentido do verbo “quis” (querer algo), sem preposição — é objeto direto (subordinada substantiva objetiva direta)."},
+  {"id":13,"subj":"port","year":"2025","skill":"EF69LP45","q":"Leia o texto.<br><em>Na ilha de Berk, onde vikings e dragões vivem em conflito, um jovem subestimado pelo pai derruba um temido dragão, mas, em vez de matá-lo, torna-se seu amigo. Esse laço revela a verdadeira natureza dos dragões e desafia antigas tradições.</em><br>Uma característica do gênero sinopse observada no texto é o(a)","opts":["apresentação resumida de uma obra para despertar curiosidade.","descrição de detalhes da cenografia do filme.","parecer específico sobre a recepção do longa-metragem.","foco na opinião do autor sobre a temática."],"ans":0,"exp":"A sinopse resume a trama (personagem, cenário, conflito) de forma breve e atraente, para despertar o interesse do público."},
+  {"id":14,"subj":"port","year":"2025","skill":"EF08LP12","q":"Leia o trecho.<br><em>“O filme faz a gente acreditar nos sonhos de criança e ter a esperança de que eles um dia aconteçam.”</em><br>A oração destacada “de que eles um dia aconteçam” é subordinada substantiva completiva nominal porque","opts":["indica o sujeito de “ter”.","representa um adjunto adnominal.","completa o significado de “esperança”.","atribui uma característica a um advérbio."],"ans":2,"exp":"A oração completa o sentido do substantivo “esperança” (esperança de algo) — é uma completiva nominal."},
+  {"id":15,"subj":"port","year":"2025","skill":"EF69LP03","q":"Leia o texto.<br><em>Uma empresária resiste à “invasão” da inteligência artificial e pergunta que sentido há em ouvir uma música criada por IA. A reportagem mostra que a ferramenta ficou muito popular, mas consome muita energia — uma busca no ChatGPT usa cerca de 10 vezes mais energia que uma busca comum.</em><br>Essa reportagem tem a finalidade principal de","opts":["apontar as dificuldades de viver sem tecnologia hoje.","informar os leitores sobre um tema que impacta a sociedade.","explicar por que as pessoas usam certas ferramentas.","convencer as pessoas a conhecer novas tecnologias."],"ans":1,"exp":"A reportagem informa o público sobre um tema de impacto social — o avanço da IA e suas consequências, como o alto consumo de energia."},
+  {"id":16,"subj":"port","year":"2025","skill":"EF08LP04","q":"Releia: “Ela resiste à ‘<strong>invasão</strong> da inteligência artificial’.” Quanto à regência nominal, a expressão “da inteligência artificial”","opts":["exerce a função de termo regente.","complementa o sentido de “pessoas”.","desempenha o papel de termo regido.","concorda com a forma verbal “resiste”."],"ans":2,"exp":"O substantivo “invasão” é o termo regente; “da inteligência artificial” é o complemento (termo regido) que completa seu sentido."},
+  {"id":17,"subj":"port","year":"2025","skill":"EF08LP15","q":"Leia o trecho.<br><em>“Havia um caçador que usava armadilhas. Um dia, quando visitava as <strong>suas</strong> armadilhas, encontrou-<strong>se</strong> com um leão. <strong>O homem</strong> respondeu ao leão com calma.”</em><br>Os termos destacados contribuem para a coesão textual porque","opts":["reforçam a objetividade do narrador.","marcam o tempo verbal da narrativa.","introduzem personagens secundários.","retomam um elemento já mencionado."],"ans":3,"exp":"“Suas”, “se” e “o homem” retomam o caçador já citado, garantindo a coesão (referência) ao longo do texto."},
+  {"id":18,"subj":"port","year":"2025","skill":"EF69LP20","q":"Leia o trecho.<br><em>“Art. 1º Esta Lei dispõe sobre a proteção integral à criança e ao adolescente. Os direitos aplicam-se a todas as crianças e adolescentes, sem discriminação.”</em> (ECA)<br>No trecho, identifica-se a seguinte característica do gênero estatuto:","opts":["Presença de argumentos que defendem um desejo da população.","Divulgação implícita de dados sobre um tema.","Abordagem parcial com linguagem coloquial.","Apresentação de direitos de um grupo específico."],"ans":3,"exp":"O estatuto, em linguagem formal e impessoal, apresenta objetivamente os direitos de um grupo específico: crianças e adolescentes."},
+  {"id":19,"subj":"port","year":"2025","skill":"EF08LP04","q":"Releia: “Os direitos enunciados nestas Leis <strong>aplicam-se</strong> a todas as crianças e adolescentes.” O verbo destacado está no plural porque concorda com o","opts":["complemento “as crianças e adolescentes”.","sujeito “os direitos enunciados nestas Leis”.","pronome indefinido “todas”.","adjunto “nestas Leis”."],"ans":1,"exp":"O verbo concorda com o núcleo do sujeito, “os direitos” (plural): os direitos… aplicam-se."},
+  {"id":20,"subj":"port","year":"2025","skill":"EF89LP04","q":"Leia o texto.<br><em>A inteligência artificial promete diagnósticos rápidos e terapias personalizadas. Mas, na saúde, cada decisão carrega o peso de uma vida. Por isso, a incorporação dessas tecnologias precisa ser guiada por princípios éticos e científicos.</em><br>Nesse artigo de opinião, os autores defendem que a(s)","opts":["inovações tecnológicas são essenciais para a saúde.","tecnologias que envolvem IA são sempre éticas.","utilização de novas tecnologias na saúde precisa ser cuidadosa.","incorporação de tecnologias na saúde compromete o bem-estar dos pacientes."],"ans":2,"exp":"Os autores reconhecem os benefícios, mas defendem cautela: o uso da IA na saúde deve seguir princípios éticos e científicos."},
+
+  {"id":21,"subj":"mat","year":"2024","skill":"EF08MA14","q":"Um quadrilátero convexo tem ângulos internos que medem (5x − 5°), (2x + 10°), (3x − 15°) e (3x + 45°). Qual é a medida do maior ângulo desse quadrilátero?","opts":["60°","80°","120°","360°"],"ans":2,"exp":"A soma dos ângulos internos de um quadrilátero é 360°: (5x−5)+(2x+10)+(3x−15)+(3x+45)=360 → 13x+35=360 → x=25. Os ângulos são 120°, 60°, 60° e 120°. O maior é 120°."},
+  {"id":22,"subj":"mat","year":"2024","skill":"EF08MA14","q":"A figura representa um losango (as diagonais são perpendiculares). Os ângulos (5x − 20°) e (3x + 10°) assinalados são alternos internos (iguais), e y pertence ao triângulo formado por uma diagonal.<div class='fig'><svg viewBox='0 0 300 220' role='img' aria-label='Losango com diagonais e ângulos assinalados'><polygon points='150,20 280,110 150,200 20,110' fill='none' stroke='currentColor' stroke-width='2'/><line x1='150' y1='20' x2='150' y2='200' stroke='currentColor' stroke-width='1.5'/><line x1='20' y1='110' x2='280' y2='110' stroke='currentColor' stroke-width='1.5'/><g font-family='Space Mono, monospace' font-size='13' fill='currentColor'><text x='60' y='128'>5x − 20°</text><text x='158' y='150'>3x + 10°</text><text x='158' y='62'>y</text></g></svg></div>Quais são os valores de x e y, respectivamente?","opts":["15° e 78°","15° e 35°","55° e 35°","23° e 67°"],"ans":1,"exp":"Alternos internos são iguais: 5x−20°=3x+10° → 2x=30° → x=15°. Então 3x+10°=55°. No triângulo com o ângulo reto da diagonal: y+55°+90°=180° → y=35°."},
+  {"id":23,"subj":"mat","year":"2024","skill":"EF08MA14","q":"A figura mostra um trapézio isósceles. Ao traçar a altura, forma-se um triângulo retângulo (ângulo de 90°); um ângulo da base mede 22°.<div class='fig'><svg viewBox='0 0 300 180' role='img' aria-label='Trapézio isósceles com altura, ângulos x, 22 graus e y'><polygon points='90,40 210,40 260,150 40,150' fill='none' stroke='currentColor' stroke-width='2'/><line x1='90' y1='40' x2='90' y2='150' stroke='currentColor' stroke-width='1.5'/><rect x='90' y='136' width='14' height='14' fill='none' stroke='currentColor' stroke-width='1'/><g font-family='Space Mono, monospace' font-size='13' fill='currentColor'><text x='96' y='58'>x</text><text x='58' y='146'>22°</text><text x='100' y='110'>y</text></g></svg></div>Quais são as medidas x e y, respectivamente?","opts":["22° e 68°","22° e 158°","112° e 68°","112° e 134°"],"ans":2,"exp":"O ângulo x soma-se ao reto formado pela altura: x = 90° + 22° = 112°. No triângulo retângulo: 22° + 90° + y = 180° → y = 68°."},
+  {"id":24,"subj":"mat","year":"2024","skill":"Currículo SAS","q":"Em uma fazenda, colheu-se certa quantidade de espigas de milho pela manhã, o dobro à tarde e o triplo à noite, totalizando 60 espigas no dia. Isso é representado por x + 2x + 3x = 60. Qual é o valor de x?","opts":["5","6","10","12"],"ans":2,"exp":"x + 2x + 3x = 60 → 6x = 60 → x = 10."},
+  {"id":25,"subj":"mat","year":"2024","skill":"EF08MA08","q":"Em um campeonato de patinação, havia patins do modelo A (4 rodas) e do modelo B (2 rodas), num total de 44 patins e 136 rodas. Quantos patins do modelo B havia?","opts":["20","16","12","10"],"ans":0,"exp":"Sistema: A + B = 44 e 4A + 2B = 136. Resolvendo, B = 20 patins do modelo B."},
+  {"id":26,"subj":"mat","year":"2024","skill":"EF08MA09","q":"Daniel pensou em um número natural, elevou-o ao quadrado e multiplicou o resultado por 3, obtendo 48. Em que número Daniel pensou?","opts":["4","7","16","24"],"ans":0,"exp":"3x² = 48 → x² = 16 → x = 4 (número natural)."},
+  {"id":27,"subj":"mat","year":"2024","skill":"Currículo SAS","q":"Carolina desenhou um polígono de 7 lados (heptágono). Qual é a quantidade de diagonais desse polígono?","opts":["5","7","10","14"],"ans":3,"exp":"Número de diagonais = n(n − 3) ÷ 2 = 7·(7 − 3) ÷ 2 = 28 ÷ 2 = 14."},
+  {"id":28,"subj":"mat","year":"2024","skill":"Currículo SAS","q":"A tampa de uma embalagem de pizza tem a forma de um polígono regular de 20 lados. Quanto mede cada ângulo interno desse polígono?","opts":["18°","60°","120°","162°"],"ans":3,"exp":"Ângulo interno = (n − 2)·180° ÷ n = (20 − 2)·180° ÷ 20 = 3 240° ÷ 20 = 162°."},
+  {"id":29,"subj":"mat","year":"2024","skill":"EF08MA19","q":"A vista superior de uma piscina tem o formato hexagonal a seguir. Ela pode ser dividida em um retângulo (12 m × 6 m) e dois triângulos (base 6 m e altura 3 m).<div class='fig'><svg viewBox='0 0 240 90' role='img' aria-label='Vista superior hexagonal da piscina'><polygon points='12,45 45,12 177,12 210,45 177,78 45,78' fill='none' stroke='currentColor' stroke-width='2'/><line x1='45' y1='12' x2='45' y2='78' stroke='currentColor' stroke-width='1' stroke-dasharray='4 3'/><line x1='177' y1='12' x2='177' y2='78' stroke='currentColor' stroke-width='1' stroke-dasharray='4 3'/><g font-family='Space Mono, monospace' font-size='12' fill='currentColor'><text x='100' y='9'>12 m</text><text x='24' y='48'>6 m</text><text x='186' y='40'>3 m</text></g></svg></div>Qual é a área ocupada pela piscina, em metros quadrados?","opts":["72","81","90","108"],"ans":2,"exp":"Área = retângulo + 2 triângulos = (12 × 6) + 2 × (6 × 3 ÷ 2) = 72 + 18 = 90 m²."},
+  {"id":30,"subj":"mat","year":"2024","skill":"EF08MA21","q":"Uma barra de chocolate tem a forma de um paralelepípedo com 15 cm de comprimento, 10 cm de largura e 2 cm de altura. Qual é o volume de chocolate de cada barra?","opts":["150 cm³","300 cm³","400 cm³","600 cm³"],"ans":1,"exp":"Volume do paralelepípedo = comprimento × largura × altura = 15 × 10 × 2 = 300 cm³."},
+
+  {"id":31,"subj":"mat","year":"2025","skill":"EF08MA14","q":"Um quadrilátero ABCD tem ângulos internos que medem x, (x − 15°), (2x + 45°) e 90°. Qual é a medida do ângulo (2x + 45°)?","opts":["120°","135°","150°","165°"],"ans":3,"exp":"A soma dos ângulos internos é 360°: x + (x − 15°) + (2x + 45°) + 90° = 360° → 4x + 120° = 360° → x = 60°. Então 2x + 45° = 165°."},
+  {"id":32,"subj":"mat","year":"2025","skill":"EF08MA14","q":"Em um paralelogramo ABCD, as diagonais AC e BD se cruzam no ponto O, que é o ponto médio de cada diagonal. Sabe-se que AO = 7 cm, BO = 5 cm, DO = (x + 3) cm e CO = (3x + 1) cm. Qual é o valor de x?","opts":["2","4","5","7"],"ans":0,"exp":"As diagonais do paralelogramo se cortam ao meio, então CO = AO: 3x + 1 = 7 → 3x = 6 → x = 2."},
+  {"id":33,"subj":"mat","year":"2025","skill":"EF08MA14","q":"Cinco trapézios isósceles idênticos formam um pentágono regular vazado. Cada ângulo interno do pentágono (108°) é formado por dois ângulos iguais das bases maiores de dois trapézios vizinhos — logo, cada um mede 54°. Na base menor de cada trapézio, os dois ângulos medem α.<div class='fig'><svg viewBox='0 0 220 210' role='img' aria-label='Pentágono regular vazado formado por cinco trapézios'><polygon points='110,23 197,86 164,189 56,189 22,86' fill='none' stroke='currentColor' stroke-width='2'/><polygon points='110,65 158,100 139,155 81,155 62,100' fill='none' stroke='currentColor' stroke-width='2'/><line x1='110' y1='23' x2='110' y2='65' stroke='currentColor' stroke-width='1'/><line x1='197' y1='86' x2='158' y2='100' stroke='currentColor' stroke-width='1'/><line x1='164' y1='189' x2='139' y2='155' stroke='currentColor' stroke-width='1'/><line x1='56' y1='189' x2='81' y2='155' stroke='currentColor' stroke-width='1'/><line x1='22' y1='86' x2='62' y2='100' stroke='currentColor' stroke-width='1'/><g font-family='Space Mono, monospace' font-size='14' fill='currentColor'><text x='104' y='82'>α</text></g></svg></div>Qual é a medida angular α?","opts":["108°","126°","144°","152°"],"ans":1,"exp":"Cada trapézio é um quadrilátero (soma 360°). Com os dois ângulos da base maior medindo 54° cada: α + α + 54° + 54° = 360° → 2α = 252° → α = 126°."},
+  {"id":34,"subj":"mat","year":"2025","skill":"Currículo SAS","q":"Numa campanha de 5 dias, arrecadou-se ração assim: no 1º dia, uma quantidade x; no 2º, o dobro (2x); no 3º, o dobro do total dos dois primeiros dias; no 4º, a mesma quantidade do 1º dia; no 5º, 50 kg. Ao todo foram 300 kg. Quantos quilogramas foram arrecadados no 1º dia?","opts":["50","45","30","25"],"ans":3,"exp":"1º: x; 2º: 2x; 3º: 2·(x+2x)=6x; 4º: x; 5º: 50. Total: x+2x+6x+x+50 = 10x+50 = 300 → 10x = 250 → x = 25 kg."},
+  {"id":35,"subj":"mat","year":"2025","skill":"EF08MA08","q":"Uma creche recebeu 20 pacotes de fraldas, totalizando 420 unidades. Cada pacote tamanho M tem 24 unidades; cada pacote tamanho G tem 20 unidades. Quantos pacotes de tamanho M a creche recebeu?","opts":["5","6","14","15"],"ans":0,"exp":"Sistema: M + G = 20 e 24M + 20G = 420. Resolvendo, M = 5 pacotes de tamanho M."},
+  {"id":36,"subj":"mat","year":"2025","skill":"EF08MA09","q":"Luiz vai revestir um cômodo quadrado. Ele comprou 64 m² de cerâmica, dos quais 15 m² eram um excedente para perdas. Qual é a medida do lado do cômodo quadrado?","opts":["6 m","7 m","8 m","9 m"],"ans":1,"exp":"Área necessária = 64 − 15 = 49 m². Como é um quadrado, lado² = 49 → lado = 7 m."},
+  {"id":37,"subj":"mat","year":"2025","skill":"Currículo SAS","q":"Helena desenhou no chão um polígono convexo de 12 lados (dodecágono). Quantas diagonais, no total, podem ser traçadas nesse polígono?","opts":["12","40","54","60"],"ans":2,"exp":"Número de diagonais = n(n − 3) ÷ 2 = 12·(12 − 3) ÷ 2 = 108 ÷ 2 = 54."},
+  {"id":38,"subj":"mat","year":"2025","skill":"Currículo SAS","q":"Luana criará um logotipo com o formato de um octógono regular (8 lados). Qual é a medida de cada ângulo interno que ela deve inserir no programa?","opts":["125°","135°","140°","150°"],"ans":1,"exp":"Ângulo interno = (n − 2)·180° ÷ n = (8 − 2)·180° ÷ 8 = 1 080° ÷ 8 = 135°."},
+  {"id":39,"subj":"mat","year":"2025","skill":"EF08MA19","q":"O piso de uma sala tem o formato a seguir. Ele pode ser dividido em um quadrado (2 m × 2 m), um retângulo (1 m × 3 m) e um triângulo retângulo de catetos 1 m e 1 m.<div class='fig'><svg viewBox='0 0 210 210' role='img' aria-label='Planta da sala em forma de L com um canto triangular'><polygon points='30,180 180,180 180,30 130,30 130,80 80,80 30,30' fill='none' stroke='currentColor' stroke-width='2'/><g font-family='Space Mono, monospace' font-size='12' fill='currentColor'><text x='96' y='197'>3 m</text><text x='186' y='110'>3 m</text><text x='140' y='68'>1 m</text><text x='52' y='66'>1 m</text></g></svg></div>Qual é a área total dessa sala?","opts":["6,5 m²","7,0 m²","7,5 m²","8,0 m²"],"ans":2,"exp":"Área = quadrado + retângulo + triângulo = (2×2) + (1×3) + (1×1÷2) = 4 + 3 + 0,5 = 7,5 m²."},
+  {"id":40,"subj":"mat","year":"2025","skill":"EF08MA21","q":"Uma piscina inflável tem, por dentro, a forma de um paralelepípedo com 100 cm de comprimento, 90 cm de largura e 30 cm de altura. Quantos litros de água são necessários para enchê-la totalmente?","opts":["360","330","270","240"],"ans":2,"exp":"Volume = 100 × 90 × 30 = 270 000 cm³. Como 1 000 cm³ = 1 L, tem-se 270 000 ÷ 1 000 = 270 L."},
+
+  {"id":41,"subj":"ing","year":"2024","skill":"EF08LI16","q":"Read the text.<br><em>“A few little words can bring a smile and cheer a lonely heart.”</em><br>In this text, “a few” means","opts":["big words.","many things.","a short number.","a large quantity."],"ans":2,"exp":"“A few” refere-se a uma pequena quantidade (aqui, poucas palavras) — “a short number”."},
+  {"id":42,"subj":"ing","year":"2024","skill":"EF08LI05","q":"Read the text.<br><em>“Practicing self-care benefits your mental health. Here are some ideas: get enough sleep; eat a balanced diet; take breaks from your phone; wash your face and take a shower; put on clean, comfortable clothes.”</em><br>According to the text, in order to practice self-care, it's important to","opts":["use phones and computers to relax.","take care of personal hygiene.","eat everything that we want.","say no to everybody."],"ans":1,"exp":"O texto recomenda lavar o rosto e tomar banho — cuidados com a higiene pessoal."},
+  {"id":43,"subj":"ing","year":"2024","skill":"EF08LI16","q":"In the sentence “Here are <strong>some</strong> ideas on ways to get started”, the highlighted word refers to","opts":["a negative number.","an uncountable thing.","an uncertain quantity.","a precise quantity of ideas."],"ans":2,"exp":"“Some” indica uma quantidade não exata (“algumas”), ou seja, um número incerto de ideias."},
+  {"id":44,"subj":"ing","year":"2024","skill":"EF08LI16","q":"Read the dialogue.<br>— Are there any professions in which you have training?<br>— <strong>None.</strong> Geese don't even attend school!<br>The use of the word “none” is correct because it","opts":["is used without a noun.","is equivalent to “some”.","is a synonym for “few”.","is used like a verb."],"ans":0,"exp":"“None” já equivale a uma resposta completa (“nenhuma”), sendo usado sem acompanhar um substantivo."},
+  {"id":45,"subj":"ing","year":"2024","skill":"EF08LI05","q":"Read the text.<br><em>“Laughter is found in all cultures. Groups who laugh together develop strong bonds, and parents who laugh with their children tend to have better communication.”</em><br>According to the text, laughter is a way to","opts":["avoid people.","make people sad.","cause stress at events.","improve social connections."],"ans":3,"exp":"O texto indica que o riso fortalece os laços e a comunicação entre as pessoas — melhora as conexões sociais."},
+
+  {"id":46,"subj":"ing","year":"2025","skill":"EF08LI16","q":"Read the sentence in a cartoon about climate change.<br><em>“Don't worry — with the sea rising like this, the ocean will reach our house in just a few years!”</em><br>The use of “a few years” expresses the belief that the ocean will reach the characters","opts":["in the near future.","in many centuries.","on a specific date.","at an uncertain time."],"ans":0,"exp":"“A few years” indica uma pequena quantidade de tempo: o oceano chegará em breve (near future)."},
+  {"id":47,"subj":"ing","year":"2025","skill":"EF08LI05","q":"Read the text.<br><em>“There is a strong connection between your body and mind. Meditation won't help much if you're not sleeping enough, and running won't boost your mood if you only eat sugary foods.”</em><br>According to the text, looking after your body","opts":["is optional if you meditate.","is all about exercising daily.","helps your mind to function better.","depends on strict and complex routines."],"ans":2,"exp":"O texto liga corpo e mente: cuidar do corpo (sono, alimentação) ajuda a mente a funcionar melhor."},
+  {"id":48,"subj":"ing","year":"2025","skill":"EF08LI16","q":"Read the excerpt.<br><em>“Are you getting enough sleep? Eating well? Getting enough exercise? If the answer is no to <strong>any</strong> of these things, how can you change this?”</em><br>The highlighted word “any” is used because it","opts":["allows for the possibility of one or more things being true.","emphasizes that none of the things are important.","expresses a mandatory action to be taken.","refers to things yet to be mentioned."],"ans":0,"exp":"“Any” tem sentido de “qualquer”: basta a resposta ser “não” a um ou mais dos itens para ser preciso mudar de hábito."},
+  {"id":49,"subj":"ing","year":"2025","skill":"EF08LI16","q":"Read the text.<br><em>“Adults should move more and sit less. Some physical activity is better than none.”</em><br>How can the sentence “Some physical activity is better than none” be rewritten without changing its meaning?","opts":["Some physical activity is better than any activity.","Some physical activity is better than no activity.","Some physical activity is better than not doing.","Some physical activity is better than no one."],"ans":1,"exp":"“None” substitui “physical activity”. Reescrevendo com o substantivo, fica “no activity” — “better than no activity”."},
+  {"id":50,"subj":"ing","year":"2025","skill":"EF08LI16","q":"Read the sentence from a comic strip.<br><em>“This is the story of a girl <strong>who</strong> finds a cabin belonging to three bears.”</em><br>In the sentence, the word “who”","opts":["adds a description of the girl's appearance.","replaces the word “book” to avoid repetition.","introduces information about what the girl did.","creates a question about the meaning of the story."],"ans":2,"exp":"O pronome relativo “who” liga a personagem (“a girl”) à ação que ela realizou (“finds a cabin…”), acrescentando informação."},
+
+  {"id":51,"subj":"cie","year":"2024","skill":"EF08CI10","q":"Leia o texto.<br><em>A doença é causada pela bactéria Treponema pallidum, é tratada com antibióticos e prevenida com o uso de preservativo. Pode passar de mãe para filho na gestação, e um sintoma característico é o aparecimento de lesões nos órgãos genitais.</em><br>O texto refere-se a uma infecção sexualmente transmissível chamada","opts":["candidíase.","gonorreia.","herpes.","sífilis."],"ans":3,"exp":"A sífilis é causada pela bactéria Treponema pallidum, tratada com antibióticos e caracterizada por lesões nos órgãos genitais."},
+  {"id":52,"subj":"cie","year":"2024","skill":"Currículo SAS","q":"O diabetes está relacionado ao aumento de glicose no sangue. Há um hormônio responsável por transportar a glicose do sangue para o interior das células; no diabetes, esse hormônio falta ou não age bem. Esse hormônio é o(a)","opts":["cortisol.","insulina.","glucagon.","melatonina."],"ans":1,"exp":"A insulina, produzida pelo pâncreas, leva a glicose do sangue para dentro das células, reduzindo o açúcar no sangue."},
+  {"id":53,"subj":"cie","year":"2024","skill":"Currículo SAS","q":"A saliva contém a enzima amilase salivar e ajuda a amolecer os alimentos. A amilase salivar é responsável por","opts":["promover a digestão de proteínas em peptídios.","absorver nutrientes provenientes do alimento.","atuar na quebra do amido em maltose.","emulsificar gorduras em meio básico."],"ans":2,"exp":"A amilase salivar inicia a digestão dos carboidratos, quebrando o amido em maltose."},
+  {"id":54,"subj":"cie","year":"2024","skill":"Currículo SAS","q":"No sistema respiratório, ocorre um processo fundamental para a entrada de gás oxigênio no organismo e a remoção do gás carbônico produzido nos tecidos. Esse processo refere-se, mais especificamente, à","opts":["dissolução de gás carbônico no plasma sanguíneo.","troca de gases entre alvéolos e capilares sanguíneos.","produção de gases na respiração celular.","ligação do gás oxigênio à hemoglobina nas hemácias."],"ans":1,"exp":"A hematose é a troca gasosa entre os alvéolos e os capilares: o O₂ passa para o sangue e o CO₂ é eliminado."},
+  {"id":55,"subj":"cie","year":"2024","skill":"Currículo SAS","q":"A grande circulação (ou circulação sistêmica) leva o sangue do ventrículo esquerdo ao corpo e traz o sangue venoso de volta ao átrio direito. Qual descrição corresponde APENAS à grande circulação?","opts":["O gás carbônico do tecido segue pela veia cava até o átrio direito.","Ao chegar ao pulmão, ocorre a hematose.","O coração tem quatro cavidades e dupla circulação.","O sangue segue do ventrículo direito para a artéria pulmonar."],"ans":0,"exp":"A grande circulação termina com o retorno do sangue venoso (com CO₂) pela veia cava ao átrio direito. As demais descrevem a pequena circulação ou o coração em geral."},
+
+  {"id":56,"subj":"cie","year":"2025","skill":"EF08CI10","q":"Leia o texto.<br><em>O HIV ataca principalmente os linfócitos T CD4+, células que coordenam a defesa do corpo. Ao destruí-las aos poucos, o vírus se multiplica e enfraquece a imunidade.</em><br>O principal efeito da doença, causado pelo ataque a essas células, é a","opts":["perda de fertilidade do indivíduo infectado.","manifestação de lesões nos órgãos genitais.","baixa coagulação sanguínea em lesões.","redução da proteção natural do corpo contra infecções."],"ans":3,"exp":"Os linfócitos T CD4+ comandam a defesa. Sua destruição pelo HIV reduz a imunidade, deixando o corpo vulnerável a infecções."},
+  {"id":57,"subj":"cie","year":"2025","skill":"Currículo SAS","q":"O hipotireoidismo é uma queda na produção dos hormônios T3 e T4 pela tireoide. Entre os sintomas estão batimentos cardíacos mais lentos, cansaço excessivo e ganho de peso. Esses sintomas decorrem de uma deficiência hormonal que afeta a","opts":["reabsorção de água pelos rins.","deposição de cálcio nos ossos.","regulação da taxa metabólica corporal.","coordenação do ritmo circadiano biológico."],"ans":2,"exp":"Os hormônios T3 e T4 regulam o metabolismo. Com menos hormônios, o metabolismo desacelera, causando cansaço e ganho de peso."},
+  {"id":58,"subj":"cie","year":"2025","skill":"Currículo SAS","q":"A hidratação é essencial para a função dos rins, que filtram o sangue e eliminam toxinas com mais facilidade quando o corpo está bem hidratado. De que forma a redução no consumo de água poderia afetar essa função?","opts":["Estimulando a ação do hormônio antidiurético e a reabsorção de água nos rins.","Impossibilitando o armazenamento de urina na bexiga.","Aumentando a diluição das substâncias que passam pelo néfron.","Impedindo o transporte de urina pelos ureteres."],"ans":0,"exp":"Com menos água, o corpo libera mais hormônio antidiurético (ADH) para reabsorver água nos rins; a urina fica mais concentrada e a eliminação de resíduos, dificultada."},
+  {"id":59,"subj":"cie","year":"2025","skill":"Currículo SAS","q":"Uma criança se machucou e viu que seu sangue era vermelho. Qual é a resposta científica para “por que o sangue é vermelho?”","opts":["Porque o plasma é composto de sais minerais.","Porque se formam coágulos no local da lesão.","Porque os leucócitos combatem microrganismos.","Porque a hemoglobina está presente nas hemácias."],"ans":3,"exp":"A cor vermelha vem da hemoglobina, proteína das hemácias que, ao se ligar ao oxigênio, dá a coloração vermelha ao sangue."},
+  {"id":60,"subj":"cie","year":"2025","skill":"Currículo SAS","q":"Durante a inspiração, o ar percorre nariz, traqueia, brônquios e bronquíolos, chegando aos alvéolos. Nas trocas gasosas desse movimento respiratório, ocorre o(a)","opts":["acúmulo de gás carbônico nas células do sangue.","passagem do gás oxigênio dos alvéolos para o sangue.","transporte de gás carbônico dos bronquíolos para o sangue.","substituição de gás carbônico por gás oxigênio nos bronquíolos."],"ans":1,"exp":"Na inspiração, o oxigênio dos alvéolos difunde-se para os capilares e se liga às hemácias, sendo levado ao coração e ao corpo."},
+
+  {"id":61,"subj":"geo","year":"2024","skill":"EF08GE19","q":"A pirâmide etária de Burundi (país da África, 2020) tem base muito larga e topo estreito, com forte concentração de pessoas entre 0 e 14 anos e poucas pessoas acima dos 50 anos. Com base nesse formato, é possível identificar que Burundi apresenta","opts":["baixa expectativa de vida.","baixo índice de natalidade.","alta densidade demográfica.","alto desenvolvimento humano."],"ans":0,"exp":"Base larga (muitos jovens) e topo estreito (poucos idosos) indicam alta natalidade e baixa expectativa de vida."},
+  {"id":62,"subj":"geo","year":"2024","skill":"EF08GE20","q":"Leia o texto.<br><em>Com quase 31% da água doce do planeta, a América Latina é rica em recursos hídricos. Mesmo assim, a irregularidade no abastecimento e no saneamento faz esses serviços não chegarem a quem precisa: 100 milhões de pessoas não têm saneamento básico.</em><br>O texto indica que parte da população dessa região é afetada pela","opts":["ocorrência de longos períodos de seca.","precariedade de infraestruturas e serviços básicos.","falta de leis de preservação ambiental.","ausência de reservatórios subterrâneos."],"ans":1,"exp":"Apesar da água abundante, falta infraestrutura: o problema é a precariedade dos serviços de abastecimento e saneamento."},
+  {"id":63,"subj":"geo","year":"2024","skill":"EF08GE08","q":"Observe os dados de exportações agrícolas (abril de 2020, variação em relação a abril de 2019):<div class='fig'><table class='nut'><tr><td>Brasil</td><td>+28,9%</td></tr><tr><td>Bolívia</td><td>+4,9%</td></tr><tr><td>Argentina</td><td>+4,9%</td></tr><tr><td>Peru</td><td>−41,7%</td></tr><tr><td>Uruguai</td><td>−16,8%</td></tr></table></div>Com base nos dados, compreende-se que, no período,","opts":["a Argentina teve a maior variação negativa.","o maior exportador foi um país da América Central.","o Brasil liderou o crescimento percentual das exportações agrícolas.","a exportação foi maior nos países de clima equatorial."],"ans":2,"exp":"O Brasil registrou a maior variação positiva (+28,9%), liderando o crescimento percentual das exportações agrícolas."},
+  {"id":64,"subj":"geo","year":"2024","skill":"EF08GE24","q":"Leia o texto.<br><em>O petróleo é fundamental para a economia da Venezuela, pois compõe a maior parte das receitas de exportação. A queda do preço dessa commodity gera instabilidade econômica e política no país.</em><br>De acordo com o texto, a economia venezuelana é movida pelo(a)","opts":["comercialização de um produto agropecuário.","aproveitamento de uma fonte renovável.","exploração de um recurso energético.","extração de um mineral metálico."],"ans":2,"exp":"O petróleo é um recurso energético (fonte de energia). A economia da Venezuela depende de sua exploração e exportação."},
+  {"id":65,"subj":"geo","year":"2024","skill":"EF08GE17","q":"Leia o texto.<br><em>A América Latina tem a distribuição de terras mais desigual do planeta (coeficiente de Gini de 0,79), superior à da Europa, África e Ásia. Na América do Sul, a desigualdade é ainda maior (0,85).</em><br>Na América Latina, esse problema é reflexo da","opts":["intensa migração do campo para a cidade.","formação de extensas propriedades monocultoras durante a colonização.","inexistência de movimentos camponeses pela reforma agrária.","implementação de máquinas no setor agropecuário."],"ans":1,"exp":"A concentração de terras tem origem no sistema colonial, marcado por grandes propriedades monocultoras voltadas à exportação."},
+
+  {"id":66,"subj":"geo","year":"2025","skill":"EF08GE19","q":"A pirâmide etária da Gâmbia (país da África) tem base muito larga e topo estreito, com predomínio de jovens e poucos idosos. Essa pirâmide sugere que o país era marcado pela","opts":["baixa expectativa de vida, com altos índices de natalidade e mortalidade.","alta taxa de adultos, associada a maior desenvolvimento econômico.","alta proporção de idosos, por melhores condições de vida.","baixo número de jovens, por queda na natalidade."],"ans":0,"exp":"Base larga e topo estreito indicam muitos jovens e poucos idosos — sinal de alta natalidade e baixa expectativa de vida."},
+  {"id":67,"subj":"geo","year":"2025","skill":"EF08GE17","q":"Leia o texto.<br><em>Segundo o PNUD, a América Latina é a região mais desigual do planeta. Apesar de avanços recentes, a desigualdade de renda continua elevada.</em><br>O cenário descrito reflete, entre outros fatores, um contexto histórico de","opts":["consolidação do desenvolvimento industrial.","continuidade de guerras independentistas.","superação da concentração fundiária.","influência da colonização europeia."],"ans":3,"exp":"A desigualdade da região tem raízes na colonização europeia, que concentrou terras e riquezas nas mãos de poucos."},
+  {"id":68,"subj":"geo","year":"2025","skill":"EF08GE08","q":"Leia o texto.<br><em>Em 2023, o Brasil bateu recorde de exportações. O principal destino foi a China, com US$ 105,75 bilhões (16,5% a mais que em 2022) — a primeira vez que as vendas a um único parceiro passam de US$ 100 bilhões.</em><br>Essa relação comercial tem como consequência para o Brasil o(a)","opts":["fragilidade competitiva, com queda nas importações.","expansão industrial, com autonomia tecnológica.","fortalecimento econômico, favorecendo a geração de empregos.","crescimento sustentável, com redução de impactos ambientais."],"ans":2,"exp":"O aumento expressivo das exportações tende a fortalecer a economia: as empresas produzem mais, o que pode gerar empregos."},
+  {"id":69,"subj":"geo","year":"2025","skill":"EF08GE24","q":"Leia o texto.<br><em>A Venezuela tem as maiores reservas de petróleo do mundo, praticamente sua única fonte de receita externa. Em 2014, com a queda no preço e na produção, o país entrou em profunda recessão.</em><br>A crise econômica descrita teve como uma de suas causas a","opts":["escassez de recursos energéticos.","diversificação das fontes de receita.","desvalorização das indústrias nacionais.","dependência da exportação do petróleo."],"ans":3,"exp":"Com a economia dependente de um único produto (petróleo), a queda de preço e produção derrubou toda a receita do país."},
+  {"id":70,"subj":"geo","year":"2025","skill":"EF08GE20","q":"Leia o texto.<br><em>Chuvas torrenciais provocaram inundações e deslizamentos na Colômbia, levando o país a declarar “situação de desastre”. Eventos assim se agravam onde falta infraestrutura.</em><br>Comum em países da América Latina, essa vulnerabilidade é reflexo do(a)","opts":["carência de saneamento básico e de planejamento urbano.","crescimento da economia e do investimento em turismo.","redução da ocupação de áreas de risco.","aumento de obras urbanas e do fluxo de pessoas."],"ans":0,"exp":"A falta de drenagem, saneamento e planejamento urbano — com ocupação de áreas de risco — agrava os efeitos das chuvas."},
+
+  {"id":71,"subj":"his","year":"2024","skill":"EF08HI16","q":"Leia o texto.<br><em>A Revolta da Cabanagem recebeu esse nome porque a maioria dos rebeldes morava em cabanas às margens dos rios do Grão-Pará. Indígenas, mestiços, negros, comerciantes e fazendeiros reivindicavam melhores condições e poder político.</em><br>Compreende-se que a revolta ficou marcada pelo","opts":["apoio das tropas governamentais.","confronto entre grupos religiosos.","predomínio da política conservadora.","envolvimento de camadas populares."],"ans":3,"exp":"A Cabanagem foi marcada pela forte participação popular — indígenas, mestiços e negros que moravam em cabanas."},
+  {"id":72,"subj":"his","year":"2024","skill":"EF08HI15","q":"Leia o texto.<br><em>A tela Independência ou Morte, de Pedro Américo, foi encomendada pela Família Real durante o Período Imperial. A ideia era ressaltar o poder monárquico e o momento da independência.</em><br>Produzida no Período Imperial, essa obra buscava","opts":["mostrar que os militares deveriam governar o país.","contribuir para a formação de um sentimento nacional.","exaltar as riquezas naturais do território.","fazer uma representação idealizada dos povos nativos."],"ans":1,"exp":"A pintura enaltecia a independência e o poder imperial, ajudando a criar na população um sentimento de identidade nacional."},
+  {"id":73,"subj":"his","year":"2024","skill":"EF08HI03","q":"Leia o texto.<br><em>Com o café alcançando regiões distantes do litoral, surgiram ferrovias para auxiliar a produção. As estradas de ferro Paulista, Mogiana e Sorocabana foram financiadas por grandes cafeicultores paulistas.</em><br>O texto aponta uma relação entre a economia cafeeira e o(a)","opts":["redistribuição de terras.","crescimento da imigração.","modernização do transporte.","fortalecimento das indústrias."],"ans":2,"exp":"O café impulsionou a construção de ferrovias, marco da modernização dos transportes no Brasil."},
+  {"id":74,"subj":"his","year":"2024","skill":"EF08HI19","q":"Leia o texto.<br><em>Por considerar a escravidão prejudicial a seus interesses, os ingleses passaram a combater o tráfico no século XIX, afundando navios negreiros. Pressionado, o Brasil proibiu o tráfico em 1850.</em><br>Entende-se que a abolição da escravatura no Brasil foi influenciada pela","opts":["realização de protestos pacíficos.","preocupação com a igualdade racial.","decadência da produção agropecuária.","existência de uma pressão internacional."],"ans":3,"exp":"A Inglaterra usou seu poder econômico para pressionar o Brasil a acabar com o tráfico e a escravidão — pressão internacional."},
+  {"id":75,"subj":"his","year":"2024","skill":"EF08HI04","q":"Leia o texto.<br><em>Após três dias de batalha nas ruas de Paris (julho de 1830), Carlos X foi destronado. Mas a república pela qual os operários lutaram não veio: veio o reinado de Luís Filipe, apoiado pelos Orleans.</em><br>O autor indica que o movimento revolucionário contribuiu para o(a)","opts":["consolidação de uma república socialista.","fortalecimento de setores da burguesia.","organização de uma eleição democrática.","rompimento com influências monárquicas."],"ans":1,"exp":"A Revolução de 1830 destronou Carlos X e levou ao poder um monarca apoiado pela burguesia, fortalecendo esse grupo."},
+
+  {"id":76,"subj":"his","year":"2025","skill":"EF08HI16","q":"Leia o texto.<br><em>Os negros malês, de diferentes etnias, construíram no Brasil redes de comunicação e resistência que culminaram na rebelião de 1835, na Bahia, em um contexto de intensa desigualdade social.</em><br>Nessa revolta, uma camada popular se reuniu com o objetivo de","opts":["resistir ao governo regencial.","questionar os altos impostos.","combater a dominação branca.","antecipar a nomeação imperial."],"ans":2,"exp":"A Revolta dos Malês uniu africanos muçulmanos que planejavam combater a dominação branca e escravista na Bahia."},
+  {"id":77,"subj":"his","year":"2025","skill":"EF08HI15","q":"Leia o texto.<br><em>O Instituto Histórico e Geográfico Brasileiro (IHGB) foi criado no Período Regencial, marcado pela ameaça de desintegração do território. A ideia era reunir documentos e escrever uma História nacional.</em><br>A criação dessa instituição revela o interesse do governo imperial em","opts":["preservar a autonomia provincial.","consolidar uma identidade nacional.","valorizar uma tradição cultural antiga.","aumentar a influência histórica europeia."],"ans":1,"exp":"Diante do risco de fragmentação, o IHGB ajudava a construir uma memória e uma identidade nacionais."},
+  {"id":78,"subj":"his","year":"2025","skill":"EF08HI03","q":"Leia o texto.<br><em>Na segunda metade do século XIX, a expansão da economia cafeeira mudou as relações de produção e permitiu um início de industrialização entre 1870 e 1880 no Brasil.</em><br>Esse cenário econômico proporcionou o(a)","opts":["redução das desigualdades regionais.","aumento dos investimentos na modernização do país.","ampliação de técnicas tradicionais no cultivo.","crescimento do deslocamento para a zona rural."],"ans":1,"exp":"O café gerou capital investido em infraestrutura, transporte e indústria — um avanço na modernização do Brasil."},
+  {"id":79,"subj":"his","year":"2025","skill":"EF08HI19","q":"Leia o texto.<br><em>Entre 1868 e 1888, o movimento abolicionista atuou de várias formas: campanhas para pagar alforrias, aceitação de proprietários e ações judiciais, como as de Luiz Gama, que buscava falhas na lei para libertar escravizados.</em><br>O texto destaca esforços que possibilitaram o(a)","opts":["incentivo à redução de fugas pela negociação de alforrias.","rompimento de alianças entre ativistas e o Império.","restrição do debate sobre a liberdade.","libertação de parcela da população por meio de ações diversas."],"ans":3,"exp":"O movimento abolicionista combinou estratégias legais, econômicas e políticas, libertando muitas pessoas e pressionando pela Lei Áurea."},
+  {"id":80,"subj":"his","year":"2025","skill":"EF08HI04","q":"Leia o texto.<br><em>Na “Primavera dos Povos” (1848), as revoluções foram feitas por trabalhadores, mas a burguesia, temendo pela propriedade, preferiu a ordem e deixou de ser uma força revolucionária.</em><br>O desfecho desses movimentos teve como consequência o(a)","opts":["formação de repúblicas democráticas na Europa.","propagação de ideais absolutistas entre trabalhadores.","desenvolvimento de projetos políticos socialistas.","fortalecimento do poder político da burguesia."],"ans":3,"exp":"Apesar de feitas por trabalhadores, as revoluções de 1848 acabaram fortalecendo a burguesia como classe dominante."},
+
+  {"id":81,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>O “unboxing” é uma estratégia em que empresas enviam produtos a influenciadores para que gravem vídeos abrindo e mostrando os itens. A linha entre anúncio e entretenimento fica quase imperceptível, o que pode criar crianças sempre em busca do próximo lançamento.</em><br>O texto critica essa estratégia afirmando que ela pode","opts":["estimular um comportamento consumista.","bloquear o desenvolvimento intelectual infantil.","gerar concorrência desonesta entre empresas.","apresentar informações enganosas sobre mercadorias."],"ans":0,"exp":"Ao destacar constantemente a obtenção de produtos, o unboxing pode incentivar o consumismo no público infantil."},
+  {"id":82,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>“Com um cartão de crédito, é possível desfrutar agora e pagar depois. Mas todo ‘depois’, cedo ou tarde, vira ‘agora’: os empréstimos terão de ser pagos.” (Zygmunt Bauman)</em><br>O exemplo evidencia uma característica do capitalismo financeiro que causa crises. Qual é ela?","opts":["O salário dos trabalhadores está abaixo dos gastos diários.","As empresas vendem mercadorias a preços cada vez mais baixos.","Os bancos perdoam dívidas com facilidade.","O potencial de crédito ganhou mais importância que o valor material do dinheiro."],"ans":3,"exp":"No capitalismo financeiro, o valor do dinheiro liga-se ao crédito (poder de pagar depois), não à sua materialidade — o que favorece crises."},
+  {"id":83,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>Na infância e na adolescência, as interações sociais são importantes para o bem-estar. Durante a pandemia de covid-19, a tecnologia aproximou quem estava distante: “uma videochamada não substitui olhar nos olhos, mas mantém os laços com quem amamos”.</em><br>No contexto da pandemia, as interações sociais foram favorecidas pelo(a)","opts":["aproximação com pessoas desconhecidas.","priorização de encontros presenciais.","aproveitamento de meios digitais.","investimento em novas amizades."],"ans":2,"exp":"Durante o isolamento, os meios digitais (como as videochamadas) ajudaram a manter os laços sociais."},
+  {"id":84,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>Ao fazer uma pesquisa, o estudante de hoje usa buscadores e bases de dados digitais, procura tutoriais e vídeos e encontra informações que complementam o que o professor discute.</em><br>O texto indica que a influência da tecnologia na educação tem o potencial de incentivar a","opts":["parceria entre escolas.","padronização do ensino.","interação entre docentes.","autonomia dos estudantes."],"ans":3,"exp":"Ao buscar informações de forma independente, os estudantes se tornam mais autônomos na construção do próprio conhecimento."},
+  {"id":85,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>Comprar roupas em brechós ajuda a reduzir os impactos ambientais e sociais da produção e do consumo desenfreado de roupas, pois estimula o reaproveitamento de peças já criadas.</em><br>Entende-se que comprar roupas em brechós é uma atitude sustentável porque","opts":["incentiva a fabricação de roupas recicladas.","possibilita a reutilização de produtos que seriam descartados.","assegura a conservação dos ambientes naturais das cidades.","impede a elevação do preço das mercadorias."],"ans":1,"exp":"O brechó dá novo uso a roupas já existentes, reduzindo a necessidade de produzir peças novas — reutilização e sustentabilidade."},
+
+  {"id":86,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>A crise financeira de 2008 ocorreu por uma bolha imobiliária nos EUA: os bancos ofereceram crédito em excesso, os imóveis se valorizaram e, quando muita gente não conseguiu pagar, os bancos ficaram sem recursos.</em><br>Essa crise caracteriza uma fase do capitalismo na qual o valor do dinheiro está associado ao(à)","opts":["aumento da produção de bens pelas indústrias.","potencial de crédito oferecido pelos bancos.","capacidade de pagamento das empresas.","diminuição da renda dos trabalhadores."],"ans":1,"exp":"No capitalismo financeiro, o valor do dinheiro liga-se ao crédito que os bancos oferecem — mesmo sem garantias reais de pagamento."},
+  {"id":87,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>Em um quadrinho, uma personagem acredita que só será feliz quando comprar o produto mais recente do momento — e, depois, o próximo, e o próximo.</em><br>A crítica em torno da felicidade, nesse quadrinho, está relacionada à","opts":["propósito de aumentar riquezas.","ideal de busca por conhecimento.","lógica de consumo de mercadorias.","satisfação de ambições profissionais."],"ans":2,"exp":"O quadrinho critica a ideia de que a felicidade pode ser comprada — a lógica de consumo de mercadorias."},
+  {"id":88,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>Diante do desastre climático no Rio Grande do Sul (2024), influenciadores e artistas usaram as redes sociais para mobilizar doações e reunir recursos essenciais, como água potável.</em><br>Essa mobilização ocorreu porque a internet foi usada com o propósito de","opts":["superar a assistência do governo.","promover conteúdos comerciais de longo alcance.","ampliar a notoriedade das celebridades.","estabelecer relações inclusivas de colaboração."],"ans":3,"exp":"A internet reuniu pessoas diferentes em torno de um objetivo coletivo — uma rede de solidariedade aberta à colaboração."},
+  {"id":89,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>Um estudante que não fala usa um tablet com um aplicativo que sintetiza a voz a partir de comandos, o que favorece sua interação com colegas e professores. Isso é possível graças à tecnologia assistiva.</em><br>Nesse exemplo, a principal vantagem do uso de tecnologias na educação é a","opts":["ampliação da autonomia dos alunos com diferentes necessidades.","redução da participação dos professores.","uniformização do método de aprendizagem.","substituição da comunicação oral entre os estudantes."],"ans":0,"exp":"A tecnologia assistiva dá mais autonomia e comunicação a alunos com diferentes necessidades, favorecendo sua participação."},
+  {"id":90,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>No Quilombo Jauary, no Pará, os moradores protegem nascentes e praticam roçados rotativos, sem derrubar grandes áreas de mata — prática que garante segurança alimentar e equilíbrio ecológico.</em><br>Essas comunidades têm práticas sustentáveis porque se baseiam no(a)","opts":["valorização do domínio humano sobre a natureza.","adesão a modelos expansivos de uso da terra.","hábito da reutilização de materiais recicláveis.","compreensão da relação de interdependência com o entorno."],"ans":3,"exp":"As práticas mostram que a sobrevivência da comunidade e o equilíbrio da natureza estão ligados — uma relação de interdependência com o meio."},
+
+  {"id":91,"subj":"art","year":"2024","skill":"EF69AR01","q":"Leia o texto.<br><em>O Museu Afro Brasil, no Parque Ibirapuera (SP), reúne mais de 6 mil obras produzidas entre o século XVIII e hoje, abordando religião, trabalho, arte e escravidão, e registrando as influências africanas na sociedade brasileira.</em><br>A principal função social desse museu é","opts":["armazenar objetos antigos para promover pesquisas.","preservar e divulgar a história africana e afro-brasileira.","apresentar e questionar dados sobre a escravização.","expor o trabalho de artistas brasileiros sobre a África."],"ans":1,"exp":"O acervo registra a trajetória e as influências africanas na cultura brasileira — o museu preserva e divulga essa história."},
+  {"id":92,"subj":"art","year":"2024","skill":"EF69AR05","q":"Leia o texto.<br><em>Uma escultura em aço inox usa formas geométricas repetidas e jogos de luz e sombra que criam, no olhar do observador, a ilusão de movimento, embora a obra não tenha partes que se movem.</em><br>Essa obra é um exemplo de arte cinética porque","opts":["utiliza recursos que lhe conferem um efeito estático.","revela o uso de material reciclado na estrutura.","estimula a visão ao explorar a ideia de movimento.","repete formas exageradas em sua composição."],"ans":2,"exp":"A arte cinética explora a sensação de movimento; aqui, as formas e a luz criam essa ilusão para quem observa."},
+  {"id":93,"subj":"art","year":"2024","skill":"EF69AR21","q":"Leia o texto.<br><em>O corpo humano é uma fonte rica de sons e pode ser nosso primeiro instrumento. Em uma atividade, as palmas são marcadas com “pá” e as batidas dos pés com “tum”, executadas em ritmo coordenado.</em><br>Essa atividade rítmica remete ao uso do corpo como","opts":["objeto que reproduz sons irregulares.","recurso sonoro e musical de percussão.","instrumento de dança em vez de música.","ferramenta para exercitar a resistência vocal."],"ans":1,"exp":"Palmas e batidas de pés produzem ritmo — é o uso do corpo como recurso de percussão para gerar música."},
+  {"id":94,"subj":"art","year":"2024","skill":"EF69AR21","q":"Leia o texto.<br><em>Grupo coral é um grupo musical composto de cantores, classificados conforme suas vozes (baixos, tenores, contraltos e sopranos). Em uma ilustração, várias pessoas aparecem cantando juntas, de boca aberta.</em><br>O elemento que permite associar a ilustração ao canto coral é a(o)","opts":["performance de um cantor solista que conduz a apresentação.","representação de um cantor principal acompanhado por um coro.","uso de uma partitura como foco central do canto.","presença de um conjunto de pessoas que cantam juntas."],"ans":3,"exp":"O canto coral é feito por um conjunto de cantores executando o canto juntos, como mostra a ilustração."},
+  {"id":95,"subj":"art","year":"2024","skill":"EF69AR14","q":"Leia o texto.<br><em>Em duas fotografias de um espetáculo de dança, a bailarina se apresenta em um palco com sombras projetadas, que evocam o teatro de sombras — arte que usa silhuetas e luz para criar efeitos visuais.</em><br>As fotografias revelam a interação entre","opts":["sonoplastia e cinema, pela técnica da câmara escura.","pintura e teatro de marionetes, com a bailarina imóvel.","dança clássica e desenho, pelo figurino ornamentado.","dança e cenário, pela integração dos movimentos com o teatro de sombras."],"ans":3,"exp":"O espetáculo integra os movimentos da dança ao cenário de sombras projetadas — interação entre dança e cenário."},
+
+  {"id":96,"subj":"art","year":"2025","skill":"EF69AR01","q":"Leia o texto.<br><em>O Museu das Culturas Indígenas (SP), inaugurado em 2022, articula, pesquisa e comunica histórias, memórias, artes e saberes dos povos indígenas, sendo um espaço de diálogo intercultural.</em><br>A principal função social desse museu é","opts":["fiscalizar transformações na cultura indígena.","incentivar novos artistas a reciclar a arte indígena.","possibilitar a preservação da memória e da identidade indígenas.","facilitar o comércio de objetos artísticos indígenas."],"ans":2,"exp":"O museu fortalece e comunica as memórias, saberes e artes dos povos originários — preserva e valoriza a identidade indígena."},
+  {"id":97,"subj":"art","year":"2025","skill":"EF69AR11","q":"Leia o texto.<br><em>Em uma cena de um musical da Broadway, muitos personagens dançam ao mesmo tempo, com figurinos chamativos e ritmo intenso, criando uma atmosfera animada.</em><br>Nessa cena, a presença da dança contribui para","opts":["transmitir intensidade e dinamismo.","permitir interação entre público e elenco.","expressar fidelidade em relação à realidade.","revelar objetividade na expressão dos sentimentos."],"ans":0,"exp":"A dança traz energia, ritmo e movimento à cena, transmitindo intensidade e dinamismo ao espetáculo."},
+  {"id":98,"subj":"art","year":"2025","skill":"EF69AR05","q":"Leia o texto.<br><em>Uma obra da arte concreta e cinética usa formas geométricas simples — como retângulos — repetidas, com pequenas variações de tamanho e espaçamento, criando uma sensação de movimento, mesmo sem partes móveis.</em><br>Para transmitir a ideia de movimento, essa obra","opts":["traz uma mistura de formas e estilos.","utiliza interação de elementos móveis.","apresenta deslocamento real de suas partes.","repete formas simples com variação nos tamanhos."],"ans":3,"exp":"O movimento é apenas visual: vem da repetição de formas simples com variações de tamanho, típica da arte cinética/concreta."},
+  {"id":99,"subj":"art","year":"2025","skill":"EF69AR21","q":"Leia o texto.<br><em>Uma imagem mostra sons produzidos com diferentes partes do corpo — batidas de mãos, estalos de língua — usados para criar ritmos e marcar compassos.</em><br>Essas ações indicam a","opts":["interação entre corpo e instrumentos tradicionais.","igualdade entre sons de partes distintas do corpo.","utilização do corpo como recurso musical de construção de ritmo.","necessidade de completar o som com instrumentos de melodia."],"ans":2,"exp":"Batidas e estalos com o corpo produzem ritmo — é a musicalização corporal, o corpo como recurso musical."},
+  {"id":100,"subj":"art","year":"2025","skill":"EF69AR21","q":"Leia o texto.<br><em>Nesse tipo de canto grupal, as vozes são divididas em naipes conforme o tipo de voz (soprano, contralto, tenor, baixo). O regente faz a classificação vocal analisando timbre, extensão e tessitura.</em><br>O texto descreve um tipo de canto grupal chamado","opts":["coral.","cânone.","canto em dupla.","canto com coro."],"ans":0,"exp":"A divisão das vozes em naipes (soprano, contralto, tenor, baixo), feita pelo regente, é característica do canto coral."}
+]
+}
+</script>
+<script>
+(function(){
+  var DB = JSON.parse(document.getElementById("DATA").textContent);
+  var SUBJECTS = DB.subjects, QUESTIONS = DB.questions;
+  var LETTERS = ["A","B","C","D"];
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function getOrder(q){ if(!(q.id in state.order)){ var base=[]; for(var i=0;i<q.opts.length;i++){ base.push(i); } state.order[q.id]=shuffle(base); } return state.order[q.id]; }
+  var state = { current: SUBJECTS[0].key, answers: {}, order: {} };
+
+  var tabsEl = document.getElementById("tabs");
+  var mainEl = document.getElementById("main");
+  var answeredEl = document.getElementById("answered");
+  var hitsEl = document.getElementById("hits");
+  var barEl = document.getElementById("bar");
+
+  function qOfSubject(k){ return QUESTIONS.filter(function(q){return q.subj===k;}); }
+  function subjMeta(k){ return SUBJECTS.find(function(s){return s.key===k;}); }
+
+  function totals(){
+    var ans=0, hit=0;
+    QUESTIONS.forEach(function(q){
+      if(q.id in state.answers){ ans++; if(state.answers[q.id]===q.ans) hit++; }
+    });
+    return {ans:ans,hit:hit};
+  }
+  function subjTotals(k){
+    var ans=0, hit=0, list=qOfSubject(k);
+    list.forEach(function(q){ if(q.id in state.answers){ans++; if(state.answers[q.id]===q.ans) hit++;} });
+    return {ans:ans,hit:hit,total:list.length};
+  }
+
+  function renderTabs(){
+    tabsEl.innerHTML="";
+    SUBJECTS.forEach(function(s){
+      var t=subjTotals(s.key);
+      var b=document.createElement("button");
+      b.className="tab"+(s.key===state.current?" active":"")+(t.ans===t.total?" done":"");
+      b.style.setProperty("--c", s.color);
+      b.innerHTML='<span class="dot"></span>'+s.name+'<span class="cnt">'+t.ans+'/'+t.total+'</span>';
+      b.onclick=function(){ state.current=s.key; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+      tabsEl.appendChild(b);
+    });
+  }
+
+  function renderScore(){
+    var t=totals();
+    answeredEl.textContent=t.ans; hitsEl.textContent=t.hit;
+    barEl.style.width=(t.ans/QUESTIONS.length*100)+"%";
+  }
+
+  function paintAnswered(card, q, chosen){
+    var opts=card.querySelectorAll(".opt");
+    opts.forEach(function(o){
+      var oi=parseInt(o.dataset.i,10);
+      o.disabled=true;
+      if(oi===q.ans){ o.classList.add("correct"); o.querySelector(".mark").textContent="\u2713"; }
+      if(oi===chosen && chosen!==q.ans){ o.classList.add("wrong"); o.querySelector(".mark").textContent="\u2717"; }
+    });
+    var exp=card.querySelector(".exp"); var ok=chosen===q.ans;
+    exp.classList.add("show", ok?"ok":"no");
+    exp.innerHTML=(ok?"<b>Correto!</b> ":"<b>N\u00e3o foi dessa vez.</b> ")+q.exp;
+  }
+
+  function choose(q, idx, card){
+    if(q.id in state.answers) return;
+    state.answers[q.id]=idx;
+    paintAnswered(card, q, idx);
+    renderScore(); renderTabs(); maybeSummary();
+  }
+
+  function maybeSummary(){
+    var k=state.current, t=subjTotals(k);
+    var sum=document.getElementById("summary-"+k);
+    if(!sum) return;
+    if(t.ans===t.total){
+      var meta=subjMeta(k);
+      sum.querySelector(".big").textContent=t.hit+"/"+t.total;
+      var pct=t.hit/t.total, msg;
+      if(pct===1) msg="Gabaritou "+meta.name+"! Mandou muito bem.";
+      else if(pct>=0.7) msg="Bom desempenho em "+meta.name+". Revise o que escapou e siga em frente.";
+      else if(pct>=0.5) msg="Voc\u00ea concluiu "+meta.name+". Vale revisar as explica\u00e7\u00f5es das quest\u00f5es erradas.";
+      else msg="Concluiu "+meta.name+". Releia as explica\u00e7\u00f5es com calma \u2014 d\u00e1 para melhorar bastante.";
+      sum.querySelector("p").textContent=msg;
+      sum.classList.add("show");
+    } else {
+      sum.classList.remove("show");
+    }
+  }
+
+  function render(){
+    var k=state.current, meta=subjMeta(k);
+    document.documentElement.style.setProperty("--accent", meta.color);
+    renderTabs(); renderScore();
+    var list=qOfSubject(k);
+    mainEl.innerHTML='<div class="mathead"><h2>'+meta.name+'</h2><span class="bar"></span></div>';
+    list.forEach(function(q){
+      var card=document.createElement("div");
+      card.className="q";
+      var opts="";
+      var ord=getOrder(q);
+      for(var i=0;i<ord.length;i++){
+        var oi=ord[i];
+        opts+='<button class="opt" data-i="'+oi+'"><span class="letter">'+LETTERS[i]+'</span><span class="txt">'+q.opts[oi]+'</span><span class="mark"></span></button>';
+      }
+      card.innerHTML='<div class="meta"><span class="qn">'+q.id+'</span><span class="pill yr">'+q.year+'</span><span class="pill">'+q.skill+'</span></div>'+
+        '<div class="stem">'+q.q+'</div><div class="opts">'+opts+'</div><div class="exp"></div>';
+      card.querySelectorAll(".opt").forEach(function(btn){
+        btn.addEventListener("click",function(){ choose(q, parseInt(btn.dataset.i,10), card); });
+      });
+      if(q.id in state.answers){ paintAnswered(card, q, state.answers[q.id]); }
+      mainEl.appendChild(card);
+    });
+    var sum=document.createElement("div");
+    sum.className="summary"; sum.id="summary-"+k;
+    sum.innerHTML='<h3>Resumo de '+meta.name+'</h3><div class="big">0/0</div><p></p><button class="next">Pr\u00f3xima</button>';
+    mainEl.appendChild(sum);
+    var idx=-1; for(var j=0;j<SUBJECTS.length;j++){ if(SUBJECTS[j].key===k){idx=j;break;} }
+    var nextBtn=sum.querySelector(".next");
+    if(idx<SUBJECTS.length-1){
+      nextBtn.textContent="Ir para "+SUBJECTS[idx+1].name+" \u2192";
+      nextBtn.onclick=function(){ state.current=SUBJECTS[idx+1].key; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+    } else {
+      nextBtn.textContent="Voltar ao in\u00edcio \u2191";
+      nextBtn.onclick=function(){ window.scrollTo({top:0,behavior:"smooth"}); };
+    }
+    maybeSummary();
+  }
+
+  document.getElementById("restart").addEventListener("click",function(){
+    if(Object.keys(state.answers).length && !confirm("Recome\u00e7ar a prova? Suas respostas ser\u00e3o apagadas.")) return;
+    state.answers={}; state.order={}; state.current=SUBJECTS[0].key; render(); window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
