@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3ª Prova Treino · 9º ano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F6F3; --card:#FFFFFF; --ink:#20242B; --muted:#6A7078;
+    --line:#E4E2DC; --good:#1E8449; --good-bg:#E7F4EC; --bad:#C0392B; --bad-bg:#FBEAE8;
+    --accent:#2471A3;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;line-height:1.55;font-size:17px}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px 64px}
+  code,.mono{font-family:"Space Mono",monospace}
+
+  header.top{padding:30px 0 18px;border-bottom:2px solid var(--ink)}
+  .kicker{font-family:"Space Mono",monospace;font-size:12.5px;letter-spacing:.14em;color:var(--muted);margin:0 0 8px}
+  h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(30px,7vw,44px);line-height:1.02;margin:0;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:8px 0 0;font-size:15.5px}
+
+  .scorebar{position:sticky;top:0;z-index:20;background:var(--bg);padding:12px 0 10px;margin-top:2px;border-bottom:1px solid var(--line)}
+  .scores{display:flex;gap:22px;align-items:baseline;flex-wrap:wrap}
+  .scores .item{display:flex;gap:7px;align-items:baseline}
+  .scores .num{font-family:"Space Mono",monospace;font-weight:700;font-size:21px;color:var(--ink)}
+  .scores .lab{font-size:12.5px;color:var(--muted)}
+  .scores .hit .num{color:var(--good)}
+  .progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+  .progress > i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .35s ease}
+
+  nav.tabs{display:flex;gap:8px;overflow-x:auto;padding:14px 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--muted);
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14.5px;
+    padding:8px 14px;border-radius:99px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px;transition:.15s}
+  .tab .dot{width:9px;height:9px;border-radius:50%;background:var(--c)}
+  .tab .cnt{font-family:"Space Mono",monospace;font-size:11.5px;color:var(--muted)}
+  .tab:hover{border-color:var(--c)}
+  .tab.active{color:#fff;background:var(--c);border-color:var(--c)}
+  .tab.active .cnt{color:rgba(255,255,255,.85)}
+  .tab.active .dot{background:#fff}
+  .tab.done::after{content:"\2713";font-family:"Public Sans";font-weight:700;margin-left:2px}
+
+  .mathead{display:flex;align-items:center;gap:10px;margin:26px 0 4px}
+  .mathead h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:24px;margin:0;color:var(--accent)}
+  .mathead .bar{height:3px;flex:1;background:var(--accent);opacity:.25;border-radius:2px}
+
+  .q{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);
+     border-radius:14px;padding:18px 18px 16px;margin:14px 0}
+  .q .meta{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+  .q .qn{font-family:"Space Mono",monospace;font-weight:700;font-size:13px;color:#fff;background:var(--accent);
+     border-radius:7px;padding:2px 8px}
+  .pill{font-family:"Space Mono",monospace;font-size:11px;color:var(--muted);border:1px solid var(--line);
+     border-radius:99px;padding:2px 8px;background:#fbfaf8}
+  .pill.yr{color:var(--accent);border-color:var(--accent)}
+  .q .stem{font-size:16.5px;margin:2px 0 14px}
+  .q .stem em{color:var(--ink)}
+  .fig{margin:12px 0;overflow-x:auto;color:var(--accent)}
+  .fig svg{max-width:100%;height:auto;display:block}
+  table.nut{border-collapse:collapse;font-family:"Space Mono",monospace;font-size:14px;min-width:230px;background:#fff}
+  table.nut td{border:1px solid var(--line);padding:5px 12px}
+  table.nut td:last-child{text-align:right;font-weight:700}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+     border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:12px 13px;cursor:pointer;
+     font:inherit;color:var(--ink);transition:.12s}
+  .opt:hover:not(:disabled){border-color:var(--accent);background:#fbfcfd}
+  .opt:disabled{cursor:default}
+  .opt .letter{font-family:"Space Mono",monospace;font-weight:700;font-size:14px;color:var(--muted);
+     border:1.5px solid var(--line);border-radius:7px;min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .opt .txt{padding-top:1px}
+  .opt.correct{border-color:var(--good);background:var(--good-bg)}
+  .opt.correct .letter{background:var(--good);border-color:var(--good);color:#fff}
+  .opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+  .opt.wrong .letter{background:var(--bad);border-color:var(--bad);color:#fff}
+  .opt.correct .mark,.opt.wrong .mark{margin-left:auto;font-weight:700;align-self:center}
+  .opt.correct .mark{color:var(--good)} .opt.wrong .mark{color:var(--bad)}
+
+  .exp{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:15px;display:none}
+  .exp.show{display:block}
+  .exp.ok{background:var(--good-bg);color:#15613a}
+  .exp.no{background:var(--bad-bg);color:#8f2419}
+  .exp b{font-weight:700}
+
+  .summary{display:none;background:var(--accent);color:#fff;border-radius:16px;padding:22px;margin:20px 0 6px}
+  .summary.show{display:block}
+  .summary h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:22px;margin:0 0 6px}
+  .summary .big{font-family:"Space Mono",monospace;font-weight:700;font-size:40px;line-height:1;margin:6px 0}
+  .summary p{margin:6px 0 0;opacity:.92;font-size:15px}
+  .summary .next{margin-top:16px;background:#fff;color:var(--accent);border:none;border-radius:10px;
+     font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:15px;padding:11px 18px;cursor:pointer}
+
+  footer.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .restart{border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:10px;
+     font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14.5px;padding:10px 18px;cursor:pointer}
+  .restart:hover{background:var(--ink);color:#fff}
+  .foot .note{font-size:12.5px;color:var(--muted)}
+  @media (max-width:520px){ body{font-size:16px} .q{padding:15px 14px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="kicker">PROVA TREINO</p>
+    <h1>3ª Prova Treino · 9º ano</h1>
+    <p class="sub">Ensino Fundamental · 120 questões (2024 + 2025) · responda e veja a correção na hora</p>
+  </header>
+
+  <div class="scorebar">
+    <div class="scores">
+      <div class="item"><span class="num" id="answered">0</span><span class="lab">de 120 respondidas</span></div>
+      <div class="item hit"><span class="num" id="hits">0</span><span class="lab">acertos</span></div>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+  </div>
+
+  <nav class="tabs" id="tabs"></nav>
+  <main id="main"></main>
+
+  <footer class="foot">
+    <button class="restart" id="restart">Recomeçar</button>
+    <span class="note">Modo prática — sem nota. Bons estudos!</span>
+  </footer>
+</div>
+
+<script type="application/json" id="DATA">
+{
+"subjects": [
+  {"key":"port","name":"Língua Portuguesa","color":"#C0392B"},
+  {"key":"mat","name":"Matemática","color":"#2471A3"},
+  {"key":"ing","name":"Inglês","color":"#7D3C98"},
+  {"key":"bio","name":"Biologia","color":"#1E8449"},
+  {"key":"fis","name":"Física","color":"#34495E"},
+  {"key":"qui","name":"Química","color":"#D35400"},
+  {"key":"geo","name":"Geografia","color":"#148F77"},
+  {"key":"his","name":"História","color":"#B9770E"},
+  {"key":"fil","name":"Filosofia","color":"#6C3483"},
+  {"key":"art","name":"Arte","color":"#C2185B"}
+],
+"questions": [
+  {"id":1,"subj":"port","year":"2024","skill":"EF69LP29","q":"Leia o texto.<br><em>Verbete é um texto de caráter informativo, destinado a explicar um conceito segundo padrões descritivos, típico de dicionários e enciclopédias. É essencialmente destinado a consulta, o que lhe impõe uma construção sucinta e de acesso imediato.</em><br>Pela análise do texto, esse gênero textual é caracterizado por","opts":["utilizar linguagem de difícil compreensão.","propor uma nova leitura da realidade científica.","trazer opiniões divergentes sobre um mesmo tema.","explicar uma ideia ou um conceito de maneira objetiva."],"ans":3,"exp":"O verbete tem linguagem formal (mas acessível), objetiva e caráter explicativo: expõe um conceito de forma clara e direta."},
+  {"id":2,"subj":"port","year":"2024","skill":"EF69LP11","q":"Leia o texto.<br><em>Em um debate na Câmara, uma coordenadora do Ministério da Educação afirmou: “A nova lei facilita a reorganização dos planos de carreira pelos estados e municípios e garante o direito a um plano de carreira vinculado ao serviço público.”</em><br>No debate, essa fala entre aspas funciona como","opts":["argumento favorável à implementação da lei.","opinião embasada em dados estatísticos.","previsão negativa sobre a não implementação.","modalização que expressa imparcialidade."],"ans":0,"exp":"A coordenadora fala de forma positiva sobre a lei, apresentando um argumento a favor de sua implementação."},
+  {"id":3,"subj":"port","year":"2024","skill":"EF89LP19","q":"Leia o trecho de uma carta aberta.<br><em>“Nós, integrantes da Comissão para o Desenvolvimento Sustentável, dirigimo-nos à sociedade: a sustentabilidade não é uma pauta para o futuro — devemos alcançá-la agora! É urgente realizar a transição para um modelo justo e ambientalmente responsável.”</em><br>Essa carta aberta tem por finalidade","opts":["convidar o leitor a participar de um evento.","comunicar um descontentamento sobre uma decisão.","alertar a sociedade sobre a urgência da questão abordada.","emitir uma opinião pessoal sobre um debate polêmico."],"ans":2,"exp":"A carta alerta a sociedade sobre a urgência de adotar um modelo de desenvolvimento sustentável — texto propositivo/reivindicatório."},
+  {"id":4,"subj":"port","year":"2024","skill":"EF89LP14","q":"Releia: “A sustentabilidade não é uma pauta para o futuro: devemos alcançá-la agora! <strong>Portanto</strong>, é urgente realizar a transição para um modelo sustentável.” O conectivo “portanto” introduz uma ideia que","opts":["contrapõe a afirmação anterior.","apresenta a consequência de uma ação.","revela uma finalidade da afirmação posterior.","indica uma conclusão a partir do que foi dito."],"ans":3,"exp":"“Portanto” é um conectivo conclusivo: o segundo período é a conclusão do que se afirmou no primeiro."},
+  {"id":5,"subj":"port","year":"2024","skill":"EF09LP10","q":"Releia: “devemos <strong>alcançá-la</strong> agora!”. Nessa expressão, a ênclise (pronome depois do verbo) justifica-se pelo uso de um","opts":["verbo no imperativo afirmativo.","verbo no infinitivo impessoal.","verbo que está no gerúndio.","verbo que inicia o período."],"ans":1,"exp":"“Alcançar” é um infinitivo impessoal; com essa forma nominal, o pronome vem depois do verbo (ênclise): “alcançá-la”."},
+  {"id":6,"subj":"port","year":"2024","skill":"EF69LP56","q":"Leia a frase.<br><em>“Eu estava me referindo <strong>a</strong> outros números.”</em><br>Nesse trecho, o “a” não recebe acento indicativo de crase porque","opts":["aparece antes de um verbo.","tem sentido de expressão adverbial.","foi usado após verbo que não exige preposição.","está diante de uma expressão masculina no plural."],"ans":3,"exp":"Não há crase diante de palavra masculina (“números”) nem no plural quando o “a” está no singular: “a outros números”, sem acento."},
+  {"id":7,"subj":"port","year":"2024","skill":"EF89LP19","q":"Leia o trecho de uma carta aberta em defesa de uma universidade.<br><em>“A universidade é um centro de pesquisa de excelência e um orgulho para o Brasil, sendo a maior do país e um modelo de inclusão social, pioneira em várias áreas. Contudo, sofre pelas consequências de sua própria magnitude.”</em><br>Esse trecho apresenta um(a)","opts":["argumentação com dados contrários a um projeto.","introdução que contextualiza a importância da instituição.","conclusão sobre uma reivindicação da instituição.","pedido para a resolução de um problema social."],"ans":1,"exp":"O trecho é a introdução da carta: identifica a universidade e justifica sua importância, preparando a defesa que virá."},
+  {"id":8,"subj":"port","year":"2024","skill":"EF89LP33","q":"Leia o trecho de um conto.<br><em>Quando a menina nasceu, foi em boa hora para todos. Antes, nossos dias passavam sem gosto, e até a natureza minguava. Mas o seu primeiro choro acordou todos nós. E, a partir daí, tomamos novamente a vida com as nossas mãos.</em><br>A descrição das condições do ambiente indica que, para o povo, a menina representou","opts":["extinção dos problemas.","esperança de dias melhores.","trabalho para os mais velhos.","decepção pelas situações vividas."],"ans":1,"exp":"O ambiente “sem gosto” contrasta com a chegada da menina, que faz o povo “tomar a vida de novo” — símbolo de esperança de dias melhores."},
+  {"id":9,"subj":"port","year":"2024","skill":"Currículo SAS","q":"Leia a fala de uma personagem: “Será que consigo tirar uma <strong>soneminha</strong> antes de dormir?” (grafia da fala: “sonequinha”).<br>A palavra “sonequinha” é formada com o uso de um","opts":["prefixo de negação.","radical sem alteração.","sufixo aumentativo.","sufixo de diminutivo."],"ans":3,"exp":"“Sonequinha” = soneca + sufixo “-inha”, que forma o diminutivo, indicando algo pequeno ou breve."},
+  {"id":10,"subj":"port","year":"2024","skill":"EF09LP07","q":"Leia o diálogo.<br>— Mãe, até que idade tenho que <strong>obedecer a</strong> você?<br>— Até você ter maturidade para decidir sua vida sozinha.<br>A regência do verbo “obedecer” está correta porque, nesse contexto, ele funciona como verbo","opts":["intransitivo.","transitivo direto.","transitivo indireto.","transitivo direto e indireto."],"ans":2,"exp":"“Obedecer” é transitivo indireto: exige a preposição “a” (obedecer a alguém). Por isso a regência está adequada."},
+
+  {"id":11,"subj":"port","year":"2025","skill":"EF69LP29","q":"Leia o texto.<br><em>O conceito de cultura material integra o patrimônio cultural, que abrange também a cultura imaterial: os bens de valor simbólico, como celebrações, festas, saberes e narrativas orais. Cultura material e imaterial são dimensões complementares do patrimônio.</em><br>Uma característica dos verbetes de enciclopédia presente nesse texto é a","opts":["análise de aspectos gramaticais de um termo.","exposição de opiniões sobre a aplicação de uma ideia.","presença de exemplos de uso de uma palavra na sociedade.","apresentação de um resumo de conhecimentos acerca de um conceito."],"ans":3,"exp":"O verbete resume, de forma objetiva, o conhecimento estabelecido sobre um conceito — aqui, cultura material e imaterial."},
+  {"id":12,"subj":"port","year":"2025","skill":"EF09LP07","q":"Releia: “O conceito integra um conceito mais amplo, que <strong>abrange</strong> também a cultura imaterial.” O verbo destacado “abrange” é classificado como","opts":["intransitivo, tendo sentido completo.","transitivo direto, exigindo um objeto direto.","transitivo indireto, exigindo um objeto indireto.","transitivo direto e indireto, exigindo dois objetos."],"ans":1,"exp":"“Abrange” pede um complemento sem preposição (“a cultura imaterial”) — é transitivo direto."},
+  {"id":13,"subj":"port","year":"2025","skill":"EF69LP11","q":"Leia o texto.<br><em>No debate brasileiro, os tempos de fala são cronometrados e, quando um candidato fala, os microfones dos demais ficam desligados. Já no debate americano, os microfones ficam ligados, e interrupções e respostas espontâneas são possíveis.</em><br>O texto compara os debates com foco na seguinte característica do gênero:","opts":["A linguagem objetiva.","O respeito aos turnos de fala.","A modalização dos discursos.","O grau de formalidade das falas."],"ans":1,"exp":"A comparação centra-se em como os turnos de fala são organizados e respeitados em cada país (microfones ligados ou desligados)."},
+  {"id":14,"subj":"port","year":"2025","skill":"EF89LP14","q":"Leia o trecho.<br><em>“À primeira vista, a relação entre água limpa e aumento de renda pode parecer distante. <strong>Mas, na verdade,</strong> faz todo sentido conectar essas questões: o saneamento é um motor do desenvolvimento.”</em><br>Os operadores argumentativos “mas” e “na verdade” indicam que o autor","opts":["critica o que foi exposto até o momento.","estabelece uma condição para a afirmação anterior.","relativiza uma informação apresentada.","combina uma oposição a uma confirmação de sua tese."],"ans":3,"exp":"“Mas” opõe-se à ideia anterior e “na verdade” confirma a tese do autor: a oposição soma-se à confirmação da própria perspectiva."},
+  {"id":15,"subj":"port","year":"2025","skill":"EF69LP56","q":"Leia a frase.<br><em>“O curso funcionará das 14h <strong>às</strong> 18h.”</em><br>Nesse trecho, a crase foi empregada porque o “a”","opts":["indica hora específica.","é regido pelo verbo dançar.","acompanha um pronome indefinido.","antecede um adjetivo indicador de tempo."],"ans":0,"exp":"Em locuções que indicam horas exatas, a crase é obrigatória: “às 18h” marca a hora específica."},
+  {"id":16,"subj":"port","year":"2025","skill":"EF89LP19","q":"Leia o trecho de uma carta aberta.<br><em>“O Instituto expressa sua proposta para valorizar a mobilidade ativa nas cidades: calçadas seguras, iluminação, limites de velocidade mais baixos e ciclovias reduzem acidentes. É premente redirecionar recursos para o transporte coletivo.”</em><br>O texto cumpre o objetivo principal de","opts":["reivindicar alternativas para problemas coletivos.","analisar sugestões de melhoria para setores privados.","publicar dados quantitativos sobre uma temática.","comunicar insatisfações sobre itens adquiridos."],"ans":0,"exp":"A carta aberta propõe medidas concretas e reivindica melhorias para problemas que afetam a coletividade (a mobilidade urbana)."},
+  {"id":17,"subj":"port","year":"2025","skill":"EF89LP14","q":"Releia: “As ações promovem redução de acidentes, <strong>bem como</strong> podem atrair mais pessoas para a mobilidade ativa.” A expressão “bem como” estabelece uma relação de","opts":["condição, indicando uma hipótese.","causa, enfatizando um motivo.","concessão, explicando um contraste.","adição, reforçando a importância das ações."],"ans":3,"exp":"“Bem como” acrescenta mais um benefício das ações — é um conectivo de adição que reforça o argumento."},
+  {"id":18,"subj":"port","year":"2025","skill":"EF09LP10","q":"Leia o verso.<br><em>“Meu coração tem a marca / <strong>que lhe</strong> puseste mansinho.”</em><br>A próclise (pronome antes do verbo) em “que lhe puseste” ocorre por causa da presença de um(a)","opts":["locução adjetiva.","verbo conjugado.","pronome relativo.","conjunção integrante."],"ans":2,"exp":"O pronome relativo “que” atrai o pronome oblíquo átono para antes do verbo (próclise): “que lhe puseste”."},
+  {"id":19,"subj":"port","year":"2025","skill":"Currículo SAS","q":"Leia o verso de uma canção: “<strong>Desfazer</strong> é árduo”.<br>O verbo destacado possui um afixo (prefixo “des-”) com sentido de","opts":["posição exterior.","ação contrária.","duplicidade.","privação."],"ans":1,"exp":"O prefixo “des-” em “desfazer” indica ação contrária: desfazer é o contrário de fazer."},
+  {"id":20,"subj":"port","year":"2025","skill":"EF89LP33","q":"Leia o resumo de um conto.<br><em>Um homem chega a uma cidade e procura outro, indicado a ele. Descobre que os dois estão hospedados no mesmo quarto. Ao entrar, não há ninguém; mas ele sente o mesmo incômodo, a mesma espera, e percebe que o homem que procura tem exatamente as suas sensações.</em><br>O desfecho do conto indica que o narrador estava","opts":["buscando locais antigos, num sentimento nostálgico.","procurando por si mesmo, numa busca interna e subjetiva.","vivendo experiências previsíveis e objetivas.","experimentando situações perigosas, numa postura corajosa."],"ans":1,"exp":"As sensações do narrador se refletem no homem procurado: a busca é subjetiva — na verdade, ele procura a si mesmo."},
+
+  {"id":21,"subj":"mat","year":"2024","skill":"Currículo SAS","q":"Uma formiga descreveu um triângulo retângulo. O trajeto de volta ao ponto de partida corresponde à hipotenusa desse triângulo. Sabendo que o cateto oposto ao ângulo de 30° mede 6 cm, qual é o comprimento do trajeto de volta? (use sen 30° = 0,5)","opts":["10,4 cm","12,0 cm","16,4 cm","18,0 cm"],"ans":1,"exp":"sen 30° = cateto oposto ÷ hipotenusa → 0,5 = 6 ÷ d → d = 6 ÷ 0,5 = 12 cm."},
+  {"id":22,"subj":"mat","year":"2024","skill":"Currículo SAS","q":"Um cabo esticado forma um ângulo de 45° com o chão. A distância entre a base do poste e o ponto em que o cabo toca o chão é de 10 m. A que altura o cabo está preso ao poste? (use tg 45° = 1)","opts":["5 m","7 m","10 m","14 m"],"ans":2,"exp":"tg 45° = altura ÷ distância → 1 = h ÷ 10 → h = 10 m."},
+  {"id":23,"subj":"mat","year":"2024","skill":"EF09MA13","q":"Uma estrutura de metal tem a forma de um triângulo retângulo cujos catetos medem 4 m e 3 m. A altura h é a distância do vértice do ângulo reto até a hipotenusa. Qual é a medida de h?","opts":["9,0 m","7,0 m","6,6 m","2,4 m"],"ans":3,"exp":"Hipotenusa = √(3² + 4²) = 5 m. Relação métrica: h × hipotenusa = produto dos catetos → 5h = 3 × 4 = 12 → h = 2,4 m."},
+  {"id":24,"subj":"mat","year":"2024","skill":"EF09MA06","q":"A trajetória de uma bola de vôlei é dada por f(x) = −0,5x² + 2x + 2,5, em que f(x) é a altura e x é a distância horizontal, em metros. Qual foi a altura da bola quando a distância horizontal era de 2 metros?","opts":["2,5 m","4,5 m","5,0 m","6,0 m"],"ans":1,"exp":"f(2) = −0,5·(2²) + 2·2 + 2,5 = −2 + 4 + 2,5 = 4,5 m."},
+  {"id":25,"subj":"mat","year":"2024","skill":"EF09MA06","q":"Um teste de velocidade tem três etapas: na etapa I, a velocidade sobe de 0 a 20 m/s; na etapa II, permanece em 20 m/s; na etapa III, desce de 20 a 0 m/s. Nas etapas I, II e III, nessa ordem, a velocidade era","opts":["decrescente, constante e decrescente.","decrescente, constante e crescente.","crescente, constante e decrescente.","crescente, constante e crescente."],"ans":2,"exp":"Sobe (crescente), mantém-se (constante) e desce (decrescente): crescente, constante e decrescente."},
+  {"id":26,"subj":"mat","year":"2024","skill":"EF09MA06","q":"Uma relação é uma função quando cada elemento do domínio está associado a apenas um elemento do contradomínio. Um gráfico é formado por um segmento de reta vertical. Ele representa uma função?","opts":["Sim, pois cada elemento do domínio se associa a um único elemento do contradomínio.","Sim, pois cada elemento do contradomínio se associa a um único elemento do domínio.","Não, pois um mesmo elemento do domínio se associa a mais de um elemento do contradomínio.","Não, pois dois elementos diferentes do domínio se associam a um mesmo elemento do contradomínio."],"ans":2,"exp":"Em um segmento vertical, um único valor de x (domínio) corresponde a vários valores de y — logo, não é função."},
+  {"id":27,"subj":"mat","year":"2024","skill":"EF09MA06","q":"Um campo de 800 m² será coberto com grama sintética. O fornecedor cobra R$ 32,00 por metro quadrado mais R$ 150,00 pela entrega. Quanto foi pago ao todo?","opts":["R$ 25 150,00","R$ 25 450,00","R$ 25 600,00","R$ 25 750,00"],"ans":3,"exp":"Valor = 32 × 800 + 150 = 25 600 + 150 = R$ 25 750,00."},
+  {"id":28,"subj":"mat","year":"2024","skill":"EF09MA06","q":"O valor da troca de óleo é dado por f(x) = 10x + 20, em que x ≥ 1 é o número de embalagens usadas. Para x ≥ 1, o gráfico dessa função é","opts":["uma reta crescente que passa pelos pontos (1, 30) e (4, 60).","uma reta decrescente que passa por (1, 30) e (4, 0).","uma parábola com vértice em (1, 30).","uma reta horizontal na altura y = 20."],"ans":0,"exp":"f(1)=30 e f(4)=60. Como é função afim com coeficiente angular positivo (10), o gráfico é uma reta crescente por (1,30) e (4,60)."},
+  {"id":29,"subj":"mat","year":"2024","skill":"EF09MA11","q":"Em uma circunferência de centro O, o ângulo inscrito BÂC mede 25° e compreende o mesmo arco que o ângulo central BÔC. Qual é a medida do ângulo central BÔC?","opts":["25°","40°","50°","65°"],"ans":2,"exp":"O ângulo central é o dobro do ângulo inscrito que compreende o mesmo arco: BÔC = 2 × 25° = 50°."},
+  {"id":30,"subj":"mat","year":"2024","skill":"EF09MA14","q":"Em um triângulo retângulo, a altura relativa à hipotenusa divide-a em duas projeções que medem 3 cm e 9 cm. O cateto x tem projeção de 3 cm sobre a hipotenusa. Qual é o valor de x?","opts":["7 cm","6 cm","5 cm","4 cm"],"ans":1,"exp":"Relação métrica: cateto² = projeção × hipotenusa. Hipotenusa = 3 + 9 = 12. x² = 3 × 12 = 36 → x = 6 cm."},
+
+  {"id":31,"subj":"mat","year":"2025","skill":"Currículo SAS","q":"João segura a linha de uma pipa a 1,5 m do solo. A linha, esticada, tem 50 m e forma 60° com a horizontal. A que altura, aproximadamente, a pipa está do solo? (use sen 60° ≈ 0,85, ou seja, 1,7 ÷ 2)","opts":["41,0 m","42,5 m","44,0 m","48,5 m"],"ans":2,"exp":"Altura acima da mão = 50 × sen 60° ≈ 50 × 0,85 = 42,5 m. Somando a altura da mão: 42,5 + 1,5 = 44 m."},
+  {"id":32,"subj":"mat","year":"2025","skill":"Currículo SAS","q":"Para medir a largura de um rio, um topógrafo mira o ponto B da margem oposta sob 90° a partir de A. Depois, de um ponto C a 30 m de A (na mesma margem), mira B sob 45°. O triângulo ABC é retângulo em A. Qual é a largura do rio (o cateto AB)? (use tg 45° = 1)","opts":["13 m","17 m","21 m","30 m"],"ans":3,"exp":"tg 45° = AB ÷ AC → 1 = AB ÷ 30 → AB = 30 m."},
+  {"id":33,"subj":"mat","year":"2025","skill":"EF09MA13","q":"Em um suporte, a haste AH foi fixada perpendicular à hipotenusa BC de um triângulo retângulo ABC (reto em A), cujos catetos medem 8 cm e 15 cm. Qual é, aproximadamente, o comprimento da haste AH?","opts":["9 cm","8 cm","7 cm","6 cm"],"ans":2,"exp":"Hipotenusa BC = √(8² + 15²) = √289 = 17. Relação métrica: BC × AH = produto dos catetos → 17 × AH = 8 × 15 = 120 → AH ≈ 7 cm."},
+  {"id":34,"subj":"mat","year":"2025","skill":"EF09MA06","q":"Uma relação é função quando toda reta vertical traçada no domínio corta o gráfico em, no máximo, um ponto (teste da reta vertical). Qual situação representa uma função?","opts":["Um gráfico em que toda reta vertical o corta em um único ponto.","Um gráfico em que uma reta vertical o corta em dois pontos.","Uma reta vertical.","Uma circunferência completa."],"ans":0,"exp":"Pelo teste da reta vertical, o gráfico é função quando cada valor de x corresponde a um único y — a reta vertical o corta uma só vez."},
+  {"id":35,"subj":"mat","year":"2025","skill":"Currículo SAS","q":"Em uma sequência de figuras feitas de círculos, a 1ª tem 1 círculo, a 2ª tem 4, a 3ª tem 9 e a 4ª tem 16 (a quantidade é o quadrado da posição). Qual é a posição da figura composta de 49 círculos?","opts":["6","7","12","13"],"ans":1,"exp":"A quantidade de círculos é y = x². Se y = 49, então x² = 49 → x = 7. É a 7ª figura."},
+  {"id":36,"subj":"mat","year":"2025","skill":"EF09MA06","q":"Uma plataforma tem dois planos: o básico custa R$ 19,90 mais R$ 1,50 por filme fora do catálogo básico; o completo custa R$ 45,90 fixos. Para quem vai assistir a 16 filmes fora do catálogo básico no mês, o plano mais vantajoso custa","opts":["R$ 35,90.","R$ 39,90.","R$ 43,90.","R$ 45,90."],"ans":2,"exp":"Básico: 19,90 + 1,50 × 16 = 19,90 + 24,00 = R$ 43,90. É mais barato que o completo (R$ 45,90)."},
+  {"id":37,"subj":"mat","year":"2025","skill":"EF09MA06","q":"Um robô segue a trajetória dada por y = ½x − 4. O gráfico dessa função afim é","opts":["uma reta que corta os eixos nos pontos (0, −4) e (8, 0).","uma reta que corta os eixos em (0, 4) e (−8, 0).","uma parábola com vértice em (0, −4).","uma reta horizontal em y = −4."],"ans":0,"exp":"Para x = 0, y = −4; para y = 0, x = 8. A reta passa por (0, −4) e (8, 0)."},
+  {"id":38,"subj":"mat","year":"2025","skill":"EF09MA06","q":"A função F(C) = 1,8·C + 32 converte a temperatura de grau Celsius (C) para grau Fahrenheit (F). A partir de que valor inteiro de temperatura em grau Celsius a temperatura em Fahrenheit passa a ser positiva?","opts":["−18 °C","−17 °C","14 °C","32 °C"],"ans":1,"exp":"F = 0 quando 1,8·C + 32 = 0 → C = −32 ÷ 1,8 ≈ −17,7. Acima disso F é positivo; o primeiro inteiro é −17 °C."},
+  {"id":39,"subj":"mat","year":"2025","skill":"EF09MA11","q":"Em uma circunferência de centro O, o ângulo central AÔB mede 114°. O ângulo inscrito APB compreende o mesmo arco AB. Qual é a medida do ângulo APB?","opts":["38°","57°","114°","228°"],"ans":1,"exp":"O ângulo inscrito é a metade do ângulo central que compreende o mesmo arco: APB = 114° ÷ 2 = 57°."},
+  {"id":40,"subj":"mat","year":"2025","skill":"EF09MA14","q":"De um ponto P externo a uma circunferência partem uma reta secante, que corta a circunferência em A e B, e uma reta tangente, que toca em C. Sabe-se que PA = 4 cm e PB = 9 cm. Pela relação PC² = PA · PB, qual é o comprimento de PC?","opts":["4,0 cm","4,5 cm","5,5 cm","6,0 cm"],"ans":3,"exp":"PC² = PA × PB = 4 × 9 = 36 → PC = 6 cm."},
+
+  {"id":41,"subj":"ing","year":"2024","skill":"EF09LI07","q":"Read the job ad.<br><em>“We are looking for an account manager. If you have 4+ years of experience working in the accounting industry, we would like you to be part of our team. Send your resume to us.”</em><br>In this job ad, the company is looking for someone who","opts":["can work in an office.","is leaving another job.","is a young professional.","has experience in the job."],"ans":3,"exp":"A única exigência explícita é ter pelo menos quatro anos de experiência na área contábil."},
+  {"id":42,"subj":"ing","year":"2024","skill":"EF09LI01","q":"Read the dialogue.<br>— This food looks good, <strong>doesn't it?</strong><br>— Yes, it really does!<br>The question tag “doesn't it?” was used to","opts":["start an opinion.","refute a common fact.","confirm an information.","try to end a conversation."],"ans":2,"exp":"A question tag transforma a afirmação em pergunta para confirmar/reforçar a informação já dita."},
+  {"id":43,"subj":"ing","year":"2024","skill":"EF09LI05","q":"Read the text.<br><em>“Health care access is the ability to obtain health services. For it to be accessible, it must be affordable and convenient. Many people do not have access to adequate health care — widely in third-world countries but also in wealthy nations.”</em><br>According to the text, the main problem about health care is that it","opts":["doesn't have a cure for diseases.","is not accessible to many people.","is not offered in the United States.","shouldn't be given by the government."],"ans":1,"exp":"O texto trata da falta de acesso de muitas pessoas à saúde, tanto em países pobres quanto ricos."},
+  {"id":44,"subj":"ing","year":"2024","skill":"EF09LI06","q":"Read the text.<br><em>“A commission of experts said the influence of 'big food' must be curbed to tackle obesity, malnutrition and climate change. Junk food overconsumption and food production are interlinked problems.”</em><br>The main idea of this article is that","opts":["experts on nutrition should work in the food industry.","people are consuming less junk food through the years.","consumers of junk food should do their own food transportation.","food industry interests can have an impact on health and the climate."],"ans":3,"exp":"O texto defende que os interesses da grande indústria de alimentos afetam a saúde das pessoas e o clima."},
+  {"id":45,"subj":"ing","year":"2024","skill":"EF09LI07","q":"Reread the excerpt.<br><em>“The commission <strong>said</strong> political leaders and civil society must step up to counter the food industry.”</em><br>The reported speech is used in the text to","opts":["reveal exact speeches by political leaders.","mention the food industry's response.","indicate what was said by the committee of experts.","present the data from the magazine's report."],"ans":2,"exp":"O reported speech (“The commission said…”) indica, de forma indireta, o que os especialistas da comissão afirmaram."},
+
+  {"id":46,"subj":"ing","year":"2025","skill":"EF09LI07","q":"Read the job ad.<br><em>“We are hiring a Social Media Specialist. Requirements: Bachelor's degree or equivalent experience; minimum 3 years of experience in similar expertise; strong verbal and written skills; ability to multitask. Send your CV to us.”</em><br>According to this job ad, what is necessary to work at this company?","opts":["To have a driving license.","To have expertise in the area.","To have good grades at school.","To have a sense of responsibility."],"ans":1,"exp":"O anúncio exige experiência e conhecimento na área (mínimo de 3 anos em função semelhante)."},
+  {"id":47,"subj":"ing","year":"2025","skill":"EF09LI01","q":"Read the dialogue.<br>— That's a beautiful tree, <strong>isn't it?</strong><br>— Yeah, I think so too.<br>The structure “isn't it?” is used to","opts":["invite an agreement.","answer a question.","refuse an idea.","give an order."],"ans":0,"exp":"A question tag convida o interlocutor a concordar com a afirmação feita."},
+  {"id":48,"subj":"ing","year":"2025","skill":"EF09LI06","q":"Read the text.<br><em>“Kat Morgan and Mark Bittman argue that putting warning labels on highly processed foods will help consumers improve their health. Traditional labels are not enough to guide people toward healthier choices.”</em><br>The main idea of the article is that","opts":["natural foods are easier to find than processed ones.","most consumers already understand nutrition labels.","food packaging should focus more on attractive design.","warning labels can help people make healthier food choices."],"ans":3,"exp":"O artigo defende que advertências (warning labels) nos ultraprocessados podem ajudar o consumidor a escolher melhor."},
+  {"id":49,"subj":"ing","year":"2025","skill":"EF09LI07","q":"Reread the sentence.<br><em>“Kat Morgan and Mark Bittman <strong>argue that</strong> warning labels will help consumers improve their health.”</em><br>In the sentence, the reported speech is used to","opts":["reproduce someone's exact words.","tell an opinion indirectly.","claim better labeling.","criticize junk foods."],"ans":1,"exp":"O reported speech (“argue that…”) apresenta a opinião dos autores de forma indireta, sem citar as palavras exatas."},
+  {"id":50,"subj":"ing","year":"2025","skill":"EF09LI07","q":"Read the direct speech.<br><em>“Do you want to play?” Lily asked, glancing at the swings.</em><br>What is the correct way to turn the highlighted question into reported speech?","opts":["Lily glanced at the swings as she spoke.","Lily asked the name of the other girl.","Lily asked if Mia wanted to play.","Lily introduced the city to Mia."],"ans":2,"exp":"No discurso indireto, “Do you want to play?” vira “Lily asked if Mia wanted to play” (asked if + verbo no passado)."},
+
+  {"id":51,"subj":"bio","year":"2024","skill":"Currículo SAS","q":"Pesquisadores identificaram o “erro” no ciclo celular que leva as células a duplicar seu DNA de forma exagerada. Sabendo que a duplicação do DNA ocorre antes da divisão celular, em qual etapa do ciclo celular ocorre esse “erro”?","opts":["Prófase.","Telófase.","Interfase.","Metáfase."],"ans":2,"exp":"A duplicação do DNA acontece na interfase (fase S), período em que a célula se prepara para a divisão."},
+  {"id":52,"subj":"bio","year":"2024","skill":"EF09CI09","q":"O tipo de lóbulo da orelha é uma herança monogênica: separado da face é dominante; colado à face é recessivo. Um casal só pode ter filhos com lóbulos colados à face (característica recessiva). Qual é o tipo de lóbulo desse casal?","opts":["A mãe tem lóbulo separado e o pai, colado.","O pai tem lóbulo separado e a mãe, colado.","O pai e a mãe têm lóbulos separados.","A mãe e o pai têm lóbulos colados à face."],"ans":3,"exp":"Para todos os filhos serem recessivos (aa), os dois pais precisam ser homozigotos recessivos (aa) — ou seja, ambos têm lóbulo colado à face."},
+  {"id":53,"subj":"bio","year":"2024","skill":"EF09CI09","q":"A presença de sardas é dominante (A) e a ausência é recessiva (aa). Considere o cruzamento de um indivíduo sem sardas (aa) com um indivíduo com sardas heterozigoto (Aa). Qual é a probabilidade de o casal ter uma criança com sardas?","opts":["25%.","50%.","75%.","100%."],"ans":1,"exp":"Aa × aa → metade dos filhos Aa (com sardas) e metade aa (sem sardas). A chance de ter sardas é de 50%."},
+  {"id":54,"subj":"bio","year":"2024","skill":"Currículo SAS","q":"Leveduras da espécie Saccharomyces cerevisiae realizam um processo em que o ácido pirúvico, produzido na glicólise, passa por uma reação que libera CO₂, formando etanol. Esse processo é chamado de","opts":["fermentação alcoólica.","fermentação láctica.","fotossíntese.","oxidação."],"ans":0,"exp":"A produção de etanol e CO₂ a partir do ácido pirúvico, pelas leveduras, caracteriza a fermentação alcoólica."},
+  {"id":55,"subj":"bio","year":"2024","skill":"Currículo SAS","q":"A respiração aeróbica tem três etapas: glicólise (no citosol), ciclo de Krebs e cadeia respiratória (na mitocôndria). Em qual local da célula ocorre a etapa que produz a maior quantidade de ATP?","opts":["No núcleo.","No citosol.","Na crista mitocondrial.","Na matriz mitocondrial."],"ans":2,"exp":"A maior parte do ATP é produzida na cadeia respiratória, que ocorre nas cristas mitocondriais."},
+
+  {"id":56,"subj":"bio","year":"2025","skill":"Currículo SAS","q":"As células do corpo humano passam por divisões que permitem seu bom funcionamento. Um tipo de divisão gera duas células-filhas geneticamente idênticas à célula-mãe, nas células do corpo (somáticas). Esse processo (mitose) tem como função a","opts":["divisão de material genético apenas.","formação de células reprodutivas.","geração de variabilidade genética.","recuperação de tecidos do organismo."],"ans":3,"exp":"A mitose gera células idênticas e permite o crescimento e a regeneração/recuperação dos tecidos do corpo."},
+  {"id":57,"subj":"bio","year":"2025","skill":"Currículo SAS","q":"Pesquisadores criaram tomateiros que produzem gametas geneticamente idênticos, substituindo a meiose pela mitose na formação das células sexuais. Ao fazer isso, os pesquisadores desejam evitar a","opts":["perda de genes de interesse nos gametas produzidos.","inserção de novos cromossomos nos gametas.","correção das informações genéticas nos gametas.","cópia exata das informações genéticas nos gametas."],"ans":0,"exp":"A meiose gera variabilidade (crossing-over e segregação). Substituindo-a pela mitose, garante-se gametas idênticos aos pais, evitando a perda dos genes de interesse."},
+  {"id":58,"subj":"bio","year":"2025","skill":"EF09CI09","q":"Duas plantas de ervilha de linhagem pura foram cruzadas: uma de estatura alta (dominante) e outra de estatura baixa (recessiva). Todos os descendentes tiveram estatura alta. Quais são os fatores hereditários das plantas A (alta) e B (baixa)?","opts":["Um dominante e um recessivo na planta A e dois recessivos na planta B.","Um dominante e um recessivo em ambas as plantas.","Dois fatores dominantes na planta A e dois recessivos na planta B.","Dois recessivos na planta A e dois dominantes na planta B."],"ans":2,"exp":"Sendo linhagens puras, a planta alta é AA (dois dominantes) e a baixa é aa (dois recessivos). Por isso todos os filhos (Aa) são altos."},
+  {"id":59,"subj":"bio","year":"2025","skill":"EF09CI09","q":"O albinismo é uma condição recessiva. Um casal em que um dos cônjuges é albino (aa) e o outro não é albino, mas já teve uma filha albina (portanto Aa), pretende ter outro filho. Qual é a probabilidade de esse filho ser albino?","opts":["25%.","50%.","75%.","100%."],"ans":1,"exp":"aa × Aa → metade dos filhos aa (albinos) e metade Aa (não albinos). A probabilidade de albino é de 50%."},
+  {"id":60,"subj":"bio","year":"2025","skill":"Currículo SAS","q":"Pesquisadores desenvolvem uma soja mais resistente à seca recortando um gene da variedade tolerante e inserindo-o na variedade mais produtiva, alterando o DNA com precisão. Essa técnica de edição gênica utiliza o(a)","opts":["mecanismo CRISPR, que recorta o gene que garante tolerância à seca.","uso de enzimas que formam DNA sem resistência à seca.","desativação de um vírus de RNA.","emprego de nucleotídios fluorescentes para marcar o DNA."],"ans":0,"exp":"A edição gênica descrita usa o mecanismo CRISPR-Cas9, que funciona como uma “tesoura molecular” para recortar e inserir o gene de interesse."},
+
+  {"id":61,"subj":"fis","year":"2024","skill":"Currículo SAS","q":"Uma máquina lança uma bola horizontalmente. Desprezando a resistência do ar, qual trajetória a bola descreve para um observador em repouso no solo?","opts":["Reta horizontal, pois a velocidade é constante.","Reta vertical, por causa apenas da gravidade.","Curva (parabólica), pela combinação da velocidade horizontal com a gravidade.","Circular, por causa do movimento da máquina."],"ans":2,"exp":"Um corpo lançado horizontalmente sofre a gravidade (na vertical) e mantém a velocidade horizontal — o resultado é uma trajetória curvilínea (parabólica)."},
+  {"id":62,"subj":"fis","year":"2024","skill":"Currículo SAS","q":"Dois objetos foram lançados obliquamente. Desprezando o ar, o tempo total de voo do objeto A é 4 s e o do objeto B é 3 s. Como o tempo de subida é metade do tempo de voo e a velocidade vertical inicial é v = g·t(subida), qual é a razão v_B ÷ v_A?","opts":["5 ÷ 3","4 ÷ 3","3 ÷ 4","2 ÷ 3"],"ans":2,"exp":"Tempo de subida: A = 2 s, B = 1,5 s. Como v = g·t(subida), v_B ÷ v_A = 1,5 ÷ 2 = 3 ÷ 4."},
+  {"id":63,"subj":"fis","year":"2024","skill":"Currículo SAS","q":"Um piano é erguido até um apartamento por meio de cabos e um sistema de polias. Qual é a principal força responsável por erguer o instrumento?","opts":["Força elástica.","Força tensora (tração).","Força normal.","Força peso."],"ans":1,"exp":"O piano sobe porque a força de tração (tensora) nos cabos supera, em módulo, a força peso — é a principal força que o ergue."},
+  {"id":64,"subj":"fis","year":"2024","skill":"Currículo SAS","q":"Uma pedra está presa a uma roda que gira com velocidade de módulo constante, sem que o carro saia do lugar (movimento circular uniforme). Qual é o ângulo formado entre a aceleração centrípeta e a velocidade da pedra?","opts":["0°.","45°.","90°.","120°."],"ans":2,"exp":"No movimento circular uniforme, a aceleração centrípeta aponta para o centro e é sempre perpendicular à velocidade — o ângulo é 90°."},
+  {"id":65,"subj":"fis","year":"2024","skill":"Currículo SAS","q":"Uma pá de turbina de massa m = 5 000 kg é erguida com velocidade constante por dois cabos que dividem igualmente o peso. Considere g = 10 m/s². Qual é o módulo da força de tensão em cada cabo?","opts":["25 000 N.","20 000 N.","10 000 N.","5 000 N."],"ans":0,"exp":"Como a velocidade é constante, 2·T = m·g → 2·T = 5 000 × 10 = 50 000 → T = 25 000 N em cada cabo."},
+
+  {"id":66,"subj":"fis","year":"2025","skill":"Currículo SAS","q":"Em uma manobra, a velocidade e a aceleração de uma aeronave têm sinais opostos (v < 0 e a > 0). Em outra, ambas têm o mesmo sinal (v < 0 e a < 0). Os movimentos na manobra 1 e na manobra 2 são, respectivamente,","opts":["retardado e acelerado.","retardado e retardado.","acelerado e acelerado.","acelerado e retardado."],"ans":0,"exp":"Sinais opostos de v e a → movimento retardado (freia); mesmo sinal → movimento acelerado. Logo: retardado e acelerado."},
+  {"id":67,"subj":"fis","year":"2025","skill":"Currículo SAS","q":"Um trem acelerou uniformemente a 0,5 m/s², partindo de 623 km/h até atingir 2 000 km/h. A variação de velocidade foi de 1 377 km/h ≈ 382,5 m/s. Quantos segundos ele levou para atingir a velocidade máxima?","opts":["382 s","765 s","1 530 s","2 754 s"],"ans":1,"exp":"Δv ≈ 382,5 m/s. Como a = Δv ÷ Δt → Δt = 382,5 ÷ 0,5 = 765 s."},
+  {"id":68,"subj":"fis","year":"2025","skill":"Currículo SAS","q":"Paraquedistas chamam de “queda livre” a etapa do salto em que o paraquedas ainda não foi acionado. Do ponto de vista da Física, ao usar esse conceito, eles desconsideram que, em situações reais, o movimento é influenciado pela","opts":["altura do salto.","resistência do ar.","aceleração da gravidade.","velocidade inicial do corpo."],"ans":1,"exp":"A queda livre, na Física, ocorre sem resistência do ar. Em situações reais, porém, o ar influencia o movimento — o que os paraquedistas desconsideram."},
+  {"id":69,"subj":"fis","year":"2025","skill":"Currículo SAS","q":"Uma placa indica, com setas (vetores), o caminho para vários locais. A seta da Praia Central e a do Terminal Pesqueiro estão na mesma direção (horizontal), mas em sentidos opostos. Se a orientação é “ir na direção horizontal, no sentido oposto à Praia Central”, o destino é o(a)","opts":["Morro do Cristo.","Praça.","Terminal Pesqueiro.","Joinville."],"ans":2,"exp":"O sentido oposto ao da seta da Praia Central, na mesma direção horizontal, corresponde ao vetor que aponta para o Terminal Pesqueiro."},
+  {"id":70,"subj":"fis","year":"2025","skill":"Currículo SAS","q":"Uma jogadora de handebol arremessa a bola horizontalmente com v₀ = 15 m/s, de uma altura de 1,80 m. Desprezando o ar e usando g = 10 m/s², a que distância da trave (alcance horizontal) a bola foi arremessada?","opts":["2,7 m","4,5 m","9,0 m","18,0 m"],"ans":2,"exp":"Tempo de queda: 1,80 = ½·10·t² → t² = 0,36 → t = 0,6 s. Alcance = v₀·t = 15 × 0,6 = 9,0 m."},
+
+  {"id":71,"subj":"qui","year":"2024","skill":"Currículo SAS","q":"Um metal é formado por cátions imersos em um “mar de elétrons” livres. Por isso, uma batida de martelo desloca os cátions, que se reajustam, permitindo transformar o metal em chapas finas. Esse comportamento indica que os metais têm alta","opts":["reflexibilidade.","maleabilidade.","resistência à tração.","condutividade térmica baixa."],"ans":1,"exp":"A maleabilidade é a capacidade de ser moldado em chapas/lâminas sob pressão — exatamente o que o texto descreve."},
+  {"id":72,"subj":"qui","year":"2024","skill":"Currículo SAS","q":"O cromo pode ser extraído do óxido Cr₂O₃. Sabendo que o oxigênio tem número de oxidação (Nox) −2 e que a soma dos Nox no composto neutro é zero, qual é o Nox do cromo no Cr₂O₃?","opts":["+3","+2","−2","−3"],"ans":0,"exp":"2·(Nox do Cr) + 3·(−2) = 0 → 2x − 6 = 0 → 2x = 6 → x = +3."},
+  {"id":73,"subj":"qui","year":"2024","skill":"Currículo SAS","q":"Na produção de papel, usam-se peróxido de hidrogênio (H₂O₂), sulfato de sódio (Na₂SO₄), hidróxido de sódio (NaOH) e dióxido de cloro (ClO₂). Qual desses compostos é uma base de Arrhenius?","opts":["Peróxido de hidrogênio.","Hidróxido de sódio.","Sulfato de sódio.","Dióxido de cloro."],"ans":1,"exp":"Base de Arrhenius libera íons OH⁻ em água. O NaOH dissocia-se em Na⁺ e OH⁻ — é uma base de Arrhenius."},
+  {"id":74,"subj":"qui","year":"2024","skill":"Currículo SAS","q":"No tratamento de água, a cal hidratada (Ca(OH)₂) é usada para precipitar metais pesados. Em água, ela se dissocia liberando íons hidróxido (OH⁻). Assim, a cal hidratada é classificada como um(a)","opts":["ácido de Arrhenius, liberando íons hidrogênio.","base de Arrhenius, liberando íons hidrogênio.","base de Arrhenius, liberando íons hidróxido.","ácido de Arrhenius, liberando íons hidróxido."],"ans":2,"exp":"Ao liberar íons OH⁻ (hidróxido) em água, a Ca(OH)₂ é uma base de Arrhenius."},
+  {"id":75,"subj":"qui","year":"2024","skill":"Currículo SAS","q":"No processo de Ostwald, obtém-se o HNO₃. Calculando o Nox do nitrogênio (H = +1, O = −2), tem-se +1 + x + 3·(−2) = 0 → x = +5. Como o elemento central tem Nox +5, o oxiácido produzido é o","opts":["ácido nítrico, um ácido fraco.","ácido nitroso, um ácido fraco.","ácido nítrico, um ácido forte.","ácido nitroso, um ácido forte."],"ans":2,"exp":"Com Nox +5, o HNO₃ é o ácido nítrico. Como (nº de O) − (nº de H ionizáveis) = 3 − 1 = 2, é um ácido forte."},
+
+  {"id":76,"subj":"qui","year":"2025","skill":"Currículo SAS","q":"No grupo heme da hemoglobina, o átomo central é o ferro (Z = 26), cuja distribuição eletrônica termina em subnível d (…4s² 3d⁶). Em relação à tabela periódica, o ferro é classificado como","opts":["metal alcalino.","metal alcalinoterroso.","elemento de transição.","elemento representativo."],"ans":2,"exp":"Elementos cujo subnível mais energético é o d são metais de transição (bloco d) — caso do ferro."},
+  {"id":77,"subj":"qui","year":"2025","skill":"Currículo SAS","q":"O cloreto férrico é formado pelo cátion férrico (Fe³⁺) e por ânions cloreto (Cl⁻, pois o cloro Z = 17 ganha 1 elétron). Para o composto ser neutro, qual é a fórmula correta desse sal?","opts":["Fe₃Cl","FeCl₃","Fe₂Cl₃","Fe₃Cl₂"],"ans":1,"exp":"Fe³⁺ precisa de três Cl⁻ para equilibrar a carga (+3 e três −1). A fórmula é FeCl₃."},
+  {"id":78,"subj":"qui","year":"2025","skill":"Currículo SAS","q":"O xenônio, um gás nobre, só forma compostos com elementos muito eletronegativos. Entre lítio (Li), iodo (I), cálcio (Ca) e oxigênio (O), qual tem maior chance de formar composto com o xenônio? (a eletronegatividade cresce da esquerda para a direita e de baixo para cima na tabela)","opts":["lítio.","iodo.","cálcio.","oxigênio."],"ans":3,"exp":"O oxigênio está mais à direita e mais acima na tabela, sendo o mais eletronegativo dos quatro — o mais provável de reagir com o xenônio."},
+  {"id":79,"subj":"qui","year":"2025","skill":"Currículo SAS","q":"Para mergulhos profundos, usa-se um gás inerte no lugar do nitrogênio. O gás nitrogênio (N₂) é apolar porque os elétrons da ligação entre os dois átomos são","opts":["transferidos de um átomo para o outro.","capazes de se mover livremente por todo o gás.","compartilhados com formação de cargas parciais.","atraídos com a mesma força pelos núcleos dos dois átomos."],"ans":3,"exp":"No N₂, os dois átomos são iguais (mesma eletronegatividade), então os elétrons são atraídos igualmente — ligação covalente apolar."},
+  {"id":80,"subj":"qui","year":"2025","skill":"Currículo SAS","q":"Na trefilação, um fio metálico é puxado por uma matriz de orifício cada vez menor, reduzindo seu diâmetro e aumentando seu comprimento, sem se romper. A propriedade dos metais que permite esse processo é a","opts":["ductilidade.","maleabilidade.","resistência à tração.","condutividade elétrica."],"ans":0,"exp":"A ductilidade é a capacidade de ser esticado em fios sem romper — propriedade aproveitada na trefilação."},
+
+  {"id":81,"subj":"geo","year":"2024","skill":"EF09GE18","q":"Leia o texto.<br><em>A nova política industrial prevê que os geradores de energia renovável, como a solar e a eólica, acelerem a substituição dos combustíveis fósseis na matriz energética da indústria.</em><br>A transição energética referida prioriza o uso de fontes que","opts":["mantêm as paisagens naturais inalteradas.","dependem do uso de recursos minerais.","geram menor impacto ambiental.","têm maior valor comercial."],"ans":2,"exp":"Fontes renováveis (solar e eólica) são limpas e inesgotáveis, gerando menor impacto ambiental que os combustíveis fósseis."},
+  {"id":82,"subj":"geo","year":"2024","skill":"EF09GE09","q":"Leia o texto.<br><em>A Itália tem a menor taxa de natalidade da Europa e é o 2º país com mais idosos do mundo. Perde entre 200 e 250 mil habitantes por ano e caminha para uma população muito envelhecida.</em><br>Esse cenário demográfico gera preocupações governamentais porque","opts":["requer a elevação dos investimentos na educação infantil.","envolve a diminuição da disponibilidade de mão de obra.","ocasiona o surgimento de epidemias de difícil controle.","provoca a ascensão de regimes políticos autoritários."],"ans":1,"exp":"Envelhecimento com baixa natalidade reduz a população economicamente ativa, diminuindo a mão de obra disponível."},
+  {"id":83,"subj":"geo","year":"2024","skill":"EF09GE08","q":"Leia o texto.<br><em>Em 2011, o governo sírio de Bashar al-Assad respondeu com violenta repressão aos protestos de rua contra o regime, o que levou ao início da Guerra Civil Síria.</em><br>O início da guerra civil teve relação direta com a","opts":["reação do governo sírio às manifestações da Primavera Árabe.","captura de cidadãos sírios ligados à Al-Qaeda.","conquista de territórios sírios pelo grupo Talibã.","oposição dos sírios à repartição de Jerusalém."],"ans":0,"exp":"A guerra começou com a repressão do governo às manifestações da Primavera Árabe, que pediam o fim dos regimes autoritários."},
+  {"id":84,"subj":"geo","year":"2024","skill":"EF09GE09","q":"Nas décadas de 1970 e 2020, as pirâmides etárias da China mudaram: a base, larga em 1970 (alta natalidade), tornou-se estreita em 2020. Um fator que contribuiu diretamente para essa mudança foi o(a)","opts":["declínio dos serviços públicos de saúde.","expulsão de imigrantes do território.","redução da expectativa de vida.","controle da natalidade promovido pelo governo."],"ans":3,"exp":"A “política do filho único” restringiu o número de filhos por família, reduzindo a natalidade e estreitando a base da pirâmide."},
+  {"id":85,"subj":"geo","year":"2024","skill":"EF09GE15","q":"Leia o texto.<br><em>“Formada pela Austrália e pelas ilhas do Oceano Pacífico que a circundam, é chamada de ‘Novíssimo Mundo’, por ter sido o último continente colonizado. Tem a menor área e população dos cinco continentes.”</em><br>O continente descrito é a","opts":["África.","Europa.","Oceania.","América."],"ans":2,"exp":"Austrália + ilhas do Pacífico, menor área e população, último a ser colonizado: trata-se da Oceania."},
+
+  {"id":86,"subj":"geo","year":"2025","skill":"EF09GE18","q":"Leia os textos.<br><em>Texto 1: as usinas hidrelétricas geram energia limpa a partir da força da água, com baixa emissão de poluentes.<br>Texto 2: a energia nuclear não emite gás carbônico, mas depende da mineração de urânio e apresenta risco de contaminação radioativa.</em><br>As fontes apresentadas nos dois textos têm em comum a vantagem de","opts":["oferecer baixos riscos ambientais.","serem fontes de matriz renovável.","reaproveitarem resíduos agrícolas.","dispensarem o uso de combustíveis fósseis."],"ans":3,"exp":"Nem a hidrelétrica nem a nuclear dependem da queima de combustíveis fósseis, reduzindo as emissões de gases do efeito estufa."},
+  {"id":87,"subj":"geo","year":"2025","skill":"EF09GE09","q":"A pirâmide etária da Europa (2024) tem base estreita (poucos jovens) e topo alargado (muitos idosos). Essa tendência demográfica preocupa os governos europeus porque prevê o(a)","opts":["decaimento da expectativa de vida.","redução da população economicamente ativa.","desequilíbrio do número de homens e mulheres.","ampliação da taxa de fecundidade no continente."],"ans":1,"exp":"Com poucos jovens e muitos idosos, haverá menos pessoas em idade produtiva — redução da população economicamente ativa."},
+  {"id":88,"subj":"geo","year":"2025","skill":"EF09GE08","q":"Leia o texto.<br><em>O conflito na Síria começou em 2011 e ganhou novo impulso em 2024, quando forças rebeldes lançaram uma ofensiva contra o ditador Bashar al-Assad, tomando cidades importantes.</em><br>Esse conflito teve origem na","opts":["competição interna pelo controle dos recursos naturais.","mobilização popular contra o regime autoritário vigente.","intervenção imediata de potências ocidentais.","oposição pública à instalação de um governo democrático."],"ans":1,"exp":"O conflito nasceu da insatisfação popular e da mobilização contra o regime autoritário de Assad, no contexto da Primavera Árabe."},
+  {"id":89,"subj":"geo","year":"2025","skill":"EF09GE15","q":"Um mapa de anamorfose distorce o tamanho dos países conforme a população: amplia os mais populosos e reduz os menos povoados. Nesse mapa, a China e a Índia aparecem muito alargadas. Essa distorção torna evidente a","opts":["população elevada dos países asiáticos.","concentração de pessoas habitando os polos.","redução populacional no continente americano.","distribuição equilibrada dos habitantes no mundo."],"ans":0,"exp":"A anamorfose amplia os territórios mais populosos: o alargamento da Ásia evidencia a grande concentração populacional asiática."},
+  {"id":90,"subj":"geo","year":"2025","skill":"EF09GE15","q":"Leia o texto.<br><em>“Divide-se em quatro sub-regiões: Austrália e Nova Zelândia; Melanésia; Micronésia; e Polinésia. Só a Austrália e a Nova Zelândia são consideradas desenvolvidas; as demais têm indicadores de países subdesenvolvidos e pequena extensão territorial.”</em><br>O continente descrito é a","opts":["África.","Ásia.","Europa.","Oceania."],"ans":3,"exp":"Austrália, Nova Zelândia e as ilhas do Pacífico (Melanésia, Micronésia e Polinésia) formam a Oceania, o menor continente."},
+
+  {"id":91,"subj":"his","year":"2024","skill":"EF09HI28","q":"Uma charge da década de 1940 retrata a disputa entre Estados Unidos e União Soviética no início da Guerra Fria, sugerindo que ambos podiam usar armamentos capazes de destruição em massa. Essa relação entre as superpotências foi marcada pelo(a)","opts":["acirramento de rivalidades em nações subdesenvolvidas.","redução da intensidade dos confrontos internacionais.","aumento da disputa pela conquista do espaço.","ameaça do uso de armas de alto poder de destruição."],"ans":3,"exp":"EUA e URSS ameaçavam usar armas nucleares como forma de pressão política e dissuasão militar durante a Guerra Fria."},
+  {"id":92,"subj":"his","year":"2024","skill":"EF09HI14","q":"Leia o texto.<br><em>No Congresso de Manchester, os representantes enfatizaram que a independência política seria a primeira etapa para a completa emancipação africana e estimularam a população a se unir e lutar pela independência.</em><br>Essa reunião fortaleceu o sentimento pan-africano ao incentivar a","opts":["percepção coletiva de união pautada na negritude.","emancipação econômica amparada na aliança ocidental.","unificação ideológica fundamentada no comunismo.","equiparação social baseada na adaptação cultural."],"ans":0,"exp":"O Congresso de Manchester estimulou a união dos povos africanos baseada na afirmação da identidade negra africana — o pan-africanismo."},
+  {"id":93,"subj":"his","year":"2024","skill":"EF09HI32","q":"Leia o texto.<br><em>Após a perestroika, o controle do Estado sobre a economia diminuiu e novas regras de mercado foram adotadas, com aumento de preços e falta de produtos. A glasnost, por sua vez, abriu espaço para protestos e greves contra o governo.</em><br>Na URSS, essas mudanças contribuíram para a","opts":["aceleração da crise econômica e o processo de desintegração do país.","manutenção da economia planificada e a continuidade do socialismo.","implantação do capitalismo e o aumento da perseguição política.","supressão das liberdades e o fim do regime democrático."],"ans":0,"exp":"As reformas não melhoraram a vida da população e aumentaram a insatisfação, acelerando a crise e a desintegração da União Soviética."},
+  {"id":94,"subj":"his","year":"2024","skill":"EF09HI35","q":"Leia o texto.<br><em>O petróleo sustenta a economia de grande parte do Oriente Médio, mas também patrocina a corrida armamentista e os interesses estrangeiros. A região do Golfo Pérsico, onde está o Iraque, foi invadida duas vezes pelos EUA (1991 e 2003).</em><br>Compreende-se uma associação entre a abundância de petróleo na região e a ocorrência de","opts":["migrações espontâneas.","divergências religiosas.","desastres naturais.","conflitos bélicos."],"ans":3,"exp":"Sendo um recurso estratégico, o petróleo do Oriente Médio atrai interesses e disputas, associando-se à ocorrência de conflitos bélicos."},
+  {"id":95,"subj":"his","year":"2024","skill":"EF09HI10","q":"Leia o texto.<br><em>Em 1947, a ONU aprovou a partilha da Palestina, apoiada por EUA e URSS. Seis meses depois, foi proclamado o Estado de Israel (1948), e o primeiro conflito árabe-israelense começou no dia seguinte.</em><br>Um dos fatores que contribuíram para o conflito foi a","opts":["busca pelo controle dos recursos energéticos.","ascensão de governos baseados nas leis islâmicas.","interferência externa sobre a disputa territorial.","acentuação das tensões entre socialistas e capitalistas."],"ans":2,"exp":"A criação de Israel resultou de uma decisão da ONU (encabeçada pelas grandes potências): a interferência externa na disputa territorial contribuiu para o conflito."},
+
+  {"id":96,"subj":"his","year":"2025","skill":"EF09HI28","q":"Uma charge da década de 1940 caricatura líderes políticos e ilustra um marco do início da Guerra Fria: a união entre países alinhados por interesses (como EUA e Reino Unido) frente ao bloco rival. Essa dinâmica representa a","opts":["redução gradual dos blocos de influência europeia.","cooperação política entre diferentes blocos ideológicos.","preparação dos blocos militares para um conflito direto.","formação dos blocos econômicos capitalista e comunista."],"ans":3,"exp":"EUA e URSS ampliaram suas áreas de influência formando blocos alinhados: a charge sugere a formação dos blocos capitalista e comunista."},
+  {"id":97,"subj":"his","year":"2025","skill":"EF09HI14","q":"Leia o texto.<br><em>O Pan-africanismo, construído ao longo do século XX, defendia uma visão unificada da África e da população negra, valorizando sua contribuição à história mundial e debatendo identidade, cultura e economia.</em><br>A construção desse movimento foi motivada pela","opts":["busca pela divisão territorial do continente africano.","demanda por autodeterminação política e emancipação cultural.","atenuação da extração mineral europeia.","teorização das hierarquias raciais coloniais."],"ans":1,"exp":"O pan-africanismo buscava a autonomia política dos povos africanos e afrodescendentes e a valorização de suas culturas — autodeterminação e emancipação cultural."},
+  {"id":98,"subj":"his","year":"2025","skill":"EF09HI32","q":"Leia o texto.<br><em>Entre 1985 e 1991, Mikhail Gorbachev promoveu na União Soviética as mudanças mais radicais, tentando corrigir as lacunas políticas e econômicas do país.</em><br>Essas mudanças radicais envolveram medidas de","opts":["centralização administrativa e aumento das intervenções militares.","evolução tecnológica e desabastecimento de produtos.","liberação da produção industrial e promoção da abertura política.","estatização das empresas e fortalecimento da censura."],"ans":2,"exp":"A perestroika liberalizou a economia (descentralizando a produção) e a glasnost promoveu a abertura política — as reformas de Gorbachev."},
+  {"id":99,"subj":"his","year":"2025","skill":"EF09HI35","q":"Leia o texto.<br><em>No Oriente Médio estão as maiores reservas de petróleo do mundo. Segundo a National Energy Policy, a região é vital para os interesses dos EUA, cujos aliados dependem dessas importações, e influencia o preço mundial do petróleo.</em><br>O texto descreve um fator que contribuiu para a","opts":["eclosão de conflitos bélicos no Oriente Médio.","adesão de fontes renováveis pelos Estados Unidos.","redução da autonomia energética dos países árabes.","acentuação da migração de povos judeus."],"ans":0,"exp":"O petróleo como recurso estratégico atrai interesses e disputas, sendo um dos fatores que contribuem para os conflitos bélicos na região."},
+  {"id":100,"subj":"his","year":"2025","skill":"EF09HI10","q":"Leia o texto.<br><em>A Palestina, parte do Império Otomano até a Primeira Guerra, passou a ser administrada pelo Reino Unido. Após a Segunda Guerra, a ONU cedeu parte do território para os judeus — o que não agradou o mundo árabe.</em><br>O início do conflito árabe-palestino tem relação com a","opts":["imposição de fronteiras pela comunidade internacional.","conquista de territórios ricos em recursos energéticos.","divergência religiosa entre os governos árabes.","independência política do povo palestino."],"ans":0,"exp":"A partilha da Palestina, imposta por decisão internacional (ONU), estabeleceu novas fronteiras sem acordo com o mundo árabe — origem do conflito."},
+
+  {"id":101,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>Segundo Aristóteles, há formas puras (ou clássicas) de governo, que trabalham em favor do bem comum, e formas corrompidas, governadas em benefício do interesse próprio.</em><br>Quais são as três formas puras ou clássicas de governo, segundo Aristóteles?","opts":["Aristocracia, democracia e tirania.","Monarquia, aristocracia e politia.","Tirania, oligarquia e democracia.","Oligarquia, politia e monarquia."],"ans":1,"exp":"Para Aristóteles, as formas puras são monarquia, aristocracia e politia; as degeneradas são tirania, oligarquia e democracia."},
+  {"id":102,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>“A liberdade de escolha e a vulnerabilidade de nossa condição são as bases da ética. A reflexão ética pretende nos ajudar a conviver melhor; embora não exista um código, podemos recorrer a ideias úteis e consolidadas.” (Savater)</em><br>No texto, a reflexão ética é abordada como um(a)","opts":["interpretação de valores morais que orientam as relações.","processo de escolha racional de validade universal.","pensamento pessoal que independe de opiniões alheias.","tradição coletiva que precisa ser tratada como lei."],"ans":0,"exp":"A reflexão ética é apresentada como a interpretação de valores morais consolidados coletivamente, que orientam as relações."},
+  {"id":103,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>“Age apenas segundo a máxima pela qual possas querer que ela se torne uma lei universal.” (Kant)</em><br>Segundo Kant, as ações humanas devem ser guiadas","opts":["pela obediência apoiada no medo.","pela crença fundamentada na fé.","por princípios fundados na razão.","por desejos baseados no egoísmo."],"ans":2,"exp":"Para Kant, a ação moral segue o imperativo categórico — princípios racionais e universais, fundados na razão, e não em medo, fé ou egoísmo."},
+  {"id":104,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>“A felicidade de cada pessoa é um bem para essa pessoa e, logo, a felicidade geral é um bem para o conjunto de todas as pessoas.” (Stuart Mill)</em><br>Segundo a filosofia utilitarista, qual deveria ser o fim das ações humanas?","opts":["Efetivar a associação entre o bem-estar individual e o coletivo.","Garantir que os mandamentos divinos sejam cumpridos.","Seguir com rigidez as regras da sociedade.","Satisfazer os desejos imediatos de cada sujeito."],"ans":0,"exp":"Para o utilitarismo de Mill, as ações devem buscar a maior felicidade geral, unindo o bem individual ao bem coletivo."},
+  {"id":105,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Leia o texto.<br><em>“Um príncipe, especialmente se for novo, muitas vezes é obrigado, para preservar o Estado, a agir contra a fé, a caridade e a religião.” (Maquiavel)</em><br>Nesse trecho, o pensador considera que as ações de um governante deveriam priorizar o(a)","opts":["atendimento de interesses do povo.","respeito às legislações nacionais.","obediência à moral dominante.","manutenção de seus poderes."],"ans":3,"exp":"Para Maquiavel, o governante deve priorizar a manutenção do poder e do Estado, mesmo que isso exija ações contrárias à moral tradicional."},
+
+  {"id":106,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>“Tirania é a monarquia governando no interesse do monarca; a oligarquia governa no interesse dos ricos; a democracia, no interesse dos pobres; e nenhuma governa para o bem de toda a comunidade.” (Aristóteles)</em><br>Segundo esse pensamento, as formas de governo descritas resultam da","opts":["consolidação do equilíbrio de poder entre classes.","degeneração de modelos políticos que valorizam o bem comum.","ampliação das decisões compartilhadas entre os cidadãos.","superação racional das formas de dominação social."],"ans":1,"exp":"Governar em favor de um grupo (e não de toda a comunidade) caracteriza as formas degeneradas — distorções das formas puras que buscam o bem comum."},
+  {"id":107,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>“A ética é da ordem do pensamento e da reflexão, enquanto a moral é da regra, do normativo. Enquanto a primeira reflete, a segunda descreve como agir em forma de regras.”</em><br>De acordo com essa descrição, a ética é compreendida como uma forma de","opts":["definir os padrões de conduta adequados e inadequados.","organizar logicamente o conjunto de regras das culturas.","investigar as mudanças no comportamento humano no tempo.","analisar criticamente os valores e costumes naturalizados pelo hábito."],"ans":3,"exp":"A ética não apenas aceita os costumes: ela reflete e questiona criticamente os valores naturalizados pelo hábito e pela tradição."},
+  {"id":108,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>“Duas coisas enchem a alma de admiração e respeito: o céu estrelado sobre mim e a lei moral dentro de mim.” (Kant)</em><br>O trecho reflete uma ideia central de Kant, na qual a moral tem origem na","opts":["vontade orientada pelas leis da razão.","obediência fundada na crença religiosa.","busca apoiada no reconhecimento social.","emoção influenciada pelos desejos individuais."],"ans":0,"exp":"A “lei moral dentro de mim” aponta para a dimensão racional da moralidade: para Kant, a moral origina-se na razão (imperativo categórico)."},
+  {"id":109,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>Stuart Mill defende que os prazeres de maior valor são os do pensamento, do sentimento e da imaginação — ligados à beleza, ao conhecimento, à arte —, superiores aos prazeres ligados às necessidades físicas.</em><br>Segundo Mill, o prazer humano de maior valor surge a partir de","opts":["condutas mecânicas ligadas a hábitos cotidianos.","atitudes conscientes associadas às práticas do intelecto.","decisões impulsivas guiadas por desejos momentâneos.","reações imediatas ligadas à necessidade de sobrevivência."],"ans":1,"exp":"Para Mill, os prazeres superiores exigem razão, sensibilidade e consciência — estão ligados às práticas do intelecto, não às necessidades físicas."},
+  {"id":110,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Leia o texto.<br><em>“Quando o príncipe está à frente de seus exércitos, é necessário não se importar com a fama de cruel, pois sem ela jamais manterá o exército unido.” (Maquiavel)</em><br>No pensamento desse filósofo, importa ao governante, principalmente, a","opts":["determinação para praticar a virtude.","disposição para se guiar pela ética.","capacidade de se manter no poder.","habilidade de evitar conflitos."],"ans":2,"exp":"Para Maquiavel, o objetivo central do governante é manter o poder e o controle, mesmo que isso exija ações duras ou impopulares."},
+
+  {"id":111,"subj":"art","year":"2024","skill":"EF69AR01","q":"Leia o texto.<br><em>O Auditório Ibirapuera, projetado por Oscar Niemeyer, é uma construção em formato de trapézio, com superfícies curvas e linhas fluidas, sem excesso de ornamentos.</em><br>Ele é entendido como representante da arquitetura modernista brasileira porque","opts":["valoriza formas geométricas simples.","enfatiza o uso de materiais sustentáveis.","remete às construções dos povos tradicionais.","revela um excesso de ornamentos na composição."],"ans":0,"exp":"A arquitetura modernista valoriza formas geométricas simples e livres de ornamentos — características da obra de Niemeyer."},
+  {"id":112,"subj":"art","year":"2024","skill":"EF69AR03","q":"Leia o texto.<br><em>O videoclipe é um filme curto que uniu imagem e música a partir dos anos 1980. É também uma ferramenta mercadológica: influencia comportamentos e dita modas, funcionando como um “pacote completo” da música e da imagem de um artista.</em><br>Infere-se que uma das principais funções do videoclipe é","opts":["narrar histórias reais.","divulgar músicas e artistas.","incorporar tendências da moda.","representar visualmente um acorde."],"ans":1,"exp":"O videoclipe promove e divulga a música e o artista, reforçando sua mensagem e estilo para alcançar o público."},
+  {"id":113,"subj":"art","year":"2024","skill":"EF69AR31","q":"Leia o texto.<br><em>A peça “Os Guardiões de Histórias” usa o teatro para falar sobre antirracismo. Por meio da identificação com personagens históricos, as crianças descobrem a grandiosidade da cultura africana e a importância da luta antirracista.</em><br>Essa obra gera impacto social ao","opts":["fortalecer a cultura afro-brasileira e promover o antirracismo.","criticar a desigualdade e reivindicar privilégios.","entreter por meio de uma encenação humorística.","resgatar os principais fatos do processo colonial."],"ans":0,"exp":"A peça fortalece o conhecimento sobre a cultura afro-brasileira e promove o antirracismo, com caráter educativo."},
+  {"id":114,"subj":"art","year":"2024","skill":"EF69AR31","q":"Leia o resumo de uma letra de rap.<br><em>O eu lírico conta que sonhava ser jogador, mas o sistema limita sua vida; diz que teve de escolher entre “sonhar ou sobreviver”, e que o sonho de todo pobre é ser rico — ainda assim, insiste que é preciso acreditar que o sonho é possível.</em><br>Essa letra apresenta uma reflexão sobre o problema da","opts":["falta de educação financeira.","precariedade da educação.","superlotação das cidades.","desigualdade social."],"ans":3,"exp":"A letra fala de sonhos limitados pela escassez financeira (“sonhar ou sobreviver”), refletindo sobre a desigualdade social."},
+  {"id":115,"subj":"art","year":"2024","skill":"EF69AR23","q":"Leia o texto.<br><em>Um músico define a improvisação como “compor em tempo real com objetos que já são reconhecíveis por ele — objetos escolhidos”, posicionando esses elementos no momento da apresentação.</em><br>A partir dessa fala, infere-se que a improvisação","opts":["dispensa a técnica por ser um ato sem preconcepção.","requer seguir uma estrutura rítmica premeditada.","demanda talento para criar com objetos desconhecidos.","envolve o uso de um repertório na criação instantânea de uma combinação."],"ans":3,"exp":"A improvisação reorganiza, em tempo real, elementos de um repertório já conhecido, gerando uma combinação nova e instantânea."},
+
+  {"id":116,"subj":"art","year":"2025","skill":"EF69AR01","q":"Leia o texto.<br><em>O Teatro Oficina, em São Paulo, tem formato de “sanduíche”: o palco no centro e duas plateias ao redor. Esse formato aproxima o público dos artistas e torna o espetáculo mais imersivo — a forma do prédio está ligada à sua função teatral.</em><br>Essa obra aproxima-se da arquitetura modernista pelo fato de","opts":["relacionar estética e funcionalidade.","aliar diversidade artística e apelo educacional.","integrar sustentabilidade ambiental e arte teatral.","priorizar acessibilidade e inclusão de grupos minoritários."],"ans":0,"exp":"O modernismo une beleza da forma (estética) e utilidade do espaço (funcionalidade): a estrutura do teatro serve à sua função artística."},
+  {"id":117,"subj":"art","year":"2025","skill":"EF69AR23","q":"Leia o texto.<br><em>Uma prática musical desfaz a separação entre intérprete e criador, abdica de roteiros e de referenciais clássicos como melodia e harmonia, dilui a hierarquia entre os músicos e deixa o tempo flexível, explorando as propriedades do som.</em><br>Essa prática é chamada de","opts":["scat singing.","improvisação livre.","improvisação idiomática.","adição de notas ornamentais."],"ans":1,"exp":"Sem regras fixas, melodia ou harmonia predefinidas, e sem hierarquia, trata-se da improvisação livre (diferente da idiomática, que segue um estilo)."},
+  {"id":118,"subj":"art","year":"2025","skill":"EF69AR03","q":"Leia o texto.<br><em>Uma crítica de uma animação destaca o uso diverso das cores, a fluidez dos movimentos e das silhuetas dos personagens e a boa dublagem, que adaptou a obra para o público brasileiro.</em><br>Entende-se que essa obra é uma produção audiovisual porque ela","opts":["tem uma versão traduzida para o público brasileiro.","apresenta personagens fictícios que geram humor.","prioriza o uso de cores em detrimento dos sons.","utiliza recursos como sons e imagens para expressar a mensagem."],"ans":3,"exp":"A produção audiovisual combina sons e imagens (cores, movimentos, dublagem) para construir sua narrativa."},
+  {"id":119,"subj":"art","year":"2025","skill":"EF69AR31","q":"Leia o texto.<br><em>O grupo Estopô Balaio, do Jardim Romano (zona leste de São Paulo), apresenta “A cidade dos rios invisíveis”, que conta, nas ruas do bairro, a história das enchentes vividas pelos moradores — bairro que ficou três meses debaixo d'água em 2009.</em><br>Esse espetáculo tem como característica a","opts":["exposição da distância econômica entre moradores de diferentes zonas.","crítica à baixa divulgação de problemas sociais nas mídias.","denúncia de um problema social enfrentado por uma comunidade específica.","exaltação da integração cultural entre artistas paulistas e potiguares."],"ans":2,"exp":"O espetáculo dá visibilidade às enchentes vividas pela comunidade, funcionando como denúncia artística de um problema social específico."},
+  {"id":120,"subj":"art","year":"2025","skill":"EF69AR31","q":"Leia o resumo de uma letra de rap.<br><em>A canção retrata a realidade difícil das periferias: as diferenças de oportunidades, a falta de recursos básicos como alimentação e a resistência de quem enfrenta essas dificuldades no cotidiano.</em><br>Essa letra aborda criticamente a temática da","opts":["violência urbana.","desigualdade social.","precarização do mercado de trabalho.","dificuldade de acesso ao registro civil."],"ans":1,"exp":"A letra expõe as diferenças de oportunidades e a falta de recursos básicos nas periferias — uma crítica à desigualdade social."}
+]
+}
+</script>
+<script>
+(function(){
+  var DB = JSON.parse(document.getElementById("DATA").textContent);
+  var SUBJECTS = DB.subjects, QUESTIONS = DB.questions;
+  var LETTERS = ["A","B","C","D"];
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function getOrder(q){ if(!(q.id in state.order)){ var base=[]; for(var i=0;i<q.opts.length;i++){ base.push(i); } state.order[q.id]=shuffle(base); } return state.order[q.id]; }
+  var state = { current: SUBJECTS[0].key, answers: {}, order: {} };
+
+  var tabsEl = document.getElementById("tabs");
+  var mainEl = document.getElementById("main");
+  var answeredEl = document.getElementById("answered");
+  var hitsEl = document.getElementById("hits");
+  var barEl = document.getElementById("bar");
+
+  function qOfSubject(k){ return QUESTIONS.filter(function(q){return q.subj===k;}); }
+  function subjMeta(k){ return SUBJECTS.find(function(s){return s.key===k;}); }
+
+  function totals(){
+    var ans=0, hit=0;
+    QUESTIONS.forEach(function(q){
+      if(q.id in state.answers){ ans++; if(state.answers[q.id]===q.ans) hit++; }
+    });
+    return {ans:ans,hit:hit};
+  }
+  function subjTotals(k){
+    var ans=0, hit=0, list=qOfSubject(k);
+    list.forEach(function(q){ if(q.id in state.answers){ans++; if(state.answers[q.id]===q.ans) hit++;} });
+    return {ans:ans,hit:hit,total:list.length};
+  }
+
+  function renderTabs(){
+    tabsEl.innerHTML="";
+    SUBJECTS.forEach(function(s){
+      var t=subjTotals(s.key);
+      var b=document.createElement("button");
+      b.className="tab"+(s.key===state.current?" active":"")+(t.ans===t.total?" done":"");
+      b.style.setProperty("--c", s.color);
+      b.innerHTML='<span class="dot"></span>'+s.name+'<span class="cnt">'+t.ans+'/'+t.total+'</span>';
+      b.onclick=function(){ state.current=s.key; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+      tabsEl.appendChild(b);
+    });
+  }
+
+  function renderScore(){
+    var t=totals();
+    answeredEl.textContent=t.ans; hitsEl.textContent=t.hit;
+    barEl.style.width=(t.ans/QUESTIONS.length*100)+"%";
+  }
+
+  function paintAnswered(card, q, chosen){
+    var opts=card.querySelectorAll(".opt");
+    opts.forEach(function(o){
+      var oi=parseInt(o.dataset.i,10);
+      o.disabled=true;
+      if(oi===q.ans){ o.classList.add("correct"); o.querySelector(".mark").textContent="\u2713"; }
+      if(oi===chosen && chosen!==q.ans){ o.classList.add("wrong"); o.querySelector(".mark").textContent="\u2717"; }
+    });
+    var exp=card.querySelector(".exp"); var ok=chosen===q.ans;
+    exp.classList.add("show", ok?"ok":"no");
+    exp.innerHTML=(ok?"<b>Correto!</b> ":"<b>N\u00e3o foi dessa vez.</b> ")+q.exp;
+  }
+
+  function choose(q, idx, card){
+    if(q.id in state.answers) return;
+    state.answers[q.id]=idx;
+    paintAnswered(card, q, idx);
+    renderScore(); renderTabs(); maybeSummary();
+  }
+
+  function maybeSummary(){
+    var k=state.current, t=subjTotals(k);
+    var sum=document.getElementById("summary-"+k);
+    if(!sum) return;
+    if(t.ans===t.total){
+      var meta=subjMeta(k);
+      sum.querySelector(".big").textContent=t.hit+"/"+t.total;
+      var pct=t.hit/t.total, msg;
+      if(pct===1) msg="Gabaritou "+meta.name+"! Mandou muito bem.";
+      else if(pct>=0.7) msg="Bom desempenho em "+meta.name+". Revise o que escapou e siga em frente.";
+      else if(pct>=0.5) msg="Voc\u00ea concluiu "+meta.name+". Vale revisar as explica\u00e7\u00f5es das quest\u00f5es erradas.";
+      else msg="Concluiu "+meta.name+". Releia as explica\u00e7\u00f5es com calma \u2014 d\u00e1 para melhorar bastante.";
+      sum.querySelector("p").textContent=msg;
+      sum.classList.add("show");
+    } else {
+      sum.classList.remove("show");
+    }
+  }
+
+  function render(){
+    var k=state.current, meta=subjMeta(k);
+    document.documentElement.style.setProperty("--accent", meta.color);
+    renderTabs(); renderScore();
+    var list=qOfSubject(k);
+    mainEl.innerHTML='<div class="mathead"><h2>'+meta.name+'</h2><span class="bar"></span></div>';
+    list.forEach(function(q){
+      var card=document.createElement("div");
+      card.className="q";
+      var opts="";
+      var ord=getOrder(q);
+      for(var i=0;i<ord.length;i++){
+        var oi=ord[i];
+        opts+='<button class="opt" data-i="'+oi+'"><span class="letter">'+LETTERS[i]+'</span><span class="txt">'+q.opts[oi]+'</span><span class="mark"></span></button>';
+      }
+      card.innerHTML='<div class="meta"><span class="qn">'+q.id+'</span><span class="pill yr">'+q.year+'</span><span class="pill">'+q.skill+'</span></div>'+
+        '<div class="stem">'+q.q+'</div><div class="opts">'+opts+'</div><div class="exp"></div>';
+      card.querySelectorAll(".opt").forEach(function(btn){
+        btn.addEventListener("click",function(){ choose(q, parseInt(btn.dataset.i,10), card); });
+      });
+      if(q.id in state.answers){ paintAnswered(card, q, state.answers[q.id]); }
+      mainEl.appendChild(card);
+    });
+    var sum=document.createElement("div");
+    sum.className="summary"; sum.id="summary-"+k;
+    sum.innerHTML='<h3>Resumo de '+meta.name+'</h3><div class="big">0/0</div><p></p><button class="next">Pr\u00f3xima</button>';
+    mainEl.appendChild(sum);
+    var idx=-1; for(var j=0;j<SUBJECTS.length;j++){ if(SUBJECTS[j].key===k){idx=j;break;} }
+    var nextBtn=sum.querySelector(".next");
+    if(idx<SUBJECTS.length-1){
+      nextBtn.textContent="Ir para "+SUBJECTS[idx+1].name+" \u2192";
+      nextBtn.onclick=function(){ state.current=SUBJECTS[idx+1].key; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+    } else {
+      nextBtn.textContent="Voltar ao in\u00edcio \u2191";
+      nextBtn.onclick=function(){ window.scrollTo({top:0,behavior:"smooth"}); };
+    }
+    maybeSummary();
+  }
+
+  document.getElementById("restart").addEventListener("click",function(){
+    if(Object.keys(state.answers).length && !confirm("Recome\u00e7ar a prova? Suas respostas ser\u00e3o apagadas.")) return;
+    state.answers={}; state.order={}; state.current=SUBJECTS[0].key; render(); window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
