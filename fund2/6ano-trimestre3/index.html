@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3ª Prova Treino · 6º ano</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F7F6F3; --card:#FFFFFF; --ink:#20242B; --muted:#6A7078;
+    --line:#E4E2DC; --good:#1E8449; --good-bg:#E7F4EC; --bad:#C0392B; --bad-bg:#FBEAE8;
+    --accent:#2471A3;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Public Sans",system-ui,sans-serif;line-height:1.55;font-size:17px}
+  .wrap{max-width:760px;margin:0 auto;padding:0 18px 64px}
+  code,.mono{font-family:"Space Mono",monospace}
+
+  header.top{padding:30px 0 18px;border-bottom:2px solid var(--ink)}
+  .kicker{font-family:"Space Mono",monospace;font-size:12.5px;letter-spacing:.14em;color:var(--muted);margin:0 0 8px}
+  h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(30px,7vw,44px);line-height:1.02;margin:0;letter-spacing:-.01em}
+  .sub{color:var(--muted);margin:8px 0 0;font-size:15.5px}
+
+  .scorebar{position:sticky;top:0;z-index:20;background:var(--bg);padding:12px 0 10px;margin-top:2px;border-bottom:1px solid var(--line)}
+  .scores{display:flex;gap:22px;align-items:baseline;flex-wrap:wrap}
+  .scores .item{display:flex;gap:7px;align-items:baseline}
+  .scores .num{font-family:"Space Mono",monospace;font-weight:700;font-size:21px;color:var(--ink)}
+  .scores .lab{font-size:12.5px;color:var(--muted)}
+  .scores .hit .num{color:var(--good)}
+  .progress{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+  .progress > i{display:block;height:100%;width:0;background:var(--accent);border-radius:99px;transition:width .35s ease}
+
+  nav.tabs{display:flex;gap:8px;overflow-x:auto;padding:14px 0 6px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  nav.tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--muted);
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14.5px;
+    padding:8px 14px;border-radius:99px;cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px;transition:.15s}
+  .tab .dot{width:9px;height:9px;border-radius:50%;background:var(--c)}
+  .tab .cnt{font-family:"Space Mono",monospace;font-size:11.5px;color:var(--muted)}
+  .tab:hover{border-color:var(--c)}
+  .tab.active{color:#fff;background:var(--c);border-color:var(--c)}
+  .tab.active .cnt{color:rgba(255,255,255,.85)}
+  .tab.active .dot{background:#fff}
+  .tab.done::after{content:"\2713";font-family:"Public Sans";font-weight:700;margin-left:2px}
+
+  .mathead{display:flex;align-items:center;gap:10px;margin:26px 0 4px}
+  .mathead h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:24px;margin:0;color:var(--accent)}
+  .mathead .bar{height:3px;flex:1;background:var(--accent);opacity:.25;border-radius:2px}
+
+  .q{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent);
+     border-radius:14px;padding:18px 18px 16px;margin:14px 0}
+  .q .meta{display:flex;gap:8px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+  .q .qn{font-family:"Space Mono",monospace;font-weight:700;font-size:13px;color:#fff;background:var(--accent);
+     border-radius:7px;padding:2px 8px}
+  .pill{font-family:"Space Mono",monospace;font-size:11px;color:var(--muted);border:1px solid var(--line);
+     border-radius:99px;padding:2px 8px;background:#fbfaf8}
+  .pill.yr{color:var(--accent);border-color:var(--accent)}
+  .q .stem{font-size:16.5px;margin:2px 0 14px}
+  .q .stem em{color:var(--ink)}
+  .fig{margin:12px 0;overflow-x:auto;color:var(--accent)}
+  .fig svg{max-width:100%;height:auto;display:block}
+  table.nut{border-collapse:collapse;font-family:"Space Mono",monospace;font-size:14px;min-width:230px;background:#fff}
+  table.nut td{border:1px solid var(--line);padding:5px 12px}
+  table.nut td:last-child{text-align:right;font-weight:700}
+
+  .opts{display:flex;flex-direction:column;gap:9px}
+  .opt{display:flex;gap:11px;align-items:flex-start;text-align:left;width:100%;
+     border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:12px 13px;cursor:pointer;
+     font:inherit;color:var(--ink);transition:.12s}
+  .opt:hover:not(:disabled){border-color:var(--accent);background:#fbfcfd}
+  .opt:disabled{cursor:default}
+  .opt .letter{font-family:"Space Mono",monospace;font-weight:700;font-size:14px;color:var(--muted);
+     border:1.5px solid var(--line);border-radius:7px;min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+  .opt .txt{padding-top:1px}
+  .opt.correct{border-color:var(--good);background:var(--good-bg)}
+  .opt.correct .letter{background:var(--good);border-color:var(--good);color:#fff}
+  .opt.wrong{border-color:var(--bad);background:var(--bad-bg)}
+  .opt.wrong .letter{background:var(--bad);border-color:var(--bad);color:#fff}
+  .opt.correct .mark,.opt.wrong .mark{margin-left:auto;font-weight:700;align-self:center}
+  .opt.correct .mark{color:var(--good)} .opt.wrong .mark{color:var(--bad)}
+
+  .exp{margin-top:12px;padding:12px 14px;border-radius:10px;font-size:15px;display:none}
+  .exp.show{display:block}
+  .exp.ok{background:var(--good-bg);color:#15613a}
+  .exp.no{background:var(--bad-bg);color:#8f2419}
+  .exp b{font-weight:700}
+
+  .summary{display:none;background:var(--accent);color:#fff;border-radius:16px;padding:22px;margin:20px 0 6px}
+  .summary.show{display:block}
+  .summary h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:22px;margin:0 0 6px}
+  .summary .big{font-family:"Space Mono",monospace;font-weight:700;font-size:40px;line-height:1;margin:6px 0}
+  .summary p{margin:6px 0 0;opacity:.92;font-size:15px}
+  .summary .next{margin-top:16px;background:#fff;color:var(--accent);border:none;border-radius:10px;
+     font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:15px;padding:11px 18px;cursor:pointer}
+
+  footer.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .restart{border:1.5px solid var(--ink);background:transparent;color:var(--ink);border-radius:10px;
+     font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:14.5px;padding:10px 18px;cursor:pointer}
+  .restart:hover{background:var(--ink);color:#fff}
+  .foot .note{font-size:12.5px;color:var(--muted)}
+  @media (max-width:520px){ body{font-size:16px} .q{padding:15px 14px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="kicker">PROVA TREINO</p>
+    <h1>3ª Prova Treino · 6º ano</h1>
+    <p class="sub">Ensino Fundamental · 100 questões (2024 + 2025) · responda e veja a correção na hora</p>
+  </header>
+
+  <div class="scorebar">
+    <div class="scores">
+      <div class="item"><span class="num" id="answered">0</span><span class="lab">de 100 respondidas</span></div>
+      <div class="item hit"><span class="num" id="hits">0</span><span class="lab">acertos</span></div>
+    </div>
+    <div class="progress"><i id="bar"></i></div>
+  </div>
+
+  <nav class="tabs" id="tabs"></nav>
+  <main id="main"></main>
+
+  <footer class="foot">
+    <button class="restart" id="restart">Recomeçar</button>
+    <span class="note">Modo prática — sem nota. Bons estudos!</span>
+  </footer>
+</div>
+
+<script type="application/json" id="DATA">
+{
+"subjects": [
+  {"key":"port","name":"Língua Portuguesa","color":"#C0392B"},
+  {"key":"mat","name":"Matemática","color":"#2471A3"},
+  {"key":"ing","name":"Inglês","color":"#7D3C98"},
+  {"key":"cie","name":"Ciências","color":"#1E8449"},
+  {"key":"geo","name":"Geografia","color":"#CA6F1E"},
+  {"key":"his","name":"História","color":"#B9770E"},
+  {"key":"fil","name":"Filosofia","color":"#117A65"},
+  {"key":"art","name":"Arte","color":"#C2185B"}
+],
+"questions": [
+  {"id":1,"subj":"port","year":"2024","skill":"EF69LP02","q":"Leia o texto de uma campanha:<br><em>“PARE. PENSE. NÃO JOGUE LIXO NO RIO. Um gesto seu hoje mantém a água limpa amanhã. Faça sua parte!”</em><br>Esse texto de campanha tem como principal objetivo","opts":["informar quanto tempo o lixo leva para se decompor.","mobilizar as pessoas a adotarem uma atitude de preservação.","divulgar os serviços de coleta de lixo da cidade.","explicar como a água dos rios é tratada."],"ans":1,"exp":"A campanha convoca o leitor à ação (“Faça sua parte!”), buscando mobilizar as pessoas a preservar o rio — propósito típico de peça publicitária de conscientização."},
+  {"id":2,"subj":"port","year":"2024","skill":"EF06LP05","q":"Na mesma campanha aparecem as frases “Pare.”, “Pense.” e “Faça sua parte!”. As formas verbais destacadas estão no modo imperativo e foram empregadas para","opts":["narrar fatos que já aconteceram.","dar instruções e orientações ao leitor.","expressar dúvidas sobre o futuro.","revelar desejos pessoais de quem escreveu."],"ans":1,"exp":"O modo imperativo exprime ordem, pedido, conselho ou instrução. Na campanha, os verbos orientam o leitor sobre o que fazer."},
+  {"id":3,"subj":"port","year":"2024","skill":"EF67LP15","q":"Leia o trecho:<br><em>“Art. 20. A pessoa idosa tem direito a educação, cultura, esporte, lazer, produtos e serviços que respeitem sua condição de idade.”</em> (Estatuto da Pessoa Idosa — Lei nº 10.741/2003)<br>Esse trecho é um texto normativo e tem como finalidade","opts":["melhorar o material didático das escolas.","determinar que os idosos frequentem a escola.","sugerir que os idosos evitem esportes.","regulamentar direitos da população idosa."],"ans":3,"exp":"Textos normativos estabelecem regras e normas. O artigo garante (regulamenta) direitos das pessoas idosas, como o acesso à educação."},
+  {"id":4,"subj":"port","year":"2024","skill":"EF06LP05","q":"Leia outro trecho:<br><em>“Se a pessoa idosa ou seus familiares não possuírem condições econômicas de prover o seu sustento, o poder público deverá garanti-lo.”</em><br>A forma verbal destacada (“possuírem”) está no futuro do subjuntivo e, no trecho, expressa","opts":["o dever de sempre terem condições econômicas.","a certeza de que não têm condições econômicas.","o fato de que já tiveram condições econômicas.","a possibilidade de não terem condições econômicas."],"ans":3,"exp":"O futuro do subjuntivo indica uma hipótese/possibilidade. O trecho prevê a possibilidade de faltarem condições econômicas."},
+  {"id":5,"subj":"port","year":"2024","skill":"EF67LP18","q":"Leia o e-mail:<br><em>“Prezados vereadores, escrevemos para pedir medidas que regulamentem o uso de fogos de artifício na cidade, priorizando opções silenciosas. Os estrondos assustam crianças e animais. Contamos com vocês. Atenciosamente, moradores do bairro.”</em><br>Esse texto é considerado reivindicatório porque","opts":["solicita mudanças quanto ao uso de fogos de artifício.","ensina crianças a se protegerem dos fogos.","divulga festas que usam fogos de artifício.","narra a história dos fogos de artifício na cidade."],"ans":0,"exp":"Textos reivindicatórios fazem solicitações para garantir direitos ou o bem-estar de um grupo. O e-mail pede providências ao poder público."},
+  {"id":6,"subj":"port","year":"2024","skill":"EF06LP11","q":"Releia: “Os fogos afetam <strong>negativamente</strong> crianças e animais.” O advérbio destacado exprime circunstância de","opts":["intensidade, reforçando o volume dos sons.","tempo, indicando a duração do incômodo.","modo, indicando como crianças e animais são afetados.","dúvida, informando que talvez sejam afetados."],"ans":2,"exp":"“Negativamente” indica o modo como algo ocorre — aqui, a forma (negativa) como os grupos são afetados."},
+  {"id":7,"subj":"port","year":"2024","skill":"EF06LP11","q":"Leia o diálogo:<br>— Você sabe <strong>onde</strong> fica a biblioteca?<br>— Sei! Fica <strong>onde</strong> antes havia a antiga padaria.<br>A palavra “onde” foi empregada corretamente porque","opts":["transmite ideia de lugar fixo.","indica ideia de movimento.","substitui a palavra “aonde”.","faz parte de uma pergunta sobre tempo."],"ans":0,"exp":"“Onde” indica lugar fixo/permanência; “aonde” indica movimento (para onde). No diálogo, refere-se a um lugar fixo."},
+  {"id":8,"subj":"port","year":"2024","skill":"EF67LP05","q":"Leia o texto:<br><em>“Vários estudos mostram que praticar exercícios físicos ajuda a prevenir doenças, como as do coração e o diabetes. Por isso, manter o corpo em movimento é indicado para conservar a saúde.”</em><br>Qual é o principal argumento usado para defender a prática de exercícios?","opts":["Exercícios curam qualquer doença já adquirida.","Exercícios garantem um bom convívio social.","Exercícios ajudam a prevenir doenças.","Exercícios servem apenas para emagrecer."],"ans":2,"exp":"O argumento central é preventivo: os exercícios ajudam a evitar doenças, conservando a saúde."},
+  {"id":9,"subj":"port","year":"2024","skill":"EF06LP08","q":"Releia: “A prática de exercícios é indicada para a saúde e deve ser realizada com orientação profissional.” Esse trecho é um","opts":["oração, pois tem apenas um verbo.","frase nominal, formada sem verbos.","período simples, sem orações.","período composto, pois tem mais de uma oração."],"ans":3,"exp":"Há duas locuções verbais (“é indicada” e “deve ser realizada”), logo duas orações — período composto."},
+  {"id":10,"subj":"port","year":"2024","skill":"EF06LP11","q":"No trecho “A prática de exercícios é indicada <strong>para</strong> a manutenção da saúde”, a preposição destacada estabelece relação de","opts":["causa.","lugar.","modo.","finalidade."],"ans":3,"exp":"“Para” liga os termos indicando o objetivo/finalidade da prática de exercícios."},
+
+  {"id":11,"subj":"port","year":"2025","skill":"EF69LP02","q":"Leia o texto de um cartaz:<br><em>“CAMPANHA DO AGASALHO — O frio não espera! Faça sua parte e doe agasalhos, cobertores e calçados. Leve sua doação aos pontos de arrecadação.”</em><br>Esse cartaz tem a intenção comunicativa de","opts":["convencer o público a fazer doações.","promover as marcas que vendem agasalhos.","anunciar a chegada da estação mais fria.","aconselhar as pessoas a se agasalharem."],"ans":0,"exp":"O cartaz é peça publicitária de campanha solidária: convoca o leitor a doar (“Faça sua parte e doe”), com o objetivo de convencê-lo a contribuir."},
+  {"id":12,"subj":"port","year":"2025","skill":"EF06LP05","q":"Nesse cartaz, as formas verbais “faça” e “doe” estão no modo imperativo e expressam","opts":["ofertas de ajuda.","alertas às pessoas.","conselhos à população.","pedidos de colaboração."],"ans":3,"exp":"No contexto de uma campanha de doação, o imperativo é usado para pedir a colaboração do leitor."},
+  {"id":13,"subj":"port","year":"2025","skill":"EF67LP15","q":"Leia o trecho:<br><em>“Art. 1º Este código estabelece normas de proteção e defesa do consumidor, de ordem pública e interesse social.”</em> (Código de Defesa do Consumidor)<br>Esse trecho pertence a um texto normativo pois apresenta","opts":["perguntas sobre como agir.","recomendações para os consumidores.","regras estabelecidas para a sociedade.","opiniões de especialistas sobre leis."],"ans":2,"exp":"Textos normativos fixam normas/regras que regem a sociedade — é o caso do artigo do Código de Defesa do Consumidor."},
+  {"id":14,"subj":"port","year":"2025","skill":"EF06LP05","q":"No trecho “componentes que <strong>mantenham</strong> as especificações técnicas do fabricante”, o verbo destacado está no modo subjuntivo e expressa","opts":["uma ordem.","uma certeza.","uma vontade.","uma possibilidade."],"ans":3,"exp":"O presente do subjuntivo (“mantenham”) indica possibilidade — os componentes podem manter as especificações."},
+  {"id":15,"subj":"port","year":"2025","skill":"EF67LP18","q":"Leia o texto:<br><em>“O plástico produzido por grandes empresas polui o planeta e ameaça a vida nos oceanos. Exigimos das lideranças mundiais um Tratado Global sobre Plásticos. Não dá para ficar como está!”</em><br>Esse texto tem como objetivo principal","opts":["convencer os leitores a usarem menos plástico.","solicitar medidas contra o plástico no meio ambiente.","criticar quem joga lixo em locais errados.","promover mutirões de limpeza dos oceanos."],"ans":1,"exp":"O texto reivindica (“Exigimos”) providências das lideranças mundiais — é um texto reivindicatório que solicita medidas."},
+  {"id":16,"subj":"port","year":"2025","skill":"EF06LP11","q":"Releia: “A ciência <strong>já</strong> mostrou que os plásticos ameaçam a saúde pública.” O advérbio “já” exprime circunstância de","opts":["modo, indicando como a ciência agiu.","lugar, mostrando onde isso foi comprovado.","intensidade, reforçando o estudo.","tempo, indicando que isso já ocorreu."],"ans":3,"exp":"“Já” situa a ação no tempo — indica que a constatação científica aconteceu anteriormente."},
+  {"id":17,"subj":"port","year":"2025","skill":"EF06LP11","q":"Leia o diálogo:<br>— Filho, pare de gritar lá de fora! Venha conversar comigo na sala, <strong>onde</strong> eu estou.<br>A mãe usa “onde” (e não “aonde”) porque se refere a","opts":["um lugar fixo.","uma localização distante.","uma ideia de movimento.","um deslocamento pequeno."],"ans":0,"exp":"“Onde” é usado para lugar fixo/permanência; a mãe indica o lugar em que está."},
+  {"id":18,"subj":"port","year":"2025","skill":"EF67LP05","q":"Leia o texto:<br><em>“Janeiro de 2025 foi o mês mais quente já registrado. Esse aumento contínuo das temperaturas é um alerta: exige compreensão do problema e a formulação de ações à altura.”</em><br>No texto, a opinião defendida é que","opts":["as cidades grandes são as mais prejudicadas.","as ondas de calor tendem a diminuir no futuro.","o problema não tem mais solução.","é preciso encontrar soluções para o aumento da temperatura."],"ans":3,"exp":"A expressão “exige… a formulação de ações à altura” revela o posicionamento: soluções precisam ser encontradas."},
+  {"id":19,"subj":"port","year":"2025","skill":"EF06LP08","q":"Releia: “Esse crescimento contínuo das temperaturas <strong>serve</strong> como um alerta para as mudanças climáticas.” Esse trecho é classificado como","opts":["período, pois se divide em mais de uma oração.","oração, pois se organiza em torno de um verbo.","período, pois tem sentido completo.","frase nominal, pois não tem verbo."],"ans":1,"exp":"Há um único verbo (“serve”), estruturando uma oração."},
+  {"id":20,"subj":"port","year":"2025","skill":"EF06LP11","q":"No trecho “São Paulo vem batendo recordes de calor <strong>desde</strong> 2010”, a preposição “desde” tem sentido de","opts":["modo.","finalidade.","tempo.","lugar."],"ans":2,"exp":"“Desde” marca o ponto de partida no tempo a partir do qual os recordes ocorrem."},
+
+  {"id":21,"subj":"mat","year":"2024","skill":"EF06MA14","q":"Adicionando 25 reais à quantia que Mariana tem, obtém-se 60 reais. Quanto Mariana possui?","opts":["R$ 15,00","R$ 25,00","R$ 35,00","R$ 45,00"],"ans":2,"exp":"Quantia + 25 = 60 → Quantia = 60 − 25 = 35. Logo, R$ 35,00."},
+  {"id":22,"subj":"mat","year":"2024","skill":"EF06MA14","q":"Multiplicando por 8 a quantidade de conchas da coleção de Pedro, obtém-se 120. Quantas conchas ele tem?","opts":["12","15","112","128"],"ans":1,"exp":"Conchas × 8 = 120 → Conchas = 120 ÷ 8 = 15."},
+  {"id":23,"subj":"mat","year":"2024","skill":"EF06MA15","q":"Juntos, Ana e Bruno têm R$ 240,00. Ana tem R$ 120,00 a mais que Bruno. Quanto cada um tem?","opts":["Ana R$ 140,00 e Bruno R$ 100,00.","Ana R$ 150,00 e Bruno R$ 90,00.","Ana R$ 160,00 e Bruno R$ 80,00.","Ana R$ 180,00 e Bruno R$ 60,00."],"ans":3,"exp":"Bruno + (Bruno + 120) = 240 → 2 × Bruno = 120 → Bruno = 60; Ana = 60 + 120 = 180."},
+  {"id":24,"subj":"mat","year":"2024","skill":"EF06MA08","q":"Observe a reta numérica, com pontos marcados entre 2 e 3.<div class='fig'><svg viewBox='0 0 600 96' role='img' aria-label='Reta numérica de 2 a 3 com os pontos P, Q, R e S'><line x1='40' y1='64' x2='560' y2='64' stroke='currentColor' stroke-width='2'/><g stroke='currentColor' stroke-width='2'><line x1='40' y1='58' x2='40' y2='70'/><line x1='92' y1='60' x2='92' y2='68'/><line x1='144' y1='60' x2='144' y2='68'/><line x1='196' y1='60' x2='196' y2='68'/><line x1='248' y1='60' x2='248' y2='68'/><line x1='300' y1='58' x2='300' y2='70'/><line x1='352' y1='60' x2='352' y2='68'/><line x1='404' y1='60' x2='404' y2='68'/><line x1='456' y1='60' x2='456' y2='68'/><line x1='508' y1='60' x2='508' y2='68'/><line x1='560' y1='58' x2='560' y2='70'/></g><g font-family='Space Mono, monospace' font-size='13' fill='currentColor'><text x='40' y='86' text-anchor='middle'>2</text><text x='300' y='86' text-anchor='middle'>2,5</text><text x='560' y='86' text-anchor='middle'>3</text></g><g fill='currentColor'><circle cx='144' cy='64' r='5'/><circle cx='300' cy='64' r='5'/><circle cx='430' cy='64' r='5'/><circle cx='534' cy='64' r='5'/></g><g font-family='Space Mono, monospace' font-size='14' font-weight='700' fill='currentColor'><text x='144' y='36' text-anchor='middle'>P</text><text x='300' y='36' text-anchor='middle'>Q</text><text x='430' y='36' text-anchor='middle'>R</text><text x='534' y='36' text-anchor='middle'>S</text></g></svg></div>Qual ponto representa o número 2,75?","opts":["Ponto P","Ponto Q","Ponto R","Ponto S"],"ans":2,"exp":"O número 2,75 tem parte inteira 2 e parte decimal 0,75, ficando entre 2,7 e 2,8 — posição do ponto R."},
+  {"id":25,"subj":"mat","year":"2024","skill":"EF06MA08","q":"Segundo uma pesquisa, 89% dos jovens de 9 a 17 anos usavam a internet. Qual é a forma decimal dessa porcentagem?","opts":["0,089","0,89","8,90","89,0"],"ans":1,"exp":"89% = 89 ÷ 100 = 0,89."},
+  {"id":26,"subj":"mat","year":"2024","skill":"EF06MA13","q":"Em uma escola de 720 alunos, 25% se inscreveram em Música. Quantos alunos se inscreveram em Música?","opts":["180","360","540","650"],"ans":0,"exp":"25% de 720 = 0,25 × 720 = 180 alunos."},
+  {"id":27,"subj":"mat","year":"2024","skill":"EF06MA11","q":"Marcelo tem R$ 30,00 e vai comprar: café R$ 9,50; biscoito R$ 2,65; sal R$ 1,80; manteiga R$ 14,20. Quanto sobrará após o pagamento?","opts":["R$ 0,15","R$ 0,95","R$ 1,85","R$ 3,65"],"ans":2,"exp":"Soma das compras = 9,50 + 2,65 + 1,80 + 14,20 = 28,15. Troco = 30 − 28,15 = 1,85."},
+  {"id":28,"subj":"mat","year":"2024","skill":"EF06MA11","q":"Clara comprou um tênis de R$ 99,00 e dividiu o valor em 5 parcelas iguais. Qual é o valor de cada parcela?","opts":["R$ 18,00","R$ 18,90","R$ 19,00","R$ 19,80"],"ans":3,"exp":"99 ÷ 5 = 19,80. Cada parcela é R$ 19,80."},
+  {"id":29,"subj":"mat","year":"2024","skill":"EF06MA24","q":"Um campeonato de xadrez dura 5 h e 45 min, dividido em 3 etapas iguais, com dois intervalos: um de 10 min e outro de 20 min. Qual é a duração de cada etapa?","opts":["1 h e 15 min","1 h e 35 min","1 h e 45 min","1 h e 55 min"],"ans":2,"exp":"Intervalos = 30 min. Tempo de jogo = 5 h 45 min − 30 min = 5 h 15 min = 315 min. 315 ÷ 3 = 105 min = 1 h e 45 min."},
+  {"id":30,"subj":"mat","year":"2024","skill":"EF06MA24","q":"O percurso de treino de Luana é formado pelos trechos indicados no mapa.<div class='fig'><svg viewBox='0 0 600 230' role='img' aria-label='Mapa do percurso com trechos medidos em metros'><polyline points='50,190 210,190 210,120 330,120 330,60 470,60 470,120 540,120 540,200' fill='none' stroke='currentColor' stroke-width='3' stroke-linejoin='round' stroke-linecap='round'/><circle cx='50' cy='190' r='6' fill='currentColor'/><circle cx='540' cy='200' r='6' fill='currentColor'/><g font-family='Space Mono, monospace' font-size='13' fill='currentColor'><text x='130' y='182' text-anchor='middle'>300 m</text><text x='220' y='158' >210 m</text><text x='270' y='112' text-anchor='middle'>150 m</text><text x='340' y='94' >110 m</text><text x='400' y='52' text-anchor='middle'>260 m</text><text x='480' y='94' >100 m</text><text x='505' y='112' text-anchor='middle'>90 m</text><text x='550' y='165' >300 m</text><text x='50' y='212' text-anchor='middle'>início</text><text x='540' y='222' text-anchor='middle'>fim</text></g></svg></div>Quantos metros esse percurso tem ao todo?","opts":["6 110 metros","5 950 metros","1 820 metros","1 520 metros"],"ans":3,"exp":"O total é a soma de todos os trechos: 300 + 210 + 150 + 110 + 260 + 100 + 90 + 300 = 1 520 m."},
+
+  {"id":31,"subj":"mat","year":"2025","skill":"EF06MA14","q":"Um caminhão saiu com certa quantidade de caixas. Após entregar 27, restaram 68. Quantas caixas havia no início?","opts":["27","41","85","95"],"ans":3,"exp":"Inicial − 27 = 68 → Inicial = 68 + 27 = 95 caixas."},
+  {"id":32,"subj":"mat","year":"2025","skill":"EF06MA14","q":"Ana estuda o mesmo tempo todos os dias e, em três dias, estuda 120 minutos no total. Quantos minutos ela estuda por dia?","opts":["30","40","60","80"],"ans":1,"exp":"3 × (tempo diário) = 120 → tempo diário = 120 ÷ 3 = 40 min."},
+  {"id":33,"subj":"mat","year":"2025","skill":"EF06MA15","q":"Lucas e Mariana têm juntos 184 moedas virtuais. Lucas conseguiu 36 moedas a mais que Mariana. Quantas moedas Lucas conseguiu?","opts":["74","92","110","146"],"ans":2,"exp":"Mariana + (Mariana + 36) = 184 → 2 × Mariana = 148 → Mariana = 74; Lucas = 74 + 36 = 110."},
+  {"id":34,"subj":"mat","year":"2025","skill":"EF06MA08","q":"Apenas 31% das escolas públicas brasileiras têm biblioteca. Qual é a representação decimal dessa porcentagem?","opts":["0,031","0,31","3,1","31,0"],"ans":1,"exp":"31% = 31 ÷ 100 = 0,31."},
+  {"id":35,"subj":"mat","year":"2025","skill":"EF06MA13","q":"Um headset custa R$ 240,00. Pagando à vista, há um desconto de 15%. Quanto Rafael pagou à vista?","opts":["R$ 160,00","R$ 180,00","R$ 204,00","R$ 225,00"],"ans":2,"exp":"Desconto = 15% de 240 = 36. Valor à vista = 240 − 36 = 204."},
+  {"id":36,"subj":"mat","year":"2025","skill":"EF06MA11","q":"O grupo I percorreu 2,689 km e depois 1,485 km. O grupo II percorreu 1,251 km e depois 1,485 km. Quantos quilômetros o grupo I percorreu a mais que o grupo II?","opts":["1,438","2,736","2,923","4,174"],"ans":0,"exp":"Grupo I = 4,174 km; Grupo II = 2,736 km; diferença = 4,174 − 2,736 = 1,438 km."},
+  {"id":37,"subj":"mat","year":"2025","skill":"EF06MA11","q":"Um tênis custa R$ 319,00 à vista ou 12 parcelas de R$ 29,90. Quanto se economiza comprando à vista?","opts":["R$ 69,70","R$ 51,90","R$ 41,80","R$ 39,80"],"ans":3,"exp":"A prazo = 12 × 29,90 = 358,80. Economia = 358,80 − 319,00 = 39,80."},
+  {"id":38,"subj":"mat","year":"2025","skill":"EF06MA24","q":"Um atleta saltou 2,286 metros. Sabendo que 1 pé equivale a 30,48 cm, qual é essa altura em pés?","opts":["1,3","7,5","13","75"],"ans":1,"exp":"2,286 m = 228,6 cm; 228,6 ÷ 30,48 = 7,5 pés."},
+  {"id":39,"subj":"mat","year":"2025","skill":"EF06MA24","q":"Uma figura é formada por 4 peças idênticas dispostas ao redor de um ponto central. Em cada peça, a borda externa (que será coberta por fita) mede 4 cm + 5,8 cm + 3,8 cm. Quantos centímetros de fita cobrem todo o contorno?","opts":["54,4","68,8","70,8","86,4"],"ans":0,"exp":"Cada peça contribui com 4 + 5,8 + 3,8 = 13,6 cm; com 4 peças, 13,6 × 4 = 54,4 cm."},
+  {"id":40,"subj":"mat","year":"2025","skill":"EF06MA24","q":"Um percurso foi dividido em 32 trechos de 150 metros cada. Qual é a distância total, em quilômetros?","opts":["4,50 km","4,65 km","4,80 km","4,95 km"],"ans":2,"exp":"32 × 150 = 4 800 m. Como 1 000 m = 1 km, então 4 800 m = 4,8 km."},
+
+  {"id":41,"subj":"ing","year":"2024","skill":"EF06LI20","q":"Read the dialogue:<br>— Computer, please open the file!<br>— <strong>It is not responding!</strong> I am pressing the button, but nothing happens.<br>The negative form of the Present Continuous appears in","opts":["“please open the file!”","“It is not responding!”","“nothing happens”","“I am pressing the button”"],"ans":1,"exp":"A forma negativa do Present Continuous (“is not responding”) indica algo que não está acontecendo no momento da fala."},
+  {"id":42,"subj":"ing","year":"2024","skill":"EF06LI08","q":"Read the text:<br><em>“Small steps can add up to huge strides. When you move more every day — walking, dancing or stretching — you improve your health.”</em><br>The text shows that people","opts":["play tennis better when they are alone.","can be physically active doing simple things.","should stretch before every activity.","need more than one hour of exercise daily."],"ans":1,"exp":"O texto indica que pequenas atitudes diárias (“small steps”) já tornam a pessoa fisicamente ativa."},
+  {"id":43,"subj":"ing","year":"2024","skill":"EF06LI22","q":"Read the title: “Helping at my <strong>family’s</strong> restaurant”. The genitive case (’s) in “family’s restaurant” indicates that the restaurant","opts":["was bought by friends.","belongs to the government.","belongs to the family.","was sold to the boy."],"ans":2,"exp":"O caso genitivo (’s) indica posse: o restaurante pertence à família."},
+  {"id":44,"subj":"ing","year":"2024","skill":"EF06LI08","q":"Read the text:<br><em>“In Italy, food is an important part of culture. Food culture means the meaning people give to food. As a specialist said about Italian food: it is our culture.”</em><br>The main idea is that","opts":["countries usually don’t have a food culture.","people only eat food from their country.","food is related to a country’s culture.","Italy has the best food in the world."],"ans":2,"exp":"O texto mostra que a comida está ligada à cultura e à identidade de um país."},
+  {"id":45,"subj":"ing","year":"2024","skill":"EF06LI19","q":"Read the text:<br><em>“Cameron runs about 180 miles a week. Three or four times a week, he runs three times a day: morning, afternoon and night.”</em><br>In the text, the Present Simple is used to express something","opts":["planned for the future.","that is part of the athlete’s routine.","that happened in the past.","that is universally true."],"ans":1,"exp":"O Present Simple (“runs”) descreve a rotina habitual do atleta."},
+
+  {"id":46,"subj":"ing","year":"2025","skill":"EF06LI08","q":"Read the text:<br><em>“Physical activity is great for young people. It improves sleep, lowers stress and anxiety, and increases confidence and self-esteem.”</em><br>According to the text, physical activity is important for young people because it","opts":["solves every health issue.","results in big loss of weight.","makes them happy all the time.","improves mental health in many ways."],"ans":3,"exp":"O texto destaca vários benefícios para a saúde mental (sono, estresse, ansiedade, autoestima)."},
+  {"id":47,"subj":"ing","year":"2025","skill":"EF06LI08","q":"Read the dialogue:<br>— Jeremy, what are you doing?<br>— (looking at his phone) Nothing…<br>— And now, what are you doing?<br>— Still nothing!<br>People keep asking Jeremy the same question because","opts":["they always believe his answers.","he wants to do other things.","he refuses to talk to them.","he always seems to be doing the same thing."],"ans":3,"exp":"Pela repetição, entende-se que, para os outros, Jeremy parece estar sempre fazendo a mesma coisa (mexendo no celular)."},
+  {"id":48,"subj":"ing","year":"2025","skill":"EF06LI22","q":"Read: “The five main food groups are a good starting point for a <strong>child’s</strong> diet.” The genitive case in “child’s diet” indicates that","opts":["the diet is made for the child.","the diet is made for everybody.","the diet must have five groups.","the diet changes with the food."],"ans":0,"exp":"O caso genitivo (’s) indica posse/relação: a dieta é da criança."},
+  {"id":49,"subj":"ing","year":"2025","skill":"EF06LI08","q":"Read the nutrition label (per cookie):<div class='fig'><table class='nut'><tr><td>Saturated Fat</td><td>9 g</td></tr><tr><td>Total Sugars</td><td>38 g</td></tr><tr><td>&nbsp;&nbsp;Added Sugars</td><td>37 g</td></tr><tr><td>Dietary Fiber</td><td>5 g</td></tr><tr><td>Protein</td><td>18 g</td></tr></table></div>Based on the label, this cookie","opts":["has more fiber than sugar.","has more added sugars than saturated fat.","has a high percentage of trans fats.","has enough nutrients for a whole day."],"ans":1,"exp":"O rótulo mostra 37 g de açúcar adicionado e 9 g de gordura saturada: há mais açúcar adicionado do que gordura saturada."},
+  {"id":50,"subj":"ing","year":"2025","skill":"EF06LI19","q":"Read: “Good Sports drives equitable access in youth sports, supporting children in high-need communities.” The Present Simple is used to","opts":["mention the players’ names.","describe the organization’s purpose.","explain what it did in the past.","talk about future plans."],"ans":1,"exp":"O Present Simple (“drives”, “supporting”) descreve a missão/propósito permanente da organização."},
+
+  {"id":51,"subj":"cie","year":"2024","skill":"EF06CI08","q":"A miopia é um problema de visão em que a imagem de objetos distantes se forma antes da retina, deixando a visão de longe embaçada. Para corrigir esse problema, a lente indicada é do tipo","opts":["convergente.","assimétrica.","divergente.","convexa."],"ans":2,"exp":"A miopia é corrigida com lente divergente, que espalha os raios luminosos e faz a imagem se formar sobre a retina."},
+  {"id":52,"subj":"cie","year":"2024","skill":"EF06CI01","q":"Considere 200 g de milho de pipoca e 200 g de pipoca já estourada. Ao estourar, o milho aumenta de tamanho. Nessa situação, o milho e a pipoca apresentam","opts":["mesma massa e mesmo volume.","mesma massa e volumes diferentes.","massas diferentes e mesmo volume.","massas diferentes e volumes diferentes."],"ans":1,"exp":"A massa é a mesma (200 g cada), mas a pipoca estourada ocupa mais espaço — volumes diferentes."},
+  {"id":53,"subj":"cie","year":"2024","skill":"EF06CI01","q":"O soro caseiro é preparado dissolvendo-se completamente sal e açúcar em água, formando um líquido de aparência uniforme. Essa mistura é classificada como","opts":["homogênea, pois é trifásica.","homogênea, pois tem aparência uniforme.","heterogênea, pois tem mais de uma fase visível.","heterogênea, pois mistura sólidos e líquido."],"ans":1,"exp":"O sal e o açúcar se dissolvem totalmente, formando uma única fase — mistura homogênea."},
+  {"id":54,"subj":"cie","year":"2024","skill":"EF06CI01","q":"Em muitas tintas, os pigmentos (partículas sólidas) se acumulam no fundo da lata quando ela fica parada. Isso mostra que a tinta é uma mistura heterogênea cujos pigmentos são","opts":["insolúveis no solvente e menos densos que ele.","solúveis no solvente e de mesma densidade.","insolúveis no solvente e mais densos que ele.","solúveis no solvente e mais densos que ele."],"ans":2,"exp":"Os pigmentos não se dissolvem (insolúveis) e, por serem mais densos que o solvente, decantam no fundo."},
+  {"id":55,"subj":"cie","year":"2024","skill":"EF06CI01","q":"A estátua de bronze é feita de uma liga metálica de cobre e estanho fundidos, que se solidificam formando uma única fase sólida uniforme. Esse material é classificado como","opts":["solução gasosa.","solução sólida.","suspensão.","coloide."],"ans":1,"exp":"Metais fundidos que formam uma única fase sólida homogênea constituem uma solução sólida (liga metálica)."},
+
+  {"id":56,"subj":"cie","year":"2025","skill":"EF06CI08","q":"Cães e gatos enxergam bem no escuro porque seus olhos fazem a luz passar duas vezes por uma estrutura que capta os raios luminosos e envia estímulos ao cérebro: a retina. Qual é a função dessa estrutura?","opts":["Direcionar a luz para as células sensoriais.","Mudar o foco para objetos próximos e distantes.","Captar os raios luminosos e enviar estímulos ao cérebro.","Controlar a quantidade de luz que entra no olho."],"ans":2,"exp":"A retina capta a luz e transforma o estímulo luminoso em sinais que são enviados ao cérebro."},
+  {"id":57,"subj":"cie","year":"2025","skill":"EF06CI01","q":"Na floculação, etapa do tratamento de água, as partículas de sujeira se juntam formando flocos visíveis na água. A mistura dentro do tanque de floculação é classificada como","opts":["heterogênea, pois há mais de uma fase (água e flocos).","homogênea, pois água e sujeira formam uma única fase.","homogênea, pois os flocos se unem à água.","heterogênea, pois a sujeira forma uma solução com a água."],"ans":0,"exp":"Os flocos visíveis formam uma fase distinta da água — mistura heterogênea (duas fases)."},
+  {"id":58,"subj":"cie","year":"2025","skill":"EF06CI01","q":"O creme dental tem aparência uniforme e é formado por pequenas partículas sólidas dispersas em uma fase líquida, tão pequenas que não decantam nem podem ser separadas por filtração comum. Ele é classificado como","opts":["coloide.","substância pura.","solução verdadeira.","mistura gasosa."],"ans":0,"exp":"Partículas dispersas que não decantam nem se dissolvem totalmente caracterizam um coloide."},
+  {"id":59,"subj":"cie","year":"2025","skill":"EF06CI01","q":"Para que uma bebida em pó forme um líquido límpido e homogêneo, sem resíduos, é necessário que o pó tenha","opts":["baixa densidade.","baixa flutuabilidade.","alta absorção de água.","alta solubilidade em água."],"ans":3,"exp":"Alta solubilidade permite que o pó se dissolva por completo, formando uma mistura homogênea."},
+  {"id":60,"subj":"cie","year":"2025","skill":"EF06CI01","q":"Em um vazamento no oceano, o óleo forma uma mancha na superfície da água e pode ser recolhido por barcos. Isso acontece porque a","opts":["densidade do óleo é menor que a da água, fazendo-o flutuar.","solubilidade do óleo na água é alta.","mistura de óleo e água é homogênea.","massa da água é maior que a do óleo."],"ans":0,"exp":"Como o óleo é menos denso que a água e não se dissolve nela, permanece flutuando na superfície."},
+
+  {"id":61,"subj":"geo","year":"2024","skill":"EF06GE07","q":"O Parque Estadual do Cocó, em Fortaleza (CE), é uma grande área verde dentro da cidade, com trilhas e muitas espécies de plantas e animais. A conservação desse espaço aproxima a população da natureza e contribui para o(a)","opts":["aumento da circulação de veículos.","valorização dos povos originários.","avanço da agricultura de subsistência.","melhoria da qualidade de vida e do equilíbrio ambiental."],"ans":3,"exp":"Áreas verdes urbanas oferecem lazer e servem de refúgio ecológico, melhorando a qualidade de vida e o equilíbrio ambiental."},
+  {"id":62,"subj":"geo","year":"2024","skill":"EF06GE11","q":"As fontes de energia não renováveis podem se esgotar e costumam causar mais impactos ambientais. Qual alternativa apresenta apenas exemplos desse tipo de fonte?","opts":["Radiação solar e etanol.","Carvão mineral e água.","Petróleo e gás natural.","Urânio e biomassa."],"ans":2,"exp":"Petróleo e gás natural são combustíveis fósseis — fontes não renováveis. Nas demais alternativas há ao menos uma fonte renovável."},
+  {"id":63,"subj":"geo","year":"2024","skill":"EF06GE11","q":"O desenvolvimento sustentável busca atender às necessidades atuais sem esgotar os recursos para as futuras gerações. Qual medida representa esse modelo?","opts":["Estímulo ao garimpo em áreas rurais.","Investimento em energias renováveis.","Proibição do uso do biodiesel.","Uso intensivo de combustíveis fósseis."],"ans":1,"exp":"Investir em energias renováveis (solar, eólica) reduz o uso de fontes que se esgotam e poluem — alinhado à sustentabilidade."},
+  {"id":64,"subj":"geo","year":"2024","skill":"EF06GE06","q":"Uma pessoa cultiva hortaliças em uma plantação, produzindo alimentos diretamente da terra. Essa atividade pertence ao","opts":["Setor primário, por usar diretamente os recursos naturais.","Setor secundário, por comercializar itens da natureza.","Setor primário, por prestar serviços à sociedade.","Setor secundário, por transformar matérias-primas."],"ans":0,"exp":"A agricultura produz alimentos diretamente da natureza — atividade do setor primário."},
+  {"id":65,"subj":"geo","year":"2024","skill":"EF06GE06","q":"Com a Revolução Industrial, a fábrica substituiu a oficina e o trabalho manual passou a ser feito por máquinas controladas pelo homem. No período em que começaram, essas mudanças provocaram o(a)","opts":["crescimento da população rural.","aumento da produção de itens.","redução dos problemas ambientais.","fim de todos os produtos artesanais."],"ans":1,"exp":"As máquinas permitiram produzir mais em menos tempo — aumento expressivo da produção."},
+
+  {"id":66,"subj":"geo","year":"2025","skill":"EF06GE07","q":"Curitiba mantém 48 parques, é líder nacional em reciclagem e investiu em ônibus elétricos. Essas práticas indicam uma relação entre sociedade e natureza marcada pela","opts":["adaptação da vida urbana ao clima local.","aplicação de iniciativas sustentáveis para o ambiente.","adequação dos hábitos à extração de recursos.","relação religiosa da comunidade com a natureza."],"ans":1,"exp":"Parques, reciclagem e transporte limpo são iniciativas sustentáveis de uso consciente dos recursos."},
+  {"id":67,"subj":"geo","year":"2025","skill":"EF06GE11","q":"Um parque eólico usa a força do vento para gerar energia. Esse modo de produção é considerado sustentável porque","opts":["demanda pouco espaço para ser instalado.","consome grande quantidade de minerais.","utiliza uma fonte renovável amplamente disponível.","depende da queima de matéria orgânica."],"ans":2,"exp":"O vento é um recurso renovável e praticamente inesgotável, com menor impacto ambiental."},
+  {"id":68,"subj":"geo","year":"2025","skill":"EF06GE11","q":"A biomassa gera energia a partir de resíduos vegetais e animais e é um recurso renovável. Priorizá-la alinha-se ao desenvolvimento sustentável porque","opts":["compromete a preservação do petróleo.","desconsidera as energias limpas.","impede totalmente o esgotamento da biodiversidade.","concilia preservação ambiental e crescimento econômico."],"ans":3,"exp":"A biomassa oferece energia renovável e reduz a dependência de combustíveis fósseis, conciliando economia e meio ambiente."},
+  {"id":69,"subj":"geo","year":"2025","skill":"EF06GE06","q":"O Brasil é um dos maiores produtores de algodão do mundo, fibra cultivada no campo. O que faz do cultivo de algodão uma atividade do setor primário?","opts":["A necessidade de muitos funcionários.","A transformação de matérias-primas.","A prestação de serviços a terceiros.","A extração direta de recursos naturais."],"ans":3,"exp":"O cultivo obtém o produto diretamente da natureza (do solo) — característica do setor primário."},
+  {"id":70,"subj":"geo","year":"2025","skill":"EF06GE06","q":"A máquina moderna substituiu o trabalho manual, central na manufatura, produzindo mais bens em menos tempo. Qual foi a principal consequência dessa mudança?","opts":["O fortalecimento do trabalho artesanal.","A autonomia dos grupos de trabalho.","O aumento dos bens de produção.","A redução do uso de tecnologias."],"ans":2,"exp":"A mecanização elevou a produtividade — maior produção de bens."},
+
+  {"id":71,"subj":"his","year":"2024","skill":"EF06HI09","q":"Na Grécia Antiga, os cidadãos se reuniam pessoalmente na Ágora para discutir e decidir os assuntos da cidade. No Brasil existe democracia indireta. A diferença é que, em Atenas,","opts":["apenas os grandes proprietários votavam.","apenas os reis apresentavam leis.","os cidadãos participavam diretamente das decisões.","a população elegia representantes."],"ans":2,"exp":"Na democracia ateniense, os cidadãos decidiam diretamente; no Brasil, elegem representantes (democracia indireta)."},
+  {"id":72,"subj":"his","year":"2024","skill":"EF06HI12","q":"Enquanto as mulheres em Atenas tinham uma vida voltada às tarefas domésticas, as de Esparta participavam dos negócios da família e eram treinadas para serem fortes. Comparando as duas cidades, o texto indica que","opts":["as atenienses valorizavam a política feminina.","o governo espartano limitava a política das mulheres.","as espartanas tinham maior atuação social do que as atenienses.","as atenienses tinham mais poder econômico que as espartanas."],"ans":2,"exp":"As espartanas tinham participação social mais ativa do que as atenienses."},
+  {"id":73,"subj":"his","year":"2024","skill":"EF06HI14","q":"No Reino de Cuxe (Núbia), após a ocupação egípcia, foram adotados a religião, os costumes funerários e a construção de pirâmides dos egípcios. Isso mostra que a cultura de Cuxe foi marcada pela","opts":["influência de outro povo africano (o egípcio).","presença da arquitetura grega.","valorização do monoteísmo.","negação do poder do rei."],"ans":0,"exp":"A cultura de Cuxe recebeu forte influência egípcia (religião, pirâmides, costumes funerários)."},
+  {"id":74,"subj":"his","year":"2024","skill":"EF06HI16","q":"Na monarquia romana, os “patrícios” (do latim <em>pater</em>) eram os chefes das grandes famílias e os únicos com direitos políticos. Esse grupo era formado por","opts":["homens dedicados ao artesanato.","grandes proprietários de terras.","filhos de pessoas escravizadas.","jovens integrantes do exército."],"ans":1,"exp":"Os patrícios eram a aristocracia romana, dona de grandes terras e detentora dos direitos políticos."},
+  {"id":75,"subj":"his","year":"2024","skill":"EF06HI14","q":"O Édito de Milão (início do século IV) determinou a tolerância entre o Estado romano e a Igreja, encerrando as perseguições. Esse documento promoveu no Império Romano","opts":["o combate à corrupção religiosa.","a igualdade entre as classes sociais.","o fim das guerras com estrangeiros.","a liberdade de culto para os cristãos."],"ans":3,"exp":"O Édito de Milão garantiu liberdade religiosa, permitindo aos cristãos praticar livremente sua fé."},
+
+  {"id":76,"subj":"his","year":"2025","skill":"EF06HI09","q":"Na democracia ateniense, os cidadãos formavam as leis na Bulé e tomavam decisões na Eclésia, a assembleia. Esse sistema caracteriza um governo em que os cidadãos","opts":["participavam diretamente das decisões políticas.","escolhiam representantes por eleições.","precisavam ser grandes proprietários.","votavam de forma secreta."],"ans":0,"exp":"Bulé e Eclésia mostram a participação direta dos cidadãos nas decisões."},
+  {"id":77,"subj":"his","year":"2025","skill":"EF06HI12","q":"As mulheres atenienses viviam sob a tutela de um homem e não tinham educação formal; as espartanas podiam herdar e possuir propriedades e recebiam educação organizada pelo Estado. Comparando, as espartanas","opts":["cumpriam mais tarefas domésticas.","desempenhavam funções manuais.","recusavam a instrução masculina.","possuíam mais direitos."],"ans":3,"exp":"As espartanas tinham mais direitos (propriedade, educação, divórcio) do que as atenienses."},
+  {"id":78,"subj":"his","year":"2025","skill":"EF06HI14","q":"O Reino de Cuxe, no atual Sudão, construiu centenas de pirâmides. Essas construções desenvolveram-se devido à","opts":["adoção da escrita cuneiforme.","exploração de minas de ferro.","influência exercida pelos egípcios.","liderança dos faraós egípcios sobre Cuxe."],"ans":2,"exp":"A tradição das pirâmides em Cuxe resultou da influência cultural egípcia."},
+  {"id":79,"subj":"his","year":"2025","skill":"EF06HI16","q":"Os tribunos da plebe, criados em 494 a.C. e obrigatoriamente plebeus, propunham leis e protegiam a plebe contra abusos dos magistrados. Na Roma Antiga, a criação dessa função representou","opts":["a diminuição do número de senadores.","o aumento da influência política dos plebeus.","a expansão do poder dos patrícios sobre a plebe.","a igualdade total entre as classes."],"ans":1,"exp":"Os tribunos deram à plebe voz e proteção política — aumento de sua influência."},
+  {"id":80,"subj":"his","year":"2025","skill":"EF06HI14","q":"O Édito de Milão (313 d.C.) permitiu a liberdade de culto e devolveu bens confiscados às igrejas cristãs. A assinatura dessa lei contribuiu para a","opts":["reação violenta dos governantes.","proibição do politeísmo.","perseguição aos cristãos.","expansão da adesão ao cristianismo."],"ans":3,"exp":"Com liberdade religiosa, o cristianismo pôde se organizar e crescer — expansão da adesão."},
+
+  {"id":81,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Décadas de guerra no Afeganistão destruíram mais da metade das florestas do país. Isso mostra que os conflitos podem levar à","opts":["diminuição da expectativa de vida.","elevação da violência nas cidades.","redução do território dos países.","degradação do espaço natural."],"ans":3,"exp":"A guerra provocou desmatamento — um exemplo de degradação do meio ambiente."},
+  {"id":82,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Em um conto, uma avó indígena diz que seu povo respeita a natureza porque é dela que vem tudo o que usam e precisam para viver. Compreende-se que o respeito ao meio ambiente se liga à ideia de que a natureza","opts":["é importante para as indústrias.","deve ser estudada cientificamente.","é fundamental para a sobrevivência humana.","está distante da vida das pessoas."],"ans":2,"exp":"A fala valoriza a natureza como base da sobrevivência humana."},
+  {"id":83,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Um princípio da Carta da Terra para crianças pede que se use com cuidado o que a natureza oferece (água, terra, ar) e defende que todos têm direito a esses bens. Esse princípio estimula a busca por","opts":["distanciamento entre pessoas e natureza.","fim da desigualdade apenas pela renda.","estudo científico da natureza.","sustentabilidade e justiça social."],"ans":3,"exp":"O princípio une o cuidado ambiental (sustentabilidade) ao direito de todos aos bens naturais (justiça social)."},
+  {"id":84,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Um texto descreve pessoas que sempre querem “mais e mais” e coisas maiores, sem cuidar do ambiente, o que leva a mudanças no clima e ao desaparecimento de espécies. Segundo a reflexão, os seres humanos","opts":["dominam meios de impedir desastres naturais.","trocaram o consumo por ações ambientais.","valorizam mais os próprios interesses que a preservação.","tornaram-se menos dependentes da natureza."],"ans":2,"exp":"O texto critica a valorização dos interesses próprios em detrimento da preservação ambiental."},
+  {"id":85,"subj":"fil","year":"2024","skill":"Currículo SAS","q":"Uma bióloga lembra que cada cidadão deve fiscalizar descartes irregulares, respeitar regras ambientais e descartar o lixo corretamente. O texto trata o cuidado com o meio ambiente como uma","opts":["responsabilidade de cada indivíduo.","tarefa apenas dos governantes.","missão só de organizações mundiais.","prática exclusiva das escolas."],"ans":0,"exp":"As ações citadas são individuais — o cuidado é apresentado como responsabilidade de cada um."},
+
+  {"id":86,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"As forças armadas do mundo foram responsáveis por cerca de 5,5% das emissões globais de gases do efeito estufa em 2022. Por isso, os conflitos armados devem ser combatidos porque","opts":["representam avanço das tecnologias inteligentes.","dificultam o desenvolvimento econômico.","estimulam manifestações coletivas.","colocam em risco o futuro da humanidade."],"ans":3,"exp":"As emissões ligadas aos conflitos agravam a crise climática, ameaçando as gerações atuais e futuras."},
+  {"id":87,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Um pesquisador afirma que o mar influencia nossa vida sem que percebamos: a alimentação, o clima, o turismo e o lazer têm relação com ele. Essa reflexão trata do(a)","opts":["vínculo contínuo entre a humanidade e a natureza.","saber compartilhado sobre o planeta.","esgotamento econômico dos recursos.","influência das tradições culturais."],"ans":0,"exp":"O texto mostra a ligação constante entre a vida humana e a natureza (o mar)."},
+  {"id":88,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Um trecho da Carta da Terra para crianças diz: “todos nós somos úteis e podemos ajudar uns aos outros” e “acreditamos que um outro mundo é possível”. O texto valoriza a","opts":["dependência de gestos públicos para mudar.","urgência em exigir soluções dos governos.","responsabilidade e a capacidade de cada um agir.","oportunidade de opinar sobre as leis."],"ans":2,"exp":"O trecho destaca que cada pessoa é útil e capaz de agir pela mudança."},
+  {"id":89,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Em uma campanha ambiental, personagens plantam árvores, recolhem resíduos e fazem coleta seletiva na comunidade. Com base nessa atitude, o enfrentamento dos problemas ambientais deve ocorrer por meio de","opts":["ações coletivas das comunidades.","discursos ambientalistas dos jovens.","descobertas de pesquisadores.","intervenções de organizações internacionais."],"ans":0,"exp":"As atitudes mostradas são coletivas e comunitárias — a mudança vem da ação conjunta."},
+  {"id":90,"subj":"fil","year":"2025","skill":"Currículo SAS","q":"Um texto explica que, após a Revolução Industrial, o ser humano passou a explorar a natureza de forma desregrada, buscando o lucro e causando danos irreparáveis. Diante disso, o texto revela a urgência em","opts":["diminuir a interação com o ambiente.","promover inovações para o crescimento econômico.","estabelecer relações mais éticas com a natureza.","intensificar o uso dos recursos naturais."],"ans":2,"exp":"O texto pede uma postura mais reflexiva e ética na relação com o meio ambiente."},
+
+  {"id":91,"subj":"art","year":"2024","skill":"EF69AR05","q":"As pinturas rupestres, como as encontradas na Serra da Capivara (PI), retratam cenas de caça e do cotidiano. Elas têm importância histórica porque","opts":["tinham finalidade apenas decorativa.","acompanhavam registros escritos que as explicavam.","foram feitas com pincéis de argila.","formam um registro do dia a dia dos primeiros seres humanos."],"ans":3,"exp":"As pinturas rupestres registram como viviam os primeiros humanos — têm valor histórico e artístico."},
+  {"id":92,"subj":"art","year":"2024","skill":"EF69AR20","q":"Na teoria musical, o ritmo relaciona-se à percepção do que é rápido ou lento, marcado por acentuações, pausas e intervalos. Entende-se que o ritmo é um elemento que","opts":["indica a repetição regular de sons no tempo da música.","prejudica as palavras que rimam.","transmite a mensagem da letra.","impede o uso de instrumentos."],"ans":0,"exp":"O ritmo organiza a repetição regular dos sons no tempo — é a pulsação da música."},
+  {"id":93,"subj":"art","year":"2024","skill":"EF69AR05","q":"A ceramista Baniwa Nazária Fontes afirma que valorizar a cerâmica e os grafismos originários ajuda a reconhecer a própria identidade cultural. Com base nisso, a arte em cerâmica","opts":["prioriza estilos pessoais.","tem função restrita ao ambiente doméstico.","mostra ausência de técnicas indígenas.","tem forte relação com a identidade cultural de quem a produz."],"ans":3,"exp":"A cerâmica Baniwa está ligada à identidade cultural do povo que a produz."},
+  {"id":94,"subj":"art","year":"2024","skill":"EF69AR06","q":"Uma característica marcante do gênero história em quadrinhos é a","opts":["presença de rimas e versos.","organização sequencial da narrativa em requadros.","ausência total de imagens.","presença obrigatória de um narrador em terceira pessoa."],"ans":1,"exp":"As HQs organizam a narrativa em requadros (quadrinhos) em sequência, guiando a leitura."},
+  {"id":95,"subj":"art","year":"2024","skill":"EF69AR07","q":"Em uma história em quadrinhos, aparece a onomatopeia “CABRUM!” logo antes de começar a chuva. Nesse contexto, ela representa o","opts":["som de um trovão antes da chuva.","som dos passos no chão.","som de um susto da personagem.","som das gotas de chuva caindo."],"ans":0,"exp":"“Cabrum” imita o som de trovão ou explosão; antes da chuva, representa o trovão."},
+
+  {"id":96,"subj":"art","year":"2025","skill":"EF69AR05","q":"A arte rupestre reúne as mais antigas representações artísticas conhecidas, gravadas em paredes de cavernas no período Paleolítico. A partir disso, identifica-se que as pinturas rupestres são um(a)","opts":["tipo de protesto da época.","desenho feito só para entretenimento.","busca por representação abstrata.","forma de expressão artística dos seres humanos."],"ans":3,"exp":"As pinturas rupestres são uma forma de expressão artística dos primeiros seres humanos."},
+  {"id":97,"subj":"art","year":"2025","skill":"EF69AR20","q":"Uma notícia conta que a leoa-marinha Ronan consegue balançar a cabeça acompanhando o ritmo de uma música tão bem quanto os humanos. Essa capacidade mostra que o animal consegue","opts":["realizar movimentos seguindo a repetição regular dos sons.","produzir notas musicais batendo no corpo.","fazer silêncios durante a música.","emitir sons enquanto ouve a música."],"ans":0,"exp":"Acompanhar o ritmo é mover-se conforme a repetição regular dos sons da música."},
+  {"id":98,"subj":"art","year":"2025","skill":"EF69AR05","q":"Estudos indicam que o povo marajoara produzia cerâmicas de uso principalmente doméstico, como vasilhas, potes e pratos. Com base nisso, a cerâmica marajoara é uma expressão artística ligada principalmente","opts":["à utilidade nas atividades cotidianas.","ao valor para ser vendida a outros países.","ao cultivo de alimentos na água.","à produção de objetos apenas para admirar."],"ans":0,"exp":"A cerâmica marajoara tinha caráter utilitário, usada no cotidiano doméstico."},
+  {"id":99,"subj":"art","year":"2025","skill":"EF69AR06","q":"Um texto é definido como história em quadrinhos principalmente porque","opts":["funciona sem nenhum narrador.","apresenta personagens crianças e adultos.","alterna diferentes cenários.","combina escrita e imagens para contar uma história."],"ans":3,"exp":"A HQ é um gênero que une palavras e imagens para narrar uma história."},
+  {"id":100,"subj":"art","year":"2025","skill":"EF69AR07","q":"Nas histórias em quadrinhos, um balão cujo contorno é formado por pequenos círculos (como bolhas) sobre a cabeça da personagem indica que ela está","opts":["gritando.","pensando.","lembrando em voz alta.","cochichando."],"ans":1,"exp":"O balão com bordas em “bolhas” é o balão de pensamento — a personagem pensa, não fala."}
+]
+}
+</script>
+<script>
+(function(){
+  var DB = JSON.parse(document.getElementById("DATA").textContent);
+  var SUBJECTS = DB.subjects, QUESTIONS = DB.questions;
+  var LETTERS = ["A","B","C","D"];
+  function shuffle(a){ for(var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function getOrder(q){ if(!(q.id in state.order)){ var base=[]; for(var i=0;i<q.opts.length;i++){ base.push(i); } state.order[q.id]=shuffle(base); } return state.order[q.id]; }
+  var state = { current: SUBJECTS[0].key, answers: {}, order: {} };
+
+  var tabsEl = document.getElementById("tabs");
+  var mainEl = document.getElementById("main");
+  var answeredEl = document.getElementById("answered");
+  var hitsEl = document.getElementById("hits");
+  var barEl = document.getElementById("bar");
+
+  function qOfSubject(k){ return QUESTIONS.filter(function(q){return q.subj===k;}); }
+  function subjMeta(k){ return SUBJECTS.find(function(s){return s.key===k;}); }
+
+  function totals(){
+    var ans=0, hit=0;
+    QUESTIONS.forEach(function(q){
+      if(q.id in state.answers){ ans++; if(state.answers[q.id]===q.ans) hit++; }
+    });
+    return {ans:ans,hit:hit};
+  }
+  function subjTotals(k){
+    var ans=0, hit=0, list=qOfSubject(k);
+    list.forEach(function(q){ if(q.id in state.answers){ans++; if(state.answers[q.id]===q.ans) hit++;} });
+    return {ans:ans,hit:hit,total:list.length};
+  }
+
+  function renderTabs(){
+    tabsEl.innerHTML="";
+    SUBJECTS.forEach(function(s){
+      var t=subjTotals(s.key);
+      var b=document.createElement("button");
+      b.className="tab"+(s.key===state.current?" active":"")+(t.ans===t.total?" done":"");
+      b.style.setProperty("--c", s.color);
+      b.innerHTML='<span class="dot"></span>'+s.name+'<span class="cnt">'+t.ans+'/'+t.total+'</span>';
+      b.onclick=function(){ state.current=s.key; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+      tabsEl.appendChild(b);
+    });
+  }
+
+  function renderScore(){
+    var t=totals();
+    answeredEl.textContent=t.ans; hitsEl.textContent=t.hit;
+    barEl.style.width=(t.ans/QUESTIONS.length*100)+"%";
+  }
+
+  function paintAnswered(card, q, chosen){
+    var opts=card.querySelectorAll(".opt");
+    opts.forEach(function(o){
+      var oi=parseInt(o.dataset.i,10);
+      o.disabled=true;
+      if(oi===q.ans){ o.classList.add("correct"); o.querySelector(".mark").textContent="\u2713"; }
+      if(oi===chosen && chosen!==q.ans){ o.classList.add("wrong"); o.querySelector(".mark").textContent="\u2717"; }
+    });
+    var exp=card.querySelector(".exp"); var ok=chosen===q.ans;
+    exp.classList.add("show", ok?"ok":"no");
+    exp.innerHTML=(ok?"<b>Correto!</b> ":"<b>N\u00e3o foi dessa vez.</b> ")+q.exp;
+  }
+
+  function choose(q, idx, card){
+    if(q.id in state.answers) return;
+    state.answers[q.id]=idx;
+    paintAnswered(card, q, idx);
+    renderScore(); renderTabs(); maybeSummary();
+  }
+
+  function maybeSummary(){
+    var k=state.current, t=subjTotals(k);
+    var sum=document.getElementById("summary-"+k);
+    if(!sum) return;
+    if(t.ans===t.total){
+      var meta=subjMeta(k);
+      sum.querySelector(".big").textContent=t.hit+"/"+t.total;
+      var pct=t.hit/t.total, msg;
+      if(pct===1) msg="Gabaritou "+meta.name+"! Mandou muito bem.";
+      else if(pct>=0.7) msg="Bom desempenho em "+meta.name+". Revise o que escapou e siga em frente.";
+      else if(pct>=0.5) msg="Voc\u00ea concluiu "+meta.name+". Vale revisar as explica\u00e7\u00f5es das quest\u00f5es erradas.";
+      else msg="Concluiu "+meta.name+". Releia as explica\u00e7\u00f5es com calma \u2014 d\u00e1 para melhorar bastante.";
+      sum.querySelector("p").textContent=msg;
+      sum.classList.add("show");
+    } else {
+      sum.classList.remove("show");
+    }
+  }
+
+  function render(){
+    var k=state.current, meta=subjMeta(k);
+    document.documentElement.style.setProperty("--accent", meta.color);
+    renderTabs(); renderScore();
+    var list=qOfSubject(k);
+    mainEl.innerHTML='<div class="mathead"><h2>'+meta.name+'</h2><span class="bar"></span></div>';
+    list.forEach(function(q){
+      var card=document.createElement("div");
+      card.className="q";
+      var opts="";
+      var ord=getOrder(q);
+      for(var i=0;i<ord.length;i++){
+        var oi=ord[i];
+        opts+='<button class="opt" data-i="'+oi+'"><span class="letter">'+LETTERS[i]+'</span><span class="txt">'+q.opts[oi]+'</span><span class="mark"></span></button>';
+      }
+      card.innerHTML='<div class="meta"><span class="qn">'+q.id+'</span><span class="pill yr">'+q.year+'</span><span class="pill">'+q.skill+'</span></div>'+
+        '<div class="stem">'+q.q+'</div><div class="opts">'+opts+'</div><div class="exp"></div>';
+      card.querySelectorAll(".opt").forEach(function(btn){
+        btn.addEventListener("click",function(){ choose(q, parseInt(btn.dataset.i,10), card); });
+      });
+      if(q.id in state.answers){ paintAnswered(card, q, state.answers[q.id]); }
+      mainEl.appendChild(card);
+    });
+    var sum=document.createElement("div");
+    sum.className="summary"; sum.id="summary-"+k;
+    sum.innerHTML='<h3>Resumo de '+meta.name+'</h3><div class="big">0/0</div><p></p><button class="next">Pr\u00f3xima</button>';
+    mainEl.appendChild(sum);
+    var idx=-1; for(var j=0;j<SUBJECTS.length;j++){ if(SUBJECTS[j].key===k){idx=j;break;} }
+    var nextBtn=sum.querySelector(".next");
+    if(idx<SUBJECTS.length-1){
+      nextBtn.textContent="Ir para "+SUBJECTS[idx+1].name+" \u2192";
+      nextBtn.onclick=function(){ state.current=SUBJECTS[idx+1].key; render(); window.scrollTo({top:0,behavior:"smooth"}); };
+    } else {
+      nextBtn.textContent="Voltar ao in\u00edcio \u2191";
+      nextBtn.onclick=function(){ window.scrollTo({top:0,behavior:"smooth"}); };
+    }
+    maybeSummary();
+  }
+
+  document.getElementById("restart").addEventListener("click",function(){
+    if(Object.keys(state.answers).length && !confirm("Recome\u00e7ar a prova? Suas respostas ser\u00e3o apagadas.")) return;
+    state.answers={}; state.order={}; state.current=SUBJECTS[0].key; render(); window.scrollTo({top:0,behavior:"smooth"});
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
